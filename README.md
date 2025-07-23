@@ -28,10 +28,10 @@ cat *_1000.txt | go run charts/main.go -title='1000 Params' -frameworks='SQL,PGX
 export OPENAI_API_KEY=...
 
 echo "List all movies directed by Ben Affleck with a rating of at least 7." | go run semantic/main.go
-{"search":"Ben Affleck","year_added":0,"min_rating":7,"limit":1000}
-[{964980 Air 2023-04-05 00:00:00 +0000 UTC 7.337 [Ben Affleck]} {68734 Argo 2012-10-11 00:00:00 +0000 UTC 7.278 [Ben Affleck]} {23168 The Town 2010-09-15 00:00:00 +0000 UTC 7.2 [Ben Affleck]}]
+{"search":"Ben Affleck","min_rating":7,"limit":1000,"sort":"rating","desc":false,"year_added":0,"with_directors":true}
+[{23168 The Town 2010-09-15 00:00:00 +0000 UTC 7.2 [Ben Affleck]} {68734 Argo 2012-10-11 00:00:00 +0000 UTC 7.278 [Ben Affleck]} {964980 Air 2023-04-05 00:00:00 +0000 UTC 7.337 [Ben Affleck]}]
 
-echo "2018年に公開された、タイトルに英単語「shark」が含まれているすべての映画を一覧にしてください" | go run semantic/main.go 
-{"search":"shark","year_added":2018,"min_rating":0,"limit":1000}
+echo "2018年に公開された、タイトルに英単語「shark」が含まれているすべての映画と、その監督を一覧にしてください。" | go run semantic/main.go  
+{"search":"shark","year_added":2018,"with_directors":true}
 [{522438 6-Headed Shark Attack 2018-08-18 00:00:00 +0000 UTC 4.7 [Mark Atkins]}]
 ```

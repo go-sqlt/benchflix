@@ -35,9 +35,9 @@ func main() {
 
 	prompt := benchflix.Must(io.ReadAll(os.Stdin))
 
-	params := Send[benchflix.ListParams](string(prompt))
+	params := Send[benchflix.DashboardParams](string(prompt))
 
-	movies, err := repo.QueryList(context.Background(), params)
+	movies, err := repo.QueryDashboard(context.Background(), params)
 	if err != nil {
 		panic(err)
 	}
@@ -66,25 +66,29 @@ func Send[T any](prompt string) T {
 				"role": "system",
 				"content": `You convert natural language into a JSON object that matches the following Go struct (all field names are in snake_case).
 				` + PrintStruct[T]() + `
-				Return only valid JSON, no code blocks.
+				Return only valid JSON, no code blocks. Pay attention to the json struct tags.
 				This is the query generated based on the input of ListParams:
 				SELECT
 					m.id                    {{ Scan.Int.To "ID" }}
 					, m.title               {{ Scan.String.To "Title" }}
 					, m.added_at            {{ Scan.Time.To "AddedAt" }}
 					, m.rating              {{ Scan.Float.To "Rating" }}
-					, d.directors           {{ Scan.StringSlice.To "Directors" }}
+					{{ if .WithDirectors }}
+						, d.directors       {{ Scan.StringSlice.To "Directors" }}
+					{{ end }}
 				FROM movies m
-				LEFT JOIN LATERAL (
-					SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
-					FROM movie_directors md
-					JOIN people p ON p.id = md.person_id
-					WHERE md.movie_id = m.id
-				) d ON true
-				WHERE
-					(
-						{{ .Search }} = ''
-						OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', {{ .Search }})
+				{{ if .WithDirectors }}
+					LEFT JOIN LATERAL (
+						SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
+						FROM movie_directors md
+						JOIN people p ON p.id = md.person_id
+						WHERE md.movie_id = m.id
+					) d ON true
+				{{ end }}
+				WHERE 1=1
+				{{ if .Search }}
+					AND (
+						to_tsvector('simple', m.title) @@ plainto_tsquery('simple', {{ .Search }})
 						OR EXISTS (
 							SELECT 1
 							FROM movie_directors md
@@ -93,10 +97,16 @@ func Send[T any](prompt string) T {
 							AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', {{ .Search }})
 						)
 					)
-					AND ({{ .YearAdded }} = 0 OR EXTRACT(YEAR FROM m.added_at) = {{ .YearAdded }})
-					AND ({{ .MinRating }} = 0 OR m.rating >= {{ .MinRating }})
-				ORDER BY m.rating DESC
-				LIMIT CASE WHEN {{ .Limit }} BETWEEN 1 AND 1000 THEN {{ .Limit }} ELSE 1000 END;
+				{{ end }}
+				{{ if .YearAdded }} AND EXTRACT(YEAR FROM m.added_at) = {{ .YearAdded }}{{ end }}
+				{{ if .MinRating }} AND m.rating >= {{ .MinRating }} {{ end }}
+				ORDER BY
+				{{ if eq .Sort "title" }} m.title
+					{{ else if eq .Sort "added_at" }} m.added_at
+					{{ else }} m.rating
+				{{ end }} 
+				{{ if .Desc }} DESC{{ else }} ASC{{ end }}
+				{{ if and (gt .Limit 0) (lt .Limit 1000) }} LIMIT {{ .Limit }}{{ else }} LIMIT 1000{{ end }}
 				`,
 			},
 			{
