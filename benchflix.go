@@ -33,19 +33,19 @@ type Movie struct {
 
 type ListParams struct {
 	Search    string
-	YearAdded int64   `db:"year_added"`
-	MinRating float64 `db:"min_rating"`
+	YearAdded int64   `db:"year_added" json:"year_added"`
+	MinRating float64 `db:"min_rating" json:"min_rating"`
 	Limit     uint64
 }
 
 type DashboardParams struct {
 	Search        string
-	YearAdded     int64   `db:"year_added"`
-	MinRating     float64 `db:"min_rating"`
+	YearAdded     int64   `db:"year_added" json:"year_added"`
+	MinRating     float64 `db:"min_rating" json:"min_rating"`
 	Limit         uint64
 	Sort          string
 	Desc          bool
-	WithDirectors bool
+	WithDirectors bool `json:"with_directors"`
 }
 
 type Repository interface {

@@ -29,7 +29,9 @@ func main() {
 
 	pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
 
-	repo := sqltflix.New(pool, sqlt.ExpressionSize(1000))
+	repo := sqltflix.New(pool, sqlt.Logger(func(ctx context.Context, info sqlt.Info) {
+		// fmt.Println(info.CollapsedSQL(), info.Args)
+	}))
 
 	prompt := benchflix.Must(io.ReadAll(os.Stdin))
 
