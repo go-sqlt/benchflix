@@ -48,12 +48,12 @@ var (
 	DashboardParams []benchflix.DashboardParams
 )
 
-type PostgresRepository struct {
+type NamedRepository struct {
 	Name       string
 	Repository func(conn string) benchflix.Repository
 }
 
-var repositories = []PostgresRepository{
+var repositories = []NamedRepository{
 	{
 		Name: "SQL",
 		Repository: func(conn string) benchflix.Repository {
@@ -279,6 +279,7 @@ func Benchmark(b *testing.B) {
 			conn, resource := initializePostgres(Pool, r.Name)
 
 			defer resource.Close()
+
 			repo := r.Repository(conn)
 
 			b.Run("List", func(b *testing.B) {

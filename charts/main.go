@@ -3,8 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
-	"math"
 	"os"
 	"slices"
 	"strconv"
@@ -18,11 +16,16 @@ import (
 )
 
 var (
-	title = flag.String("title", "", "Chart Title")
+	title      = flag.String("title", "", "Chart Title")
+	cores      = flag.Int("cores", 12, "Number of cores")
+	frameworks = flag.String("frameworks", "", "X-Axis Frameworks")
+	FRAMEWORKS []string
 )
 
 type Data struct {
 	Name                       string
+	Framework                  string
+	Szenario                   string
 	NsPerOp                    []float64
 	AllocedBytesPerOp          []float64
 	AllocsPerOp                []float64
@@ -33,6 +36,8 @@ type Data struct {
 
 func main() {
 	flag.Parse()
+
+	FRAMEWORKS = strings.Split(*frameworks, ",")
 
 	scan := bufio.NewScanner(os.Stdin)
 
@@ -50,13 +55,14 @@ func main() {
 			panic(err)
 		}
 
-		parts := strings.Split(b.Name, "/")
-		name := parts[1]
-
-		index := slices.IndexFunc(data, func(d Data) bool { return d.Name == name })
+		index := slices.IndexFunc(data, func(d Data) bool { return d.Name == b.Name })
 		if index < 0 {
+			parts := strings.Split(b.Name, "/")
+
 			data = append(data, Data{
-				Name:              name,
+				Name:              b.Name,
+				Framework:         parts[1],
+				Szenario:          strings.TrimSuffix(parts[2], "-"+strconv.Itoa(*cores)),
 				NsPerOp:           []float64{b.NsPerOp},
 				AllocedBytesPerOp: []float64{float64(b.AllocedBytesPerOp)},
 				AllocsPerOp:       []float64{float64(b.AllocsPerOp)},
@@ -71,11 +77,51 @@ func main() {
 	}
 
 	renderChart(data, "NsPerOp", func(d Data) []float64 { return d.NsPerOp })
-	renderChart(data, "AllocedBytesPerOp", func(d Data) []float64 { return d.AllocedBytesPerOp })
+	renderChart(data, "BytesPerOp", func(d Data) []float64 { return d.AllocedBytesPerOp })
 	renderChart(data, "AllocsPerOp", func(d Data) []float64 { return d.AllocsPerOp })
 }
 
 func renderChart(data []Data, suffix string, fn func(Data) []float64) {
+	list := make([]opts.BarData, len(FRAMEWORKS))
+	listpreload := make([]opts.BarData, len(FRAMEWORKS))
+	dashboard := make([]opts.BarData, len(FRAMEWORKS))
+	dashboardpreload := make([]opts.BarData, len(FRAMEWORKS))
+	xSet := map[string]bool{}
+
+	for _, d := range data {
+		xSet[d.Framework] = true
+
+		q, err := stats.Quartile(fn(d))
+		if err != nil {
+			panic(err)
+		}
+
+		index := slices.Index(FRAMEWORKS, d.Framework)
+
+		switch d.Szenario {
+		case "List":
+			list[index] = opts.BarData{
+				Name:  d.Framework,
+				Value: q.Q2,
+			}
+		case "ListPreload":
+			listpreload[index] = opts.BarData{
+				Name:  d.Framework,
+				Value: q.Q2,
+			}
+		case "Dashboard":
+			dashboard[index] = opts.BarData{
+				Name:  d.Framework,
+				Value: q.Q2,
+			}
+		case "DashboardPreload":
+			dashboardpreload[index] = opts.BarData{
+				Name:  d.Framework,
+				Value: q.Q2,
+			}
+		}
+	}
+
 	chart := charts.NewBar()
 	chart.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
@@ -85,33 +131,22 @@ func renderChart(data []Data, suffix string, fn func(Data) []float64) {
 		charts.WithInitializationOpts(opts.Initialization{
 			BackgroundColor: "#FFFFFF",
 		}),
-		charts.WithXAxisOpts(opts.XAxis{Position: "bottom"}),
 	)
 
-	q2 := []opts.BarData{}
-	xaxis := []string{}
-
-	for _, d := range data {
-		q, err := stats.Quartile(fn(d))
-		if err != nil {
-			panic(err)
-		}
-
-		q2 = append(q2, opts.BarData{
-			Name:  d.Name,
-			Value: strconv.FormatFloat(q.Q2, 'f', 1, 64),
-		})
-
-		xaxis = append(xaxis, d.Name+fmt.Sprintf(`
-%d
-%d
-%d
-%d
-				`, int(math.Round(q.Q1)), int(math.Round(q.Q2)), int(math.Round(q.Q3)), int(math.Round(q.Q3-q.Q1))))
+	if len(list) > 0 {
+		chart.AddSeries("List", list)
+	}
+	if len(listpreload) > 0 {
+		chart.AddSeries("ListPreload", listpreload)
+	}
+	if len(dashboard) > 0 {
+		chart.AddSeries("Dashboard", dashboard)
+	}
+	if len(dashboardpreload) > 0 {
+		chart.AddSeries("DashboardPreload", dashboardpreload)
 	}
 
-	chart.AddSeries("2. Quartil", q2)
-	chart.SetXAxis(xaxis)
+	chart.SetXAxis(FRAMEWORKS)
 
 	output := "charts/" + strings.ReplaceAll(*title, " ", "_") + "_" + suffix + ".png"
 
