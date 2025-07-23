@@ -21,3 +21,12 @@ go test -bench='^Benchmark/.*/DashboardPreload$' -benchmem -timeout=60m -count=1
 cat *_100.txt | go run charts/main.go -title='100 Params' -frameworks='SQL,PGX,SQUIRREL,SQLX,GORM,SQLC,SQLT,SQLT-Cache'
 cat *_1000.txt | go run charts/main.go -title='1000 Params' -frameworks='SQL,PGX,SQUIRREL,SQLX,GORM,SQLC,SQLT,SQLT-Cache'
 ```
+
+## Semantic Query Example:
+
+```sh
+export OPENAI_API_KEY=...
+echo "List all movies directed by Ben Affleck with a rating of at least 9." | go run semantic/main.go
+{"search":"Ben Affleck","year_added":0,"min_rating":9,"limit":1000}
+[{964980 Air 2023-04-05 00:00:00 +0000 UTC 7.337 [Ben Affleck]} {68734 Argo 2012-10-11 00:00:00 +0000 UTC 7.278 [Ben Affleck]} {23168 The Town 2010-09-15 00:00:00 +0000 UTC 7.2 [Ben Affleck]} {259695 Live by Night 2016-12-25 00:00:00 +0000 UTC 6.249 [Ben Affleck]}]
+```
