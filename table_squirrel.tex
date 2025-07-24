@@ -4,12 +4,12 @@
 \caption{SQUIRREL: Nanosekunden pro Operation}
 \begin{tabular}{lcccccc}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA \\
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	Dashboard & 100 & 307668 & 309273 & 313745 & 6077 \\
-	DashboardPreload & 100 & 321100 & 328110.5 & 329171 & 8071 \\
-	Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 \\
-	DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 \\
+	Dashboard & 100 & 307668 & 309273 & 313745 & 6077 & 0.02 \\
+	DashboardPreload & 100 & 321100 & 328110.5 & 329171 & 8071 & 0.02 \\
+	Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 & 0.03 \\
+	DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 & 0.02 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_nsperop}
@@ -22,10 +22,10 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	Dashboard & 100 & 24723 & 24748 & 24778 & 55 \\
-	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 \\
-	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 \\
-	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 \\
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0 \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0 \\
+	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 & 0.01 \\
+	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 & 0 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_bytesperop}
@@ -38,10 +38,10 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	Dashboard & 100 & 24723 & 24748 & 24778 & 55 \\
-	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 \\
-	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 \\
-	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 \\
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0 \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0 \\
+	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 & 0.01 \\
+	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 & 0 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_allocsperop}

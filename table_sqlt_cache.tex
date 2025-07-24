@@ -4,16 +4,16 @@
 \caption{SQLT-Cache: Nanosekunden pro Operation}
 \begin{tabular}{lcccccc}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA \\
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 186591 & 188083.5 & 190975 & 4384 \\
-	ListPreload & 100 & 185070 & 186017.5 & 190201 & 5131 \\
-	Dashboard & 100 & 199207 & 200395.5 & 201462 & 2255 \\
-	DashboardPreload & 100 & 188354 & 191267.5 & 192707 & 4353 \\
-	List & 1000 & 182355 & 184300.5 & 189451 & 7096 \\
-	ListPreload & 1000 & 184550 & 185307.5 & 186521 & 1971 \\
-	Dashboard & 1000 & 180526 & 181889.5 & 182633 & 2107 \\
-	DashboardPreload & 1000 & 177811 & 179695.5 & 181609 & 3798 \\
+	List & 100 & 186591 & 188083.5 & 190975 & 4384 & 0.02 \\
+	ListPreload & 100 & 185070 & 186017.5 & 190201 & 5131 & 0.03 \\
+	Dashboard & 100 & 199207 & 200395.5 & 201462 & 2255 & 0.01 \\
+	DashboardPreload & 100 & 188354 & 191267.5 & 192707 & 4353 & 0.02 \\
+	List & 1000 & 182355 & 184300.5 & 189451 & 7096 & 0.04 \\
+	ListPreload & 1000 & 184550 & 185307.5 & 186521 & 1971 & 0.01 \\
+	Dashboard & 1000 & 180526 & 181889.5 & 182633 & 2107 & 0.01 \\
+	DashboardPreload & 1000 & 177811 & 179695.5 & 181609 & 3798 & 0.02 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt-cache_nsperop}
@@ -26,14 +26,14 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	List & 100 & 5444 & 5456.5 & 5482 & 38 \\
-	ListPreload & 100 & 7452 & 7484.5 & 7517 & 65 \\
-	Dashboard & 100 & 5089 & 5093.5 & 5109 & 20 \\
-	DashboardPreload & 100 & 6038 & 6063.5 & 6093 & 55 \\
-	List & 1000 & 6402 & 6425.5 & 6438 & 36 \\
-	ListPreload & 1000 & 8805 & 8821 & 8837 & 32 \\
-	Dashboard & 1000 & 6093 & 6101.5 & 6115 & 22 \\
-	DashboardPreload & 1000 & 7310 & 7331.5 & 7339 & 29 \\
+	List & 100 & 5444 & 5456.5 & 5482 & 38 & 0.01 \\
+	ListPreload & 100 & 7452 & 7484.5 & 7517 & 65 & 0.01 \\
+	Dashboard & 100 & 5089 & 5093.5 & 5109 & 20 & 0 \\
+	DashboardPreload & 100 & 6038 & 6063.5 & 6093 & 55 & 0.01 \\
+	List & 1000 & 6402 & 6425.5 & 6438 & 36 & 0.01 \\
+	ListPreload & 1000 & 8805 & 8821 & 8837 & 32 & 0 \\
+	Dashboard & 1000 & 6093 & 6101.5 & 6115 & 22 & 0 \\
+	DashboardPreload & 1000 & 7310 & 7331.5 & 7339 & 29 & 0 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt-cache_bytesperop}
@@ -46,14 +46,14 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	List & 100 & 5444 & 5456.5 & 5482 & 38 \\
-	ListPreload & 100 & 7452 & 7484.5 & 7517 & 65 \\
-	Dashboard & 100 & 5089 & 5093.5 & 5109 & 20 \\
-	DashboardPreload & 100 & 6038 & 6063.5 & 6093 & 55 \\
-	List & 1000 & 6402 & 6425.5 & 6438 & 36 \\
-	ListPreload & 1000 & 8805 & 8821 & 8837 & 32 \\
-	Dashboard & 1000 & 6093 & 6101.5 & 6115 & 22 \\
-	DashboardPreload & 1000 & 7310 & 7331.5 & 7339 & 29 \\
+	List & 100 & 5444 & 5456.5 & 5482 & 38 & 0.01 \\
+	ListPreload & 100 & 7452 & 7484.5 & 7517 & 65 & 0.01 \\
+	Dashboard & 100 & 5089 & 5093.5 & 5109 & 20 & 0 \\
+	DashboardPreload & 100 & 6038 & 6063.5 & 6093 & 55 & 0.01 \\
+	List & 1000 & 6402 & 6425.5 & 6438 & 36 & 0.01 \\
+	ListPreload & 1000 & 8805 & 8821 & 8837 & 32 & 0 \\
+	Dashboard & 1000 & 6093 & 6101.5 & 6115 & 22 & 0 \\
+	DashboardPreload & 1000 & 7310 & 7331.5 & 7339 & 29 & 0 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt-cache_allocsperop}

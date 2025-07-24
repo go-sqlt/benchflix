@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"math"
 	"os"
 	"slices"
 	"strings"
@@ -113,19 +114,19 @@ func main() {
 \caption{%s: Nanosekunden pro Operation}
 \begin{tabular}{lcccccc}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA \\
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule`, *framework)
 
 	for i, q := range NsPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, (q.Hundred.Q3 - q.Hundred.Q1), math.Round((q.Hundred.Q3-q.Hundred.Q1)/q.Hundred.Q2*100)/100)
 	}
 
 	for i, q := range NsPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, (q.Thousand.Q3 - q.Thousand.Q1), math.Round((q.Thousand.Q3-q.Thousand.Q1)/q.Thousand.Q2*100)/100)
 	}
 
 	fmt.Printf(`
@@ -146,14 +147,14 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 
 	for i, q := range BytesPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, (q.Hundred.Q3 - q.Hundred.Q1), math.Round((q.Hundred.Q3-q.Hundred.Q1)/q.Hundred.Q2*100)/100)
 	}
 
 	for i, q := range BytesPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, (q.Thousand.Q3 - q.Thousand.Q1), math.Round((q.Thousand.Q3-q.Thousand.Q1)/q.Thousand.Q2*100)/100)
 	}
 
 	fmt.Printf(`
@@ -174,14 +175,14 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 
 	for i, q := range AllocsPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, (q.Hundred.Q3 - q.Hundred.Q1), math.Round((q.Hundred.Q3-q.Hundred.Q1)/q.Hundred.Q2*100)/100)
 	}
 
 	for i, q := range AllocsPerOp {
 		fmt.Printf(`
-	%s & %s & %g & %g & %g & %g \\`,
-			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
+	%s & %s & %g & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, (q.Thousand.Q3 - q.Thousand.Q1), math.Round((q.Thousand.Q3-q.Thousand.Q1)/q.Thousand.Q2*100)/100)
 	}
 
 	fmt.Printf(`

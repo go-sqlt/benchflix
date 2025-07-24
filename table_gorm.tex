@@ -4,12 +4,12 @@
 \caption{GORM: Nanosekunden pro Operation}
 \begin{tabular}{lcccccc}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA \\
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	ListPreload & 100 & 220176 & 221395.5 & 225370 & 5194 \\
-	DashboardPreload & 100 & 199146 & 202133.5 & 205611 & 6465 \\
-	ListPreload & 1000 & 225621 & 226703 & 229797 & 4176 \\
-	DashboardPreload & 1000 & 192647 & 193648.5 & 194520 & 1873 \\
+	ListPreload & 100 & 220176 & 221395.5 & 225370 & 5194 & 0.02 \\
+	DashboardPreload & 100 & 199146 & 202133.5 & 205611 & 6465 & 0.03 \\
+	ListPreload & 1000 & 225621 & 226703 & 229797 & 4176 & 0.02 \\
+	DashboardPreload & 1000 & 192647 & 193648.5 & 194520 & 1873 & 0.01 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_gorm_nsperop}
@@ -22,10 +22,10 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	ListPreload & 100 & 39410 & 39774.5 & 39812 & 402 \\
-	DashboardPreload & 100 & 27756 & 27774 & 27811 & 55 \\
-	ListPreload & 1000 & 42194 & 42440 & 42621 & 427 \\
-	DashboardPreload & 1000 & 29623 & 29743 & 30385 & 762 \\
+	ListPreload & 100 & 39410 & 39774.5 & 39812 & 402 & 0.01 \\
+	DashboardPreload & 100 & 27756 & 27774 & 27811 & 55 & 0 \\
+	ListPreload & 1000 & 42194 & 42440 & 42621 & 427 & 0.01 \\
+	DashboardPreload & 1000 & 29623 & 29743 & 30385 & 762 & 0.03 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_gorm_bytesperop}
@@ -38,10 +38,10 @@ Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA \\
 \midrule
-	ListPreload & 100 & 39410 & 39774.5 & 39812 & 402 \\
-	DashboardPreload & 100 & 27756 & 27774 & 27811 & 55 \\
-	ListPreload & 1000 & 42194 & 42440 & 42621 & 427 \\
-	DashboardPreload & 1000 & 29623 & 29743 & 30385 & 762 \\
+	ListPreload & 100 & 39410 & 39774.5 & 39812 & 402 & 0.01 \\
+	DashboardPreload & 100 & 27756 & 27774 & 27811 & 55 & 0 \\
+	ListPreload & 1000 & 42194 & 42440 & 42621 & 427 & 0.01 \\
+	DashboardPreload & 1000 & 29623 & 29743 & 30385 & 762 & 0.03 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_gorm_allocsperop}
