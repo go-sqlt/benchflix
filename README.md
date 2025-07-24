@@ -35,3 +35,31 @@ echo "2018年に公開された、タイトルに英単語「shark」が含ま�
 {"search":"shark","year_added":2018,"with_directors":true}
 [{522438 6-Headed Shark Attack 2018-08-18 00:00:00 +0000 UTC 4.7 [Mark Atkins]}]
 ```
+
+## Tables
+
+```sh
+cat *_100.txt | go run tables/main.go -framework=SQL -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=SQL -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=PGX -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=PGX -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=SQUIRREL -params=100 -szenarios=Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=SQUIRREL -params=1000 -szenarios=Dashboard,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=SQLX -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=SQLX -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=GORM -params=100 -szenarios=ListPreload,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=GORM -params=1000 -szenarios=ListPreload,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=SQLC -params=100 -szenarios=List,ListPreload
+cat *_1000.txt | go run tables/main.go -framework=SQLC -params=1000 -szenarios=List,ListPreload
+
+cat *_100.txt | go run tables/main.go -framework=SQLT -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=SQLT -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+
+cat *_100.txt | go run tables/main.go -framework=SQLT-Cache -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *_1000.txt | go run tables/main.go -framework=SQLT-Cache -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+```
