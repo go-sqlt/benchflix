@@ -2,24 +2,14 @@
 
 ```sh
 ## generate params
-go run params/main.go --num=1000 > params.json
+go run params/main.go --size=1000 > params.json
 
+go test -bench='^Benchmark/.*/List$/.*' -benchmem -timeout=120m -count=14 > list.bench
+go test -bench='^Benchmark/.*/ListPreload$/.*' -benchmem -timeout=120m -count=14 > list_preload.bench
+go test -bench='^Benchmark/.*/Dashboard$/.*' -benchmem -timeout=120m -count=14 > dashboard.bench
+go test -bench='^Benchmark/.*/DashboardPreload$/.*' -benchmem -timeout=120m -count=14 > dashboard_preload.bench
 
-go test -bench='^Benchmark/.*/List$' -benchmem -timeout=60m -count=12 -size=100 > bench_list_100.txt
-go test -bench='^Benchmark/.*/List$' -benchmem -timeout=60m -count=12 -size=1000 > bench_list_1000.txt
-
-go test -bench='^Benchmark/.*/ListPreload$' -benchmem -timeout=60m -count=12 -size=100 > bench_list_preload_100.txt
-go test -bench='^Benchmark/.*/ListPreload$' -benchmem -timeout=60m -count=12 -size=1000 > bench_list_preload_1000.txt
-
-go test -bench='^Benchmark/.*/Dashboard$' -benchmem -timeout=60m -count=12 -size=100 > bench_dashboard_100.txt
-go test -bench='^Benchmark/.*/Dashboard$' -benchmem -timeout=60m -count=12 -size=1000 > bench_dashboard_1000.txt
-
-go test -bench='^Benchmark/.*/DashboardPreload$' -benchmem -timeout=60m -count=12 -size=100 > bench_dashboard_preload_100.txt
-go test -bench='^Benchmark/.*/DashboardPreload$' -benchmem -timeout=60m -count=12 -size=1000 > bench_dashboard_preload_1000.txt
-
-
-cat *_100.txt | go run charts/main.go -title='100 Params' -frameworks='SQL,PGX,SQUIRREL,SQLX,GORM,SQLC,SQLT,SQLT-Cache'
-cat *_1000.txt | go run charts/main.go -title='1000 Params' -frameworks='SQL,PGX,SQUIRREL,SQLX,GORM,SQLC,SQLT,SQLT-Cache'
+cat *.bench | go run charts/main.go -frameworks='SQL,PGX,SQUIRREL,SQLX,GORM,SQLC,SQLT,SQLT-Cache'
 ```
 
 ## Semantic Query Example:
@@ -39,27 +29,12 @@ echo "2018年に公開された、タイトルに英単語「shark」が含ま�
 ## Tables
 
 ```sh
-cat *_100.txt | go run tables/main.go -framework=SQL -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=SQL -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=PGX -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=PGX -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=SQUIRREL -params=100 -szenarios=Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=SQUIRREL -params=1000 -szenarios=Dashboard,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=SQLX -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=SQLX -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=GORM -params=100 -szenarios=ListPreload,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=GORM -params=1000 -szenarios=ListPreload,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=SQLC -params=100 -szenarios=List,ListPreload
-cat *_1000.txt | go run tables/main.go -framework=SQLC -params=1000 -szenarios=List,ListPreload
-
-cat *_100.txt | go run tables/main.go -framework=SQLT -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=SQLT -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-
-cat *_100.txt | go run tables/main.go -framework=SQLT-Cache -params=100 -szenarios=List,ListPreload,Dashboard,DashboardPreload
-cat *_1000.txt | go run tables/main.go -framework=SQLT-Cache -params=1000 -szenarios=List,ListPreload,Dashboard,DashboardPreload
+cat *.bench | go run tables/main.go -framework=SQL -szenarios=List,ListPreload,Dashboard,DashboardPreload > table_sql.tex
+cat *.bench | go run tables/main.go -framework=PGX -szenarios=List,ListPreload,Dashboard,DashboardPreload > table_pgx.tex
+cat *.bench | go run tables/main.go -framework=SQUIRREL -szenarios=Dashboard,DashboardPreload > table_squirrel.tex
+cat *.bench | go run tables/main.go -framework=SQLX -szenarios=List,ListPreload,Dashboard,DashboardPreload > table_sqlx.tex
+cat *.bench | go run tables/main.go -framework=GORM -szenarios=ListPreload,DashboardPreload > table_gorm.tex
+cat *.bench | go run tables/main.go -framework=SQLC -szenarios=List,ListPreload > table_sqlc.tex
+cat *.bench | go run tables/main.go -framework=SQLT -szenarios=List,ListPreload,Dashboard,DashboardPreload > table_sqlt.tex
+cat *.bench | go run tables/main.go -framework=SQLT-Cache -szenarios=List,ListPreload,Dashboard,DashboardPreload > table_sqlt_cache.tex
 ```

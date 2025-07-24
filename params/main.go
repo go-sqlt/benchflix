@@ -10,12 +10,12 @@ import (
 )
 
 func main() {
-	num := flag.Int("num", 100, "number of params")
+	size := flag.Int("size", 0, "number of params")
 	flag.Parse()
 
-	params := make([]benchflix.DashboardParams, *num)
+	params := make([]benchflix.DashboardParams, *size)
 
-	for i := range *num {
+	for i := range *size {
 		params[i] = RandomDashboardParams()
 	}
 

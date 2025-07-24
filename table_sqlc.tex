@@ -1,0 +1,49 @@
+
+\begin{table}[ht]
+\centering
+\caption{SQLC: Nanosekunden pro Operation}
+\begin{tabular}{lcccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	List & 100 & 183919 & 184813 & 186519 & 2600 \\
+	ListPreload & 100 & 161556 & 162354.5 & 166160 & 4604 \\
+	List & 1000 & 185965 & 186626.5 & 187790 & 1825 \\
+	ListPreload & 1000 & 155755 & 156915 & 158386 & 2631 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlc_nsperop}
+\end{table}
+	
+\begin{table}[ht]
+\centering
+\caption{SQLC: Speicherverbrauch pro Operation}
+\begin{tabular}{lccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	List & 100 & 6415 & 6432 & 6462 & 47 \\
+	ListPreload & 100 & 7684 & 7696 & 7717 & 33 \\
+	List & 1000 & 7518 & 7537.5 & 7564 & 46 \\
+	ListPreload & 1000 & 9497 & 9865 & 9963 & 466 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlc_bytesperop}
+\end{table}
+	
+\begin{table}[ht]
+\centering
+\caption{SQLC: Allokationen pro Operation}
+\begin{tabular}{lccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	List & 100 & 6415 & 6432 & 6462 & 47 \\
+	ListPreload & 100 & 7684 & 7696 & 7717 & 33 \\
+	List & 1000 & 7518 & 7537.5 & 7564 & 46 \\
+	ListPreload & 1000 & 9497 & 9865 & 9963 & 466 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlc_allocsperop}
+\end{table}
+	

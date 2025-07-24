@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"flag"
 	"io"
 	"os"
 	"runtime"
@@ -31,7 +30,6 @@ import (
 )
 
 var (
-	ParamSize       = flag.Int("size", 0, "number of params")
 	MaxConns        = 6
 	MinConns        = 3
 	IdleTimeout     = 2 * time.Minute
@@ -182,9 +180,11 @@ func ExecBenchmark[P any](exec func(context.Context, P) ([]benchflix.Movie, erro
 
 	group.SetLimit(MaxConns)
 
+	size := len(params)
+
 	for i := range 12_500 {
 		group.Go(func() error {
-			_, err := exec(context.Background(), params[i%*ParamSize])
+			_, err := exec(context.Background(), params[i%size])
 			if err != nil {
 				return err
 			}
@@ -208,7 +208,7 @@ func ExecBenchmark[P any](exec func(context.Context, P) ([]benchflix.Movie, erro
 		i := 0
 
 		for pb.Next() {
-			_, err := exec(context.Background(), params[i%*ParamSize])
+			_, err := exec(context.Background(), params[i%size])
 			if err != nil {
 				b.Fatal(err)
 
@@ -235,13 +235,9 @@ func Benchmark(b *testing.B) {
 		panic(err)
 	}
 
-	DashboardParams = DashboardParams[:*ParamSize]
-
 	if err = json.Unmarshal(data, &ListParams); err != nil {
 		panic(err)
 	}
-
-	ListParams = ListParams[:*ParamSize]
 
 	for _, r := range repositories {
 		b.Run(r.Name, func(b *testing.B) {
@@ -252,19 +248,43 @@ func Benchmark(b *testing.B) {
 			repo := r.Repository(conn)
 
 			b.Run("List", func(b *testing.B) {
-				ExecBenchmark(repo.QueryList, ListParams, b)
+				b.Run("100", func(b *testing.B) {
+					ExecBenchmark(repo.QueryList, ListParams[:100], b)
+				})
+
+				b.Run("1000", func(b *testing.B) {
+					ExecBenchmark(repo.QueryList, ListParams[:1000], b)
+				})
 			})
 
 			b.Run("ListPreload", func(b *testing.B) {
-				ExecBenchmark(repo.QueryListPreload, ListParams, b)
+				b.Run("100", func(b *testing.B) {
+					ExecBenchmark(repo.QueryListPreload, ListParams[:100], b)
+				})
+
+				b.Run("1000", func(b *testing.B) {
+					ExecBenchmark(repo.QueryListPreload, ListParams[:1000], b)
+				})
 			})
 
 			b.Run("Dashboard", func(b *testing.B) {
-				ExecBenchmark(repo.QueryDashboard, DashboardParams, b)
+				b.Run("100", func(b *testing.B) {
+					ExecBenchmark(repo.QueryDashboard, DashboardParams[:100], b)
+				})
+
+				b.Run("1000", func(b *testing.B) {
+					ExecBenchmark(repo.QueryDashboard, DashboardParams[:1000], b)
+				})
 			})
 
 			b.Run("DashboardPreload", func(b *testing.B) {
-				ExecBenchmark(repo.QueryDashboardPreload, DashboardParams, b)
+				b.Run("100", func(b *testing.B) {
+					ExecBenchmark(repo.QueryDashboardPreload, DashboardParams[:100], b)
+				})
+
+				b.Run("1000", func(b *testing.B) {
+					ExecBenchmark(repo.QueryDashboardPreload, DashboardParams[:1000], b)
+				})
 			})
 
 			_ = resource.Close()

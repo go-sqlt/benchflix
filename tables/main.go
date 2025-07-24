@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/go-sqlt/benchflix"
@@ -16,16 +15,21 @@ import (
 
 var (
 	framework = flag.String("framework", "SQL", "Framwork")
-	cores     = flag.Int("cores", 12, "Number of cores")
+	cores     = flag.String("cores", "12", "Number of cores")
 	szenarios = flag.String("szenarios", "", "Szanarios")
-	params    = flag.String("params", "", "Number of Params")
 )
 
 type Data struct {
 	Szenario          string
+	Params            string
 	NsPerOp           []float64
 	AllocedBytesPerOp []float64
 	AllocsPerOp       []float64
+}
+
+type Stats struct {
+	Hundred  stats.Quartiles
+	Thousand stats.Quartiles
 }
 
 func main() {
@@ -55,13 +59,17 @@ func main() {
 			continue
 		}
 
-		szenario := strings.TrimSuffix(parts[2], "-"+strconv.Itoa(*cores))
+		szenario := parts[2]
+		params := strings.TrimSuffix(parts[3], "-"+*cores)
 
-		index := slices.IndexFunc(data, func(d Data) bool { return d.Szenario == szenario })
+		index := slices.IndexFunc(data, func(d Data) bool {
+			return d.Szenario == szenario && params == d.Params
+		})
 		if index < 0 {
 
 			data = append(data, Data{
 				Szenario:          szenario,
+				Params:            params,
 				NsPerOp:           []float64{float64(b.NsPerOp)},
 				AllocedBytesPerOp: []float64{float64(b.AllocedBytesPerOp)},
 				AllocsPerOp:       []float64{float64(b.AllocsPerOp)},
@@ -75,9 +83,9 @@ func main() {
 		data[index].AllocsPerOp = append(data[index].AllocsPerOp, float64(b.AllocsPerOp))
 	}
 
-	NsPerOp := make([]stats.Quartiles, len(SZENARIOS))
-	BytesPerOp := make([]stats.Quartiles, len(SZENARIOS))
-	AllocsPerOp := make([]stats.Quartiles, len(SZENARIOS))
+	NsPerOp := make([]Stats, len(SZENARIOS))
+	BytesPerOp := make([]Stats, len(SZENARIOS))
+	AllocsPerOp := make([]Stats, len(SZENARIOS))
 
 	for _, d := range data {
 		index := slices.Index(SZENARIOS, d.Szenario)
@@ -85,71 +93,101 @@ func main() {
 			continue
 		}
 
-		NsPerOp[index] = benchflix.Must(stats.Quartile(d.NsPerOp))
-		BytesPerOp[index] = benchflix.Must(stats.Quartile(d.AllocedBytesPerOp))
-		AllocsPerOp[index] = benchflix.Must(stats.Quartile(d.AllocsPerOp))
+		switch d.Params {
+		case "100":
+			NsPerOp[index].Hundred = benchflix.Must(stats.Quartile(d.NsPerOp))
+			BytesPerOp[index].Hundred = benchflix.Must(stats.Quartile(d.AllocedBytesPerOp))
+			AllocsPerOp[index].Hundred = benchflix.Must(stats.Quartile(d.AllocedBytesPerOp))
+		case "1000":
+			NsPerOp[index].Thousand = benchflix.Must(stats.Quartile(d.NsPerOp))
+			BytesPerOp[index].Thousand = benchflix.Must(stats.Quartile(d.AllocedBytesPerOp))
+			AllocsPerOp[index].Thousand = benchflix.Must(stats.Quartile(d.AllocedBytesPerOp))
+		default:
+			panic(d.Params)
+		}
 	}
 
 	fmt.Printf(`
 \begin{table}[ht]
 \centering
-\caption{%s: Nanosekunden pro Operation für %s Parameter}
-\begin{tabular}{lccccc}
+\caption{%s: Nanosekunden pro Operation}
+\begin{tabular}{lcccccc}
 \toprule
-Szenario & 1. Quartil & 2. Quartil & 3. Quartil & Quartilabstand \\
-\midrule`, *framework, *params)
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule`, *framework)
 
 	for i, q := range NsPerOp {
 		fmt.Printf(`
-	%s & %g & %g & %g & %g \\`, SZENARIOS[i], q.Q1, q.Q2, q.Q3, q.Q3-q.Q1)
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	}
+
+	for i, q := range NsPerOp {
+		fmt.Printf(`
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
 	}
 
 	fmt.Printf(`
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_nsperop_%s}
+\label{tab:benchmark_%s_nsperop}
 \end{table}
-	`, strings.ToLower(*framework), *params)
+	`, strings.ToLower(*framework))
 
 	fmt.Printf(`
 \begin{table}[ht]
 \centering
-\caption{%s: Speicherverbrauch pro Operation für %s Parameter}
+\caption{%s: Speicherverbrauch pro Operation}
 \begin{tabular}{lccccc}
 \toprule
-Szenario & 1. Quartil & 2. Quartil & 3. Quartil & Quartilabstand \\
-\midrule`, *framework, *params)
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule`, *framework)
 
 	for i, q := range BytesPerOp {
 		fmt.Printf(`
-	%s & %g & %g & %g & %g \\`, SZENARIOS[i], q.Q1, q.Q2, q.Q3, q.Q3-q.Q1)
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	}
+
+	for i, q := range BytesPerOp {
+		fmt.Printf(`
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
 	}
 
 	fmt.Printf(`
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_bytesperop_%s}
+\label{tab:benchmark_%s_bytesperop}
 \end{table}
-	`, strings.ToLower(*framework), *params)
+	`, strings.ToLower(*framework))
 
-		fmt.Printf(`
+	fmt.Printf(`
 \begin{table}[ht]
 \centering
-\caption{%s: Allokationen pro Operation für %s Parameter}
+\caption{%s: Allokationen pro Operation}
 \begin{tabular}{lccccc}
 \toprule
-Szenario & 1. Quartil & 2. Quartil & 3. Quartil & Quartilabstand \\
-\midrule`, *framework, *params)
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule`, *framework)
 
 	for i, q := range AllocsPerOp {
 		fmt.Printf(`
-	%s & %g & %g & %g & %g \\`, SZENARIOS[i], q.Q1, q.Q2, q.Q3, q.Q3-q.Q1)
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "100", q.Hundred.Q1, q.Hundred.Q2, q.Hundred.Q3, q.Hundred.Q3-q.Hundred.Q1)
+	}
+
+	for i, q := range AllocsPerOp {
+		fmt.Printf(`
+	%s & %s & %g & %g & %g & %g \\`,
+			SZENARIOS[i], "1000", q.Thousand.Q1, q.Thousand.Q2, q.Thousand.Q3, q.Thousand.Q3-q.Thousand.Q1)
 	}
 
 	fmt.Printf(`
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_allocsperop_%s}
+\label{tab:benchmark_%s_allocsperop}
 \end{table}
-	`, strings.ToLower(*framework), *params)
+	`, strings.ToLower(*framework))
 }

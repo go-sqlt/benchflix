@@ -1,0 +1,49 @@
+
+\begin{table}[ht]
+\centering
+\caption{SQUIRREL: Nanosekunden pro Operation}
+\begin{tabular}{lcccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	Dashboard & 100 & 307668 & 309273 & 313745 & 6077 \\
+	DashboardPreload & 100 & 321100 & 328110.5 & 329171 & 8071 \\
+	Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 \\
+	DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_squirrel_nsperop}
+\end{table}
+	
+\begin{table}[ht]
+\centering
+\caption{SQUIRREL: Speicherverbrauch pro Operation}
+\begin{tabular}{lccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 \\
+	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 \\
+	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_squirrel_bytesperop}
+\end{table}
+	
+\begin{table}[ht]
+\centering
+\caption{SQUIRREL: Allokationen pro Operation}
+\begin{tabular}{lccccc}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA \\
+\midrule
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 \\
+	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 \\
+	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_squirrel_allocsperop}
+\end{table}
+	

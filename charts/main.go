@@ -5,7 +5,6 @@ import (
 	"flag"
 	"os"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/go-echarts/go-echarts/v2/charts"
@@ -16,8 +15,7 @@ import (
 )
 
 var (
-	title      = flag.String("title", "", "Chart Title")
-	cores      = flag.Int("cores", 12, "Number of cores")
+	cores      = flag.String("cores", "12", "Number of cores")
 	frameworks = flag.String("frameworks", "", "X-Axis Frameworks")
 	FRAMEWORKS []string
 )
@@ -26,6 +24,7 @@ type Data struct {
 	Name                       string
 	Framework                  string
 	Szenario                   string
+	Params                     string
 	NsPerOp                    []float64
 	AllocedBytesPerOp          []float64
 	AllocsPerOp                []float64
@@ -62,7 +61,8 @@ func main() {
 			data = append(data, Data{
 				Name:              b.Name,
 				Framework:         parts[1],
-				Szenario:          strings.TrimSuffix(parts[2], "-"+strconv.Itoa(*cores)),
+				Szenario:          parts[2],
+				Params:            strings.TrimSuffix(parts[3], "-"+*cores),
 				NsPerOp:           []float64{b.NsPerOp},
 				AllocedBytesPerOp: []float64{float64(b.AllocedBytesPerOp)},
 				AllocsPerOp:       []float64{float64(b.AllocsPerOp)},
@@ -76,12 +76,52 @@ func main() {
 		data[index].AllocsPerOp = append(data[index].AllocsPerOp, float64(b.AllocsPerOp))
 	}
 
-	renderChart(data, "NsPerOp", func(d Data) []float64 { return d.NsPerOp })
-	renderChart(data, "BytesPerOp", func(d Data) []float64 { return d.AllocedBytesPerOp })
-	renderChart(data, "AllocsPerOp", func(d Data) []float64 { return d.AllocsPerOp })
+	renderChart(data, "100 Params NsPerOp", func(d Data) []float64 {
+		if d.Params != "100" {
+			return nil
+		}
+
+		return d.NsPerOp
+	})
+	renderChart(data, "100 Params BytesPerOp", func(d Data) []float64 {
+		if d.Params != "100" {
+			return nil
+		}
+
+		return d.AllocedBytesPerOp
+	})
+	renderChart(data, "100 Params AllocsPerOp", func(d Data) []float64 {
+		if d.Params != "100" {
+			return nil
+		}
+
+		return d.AllocsPerOp
+	})
+
+	renderChart(data, "1000 Params NsPerOp", func(d Data) []float64 {
+		if d.Params != "1000" {
+			return nil
+		}
+
+		return d.NsPerOp
+	})
+	renderChart(data, "1000 Params BytesPerOp", func(d Data) []float64 {
+		if d.Params != "1000" {
+			return nil
+		}
+
+		return d.AllocedBytesPerOp
+	})
+	renderChart(data, "1000 Params AllocsPerOp", func(d Data) []float64 {
+		if d.Params != "1000" {
+			return nil
+		}
+
+		return d.AllocsPerOp
+	})
 }
 
-func renderChart(data []Data, suffix string, fn func(Data) []float64) {
+func renderChart(data []Data, title string, fn func(Data) []float64) {
 	list := make([]opts.BarData, len(FRAMEWORKS))
 	listpreload := make([]opts.BarData, len(FRAMEWORKS))
 	dashboard := make([]opts.BarData, len(FRAMEWORKS))
@@ -91,7 +131,13 @@ func renderChart(data []Data, suffix string, fn func(Data) []float64) {
 	for _, d := range data {
 		xSet[d.Framework] = true
 
-		q, err := stats.Quartile(fn(d))
+		values := fn(d)
+
+		if len(values) == 0 {
+			continue
+		}
+
+		q, err := stats.Quartile(values)
 		if err != nil {
 			panic(err)
 		}
@@ -125,7 +171,7 @@ func renderChart(data []Data, suffix string, fn func(Data) []float64) {
 	chart := charts.NewBar()
 	chart.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title: *title + " " + suffix,
+			Title: title,
 		}),
 		charts.WithAnimation(false),
 		charts.WithInitializationOpts(opts.Initialization{
@@ -148,7 +194,7 @@ func renderChart(data []Data, suffix string, fn func(Data) []float64) {
 
 	chart.SetXAxis(FRAMEWORKS)
 
-	output := "charts/" + strings.ReplaceAll(*title, " ", "_") + "_" + suffix + ".png"
+	output := "charts/" + strings.ReplaceAll(title, " ", "_") + ".png"
 
 	if err := render.MakeChartSnapshot(chart.RenderContent(), output); err != nil {
 		panic(err)
