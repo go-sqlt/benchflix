@@ -321,12 +321,12 @@ func ReadAll(reader io.Reader) (Benchmark, error) {
 		switch {
 		case strings.HasPrefix(parts[3], "100-"):
 			szenario.Hundred.NsPerOp = append(szenario.Hundred.NsPerOp, b.NsPerOp)
-			szenario.Hundred.BytesPerOp = append(szenario.Hundred.NsPerOp, float64(b.AllocedBytesPerOp))
-			szenario.Hundred.AllocsPerOp = append(szenario.Hundred.NsPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Hundred.BytesPerOp = append(szenario.Hundred.BytesPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Hundred.AllocsPerOp = append(szenario.Hundred.AllocsPerOp, float64(b.AllocsPerOp))
 		case strings.HasPrefix(parts[3], "1000-"):
 			szenario.Thousand.NsPerOp = append(szenario.Thousand.NsPerOp, b.NsPerOp)
-			szenario.Thousand.BytesPerOp = append(szenario.Thousand.NsPerOp, float64(b.AllocedBytesPerOp))
-			szenario.Thousand.AllocsPerOp = append(szenario.Thousand.NsPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Thousand.BytesPerOp = append(szenario.Thousand.BytesPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Thousand.AllocsPerOp = append(szenario.Thousand.AllocsPerOp, float64(b.AllocsPerOp))
 		default:
 			return bench, fmt.Errorf("invalid params: %s", parts[3])
 		}
