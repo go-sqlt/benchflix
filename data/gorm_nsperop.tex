@@ -1,0 +1,16 @@
+\begin{table}[ht]
+\centering
+\caption{GORM: Nanosekunden pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		ListPreload & 100 & 220176 & 221396 & 225370 & 5194 & 2.3\% \\
+		DashboardPreload & 100 & 199146 & 202134 & 205611 & 6465 & 3.2\% \\
+		ListPreload & 1000 & 225621 & 226703 & 229797 & 4176 & 1.8\% \\
+		DashboardPreload & 1000 & 192647 & 193649 & 194520 & 1873 & 1.0\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_gorm_nsperop}
+\end{table}
+	

@@ -2,6 +2,7 @@ package sqltflix
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-sqlt/benchflix"
 	"github.com/go-sqlt/sqlt"
@@ -13,7 +14,15 @@ type MovieDirectors struct {
 	Directors []string
 }
 
-func New(pool *pgxpool.Pool, config sqlt.Config) Repository {
+func NewRepository(conn string, min, max int, idle time.Duration, config sqlt.Config) Repository {
+	cfg := benchflix.Must(pgxpool.ParseConfig(conn))
+
+	cfg.MaxConns = int32(max)
+	cfg.MinConns = int32(min)
+	cfg.MaxConnIdleTime = idle
+
+	pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
+
 	return Repository{
 		Pool: pool,
 		QueryListStatement: sqlt.AllPgx[benchflix.ListParams, benchflix.Movie](

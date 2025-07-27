@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\caption{SQLT: Nanosekunden pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		List & 100 & 191776 & 193054 & 195057 & 3281 & 1.7\% \\
+		ListPreload & 100 & 194403 & 194894 & 198892 & 4489 & 2.3\% \\
+		Dashboard & 100 & 202902 & 203987 & 205037 & 2135 & 1.0\% \\
+		DashboardPreload & 100 & 191508 & 193434 & 194897 & 3389 & 1.8\% \\
+		List & 1000 & 187291 & 189724 & 190550 & 3259 & 1.7\% \\
+		ListPreload & 1000 & 192134 & 192623 & 193596 & 1462 & 0.8\% \\
+		Dashboard & 1000 & 185076 & 186199 & 186684 & 1608 & 0.9\% \\
+		DashboardPreload & 1000 & 178442 & 179527 & 181207 & 2765 & 1.5\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlt_nsperop}
+\end{table}
+	

@@ -10,11 +10,11 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"time"
 
 	"github.com/go-sqlt/benchflix"
 	"github.com/go-sqlt/benchflix/sqltflix"
 	"github.com/go-sqlt/sqlt"
-	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -25,13 +25,7 @@ func main() {
 
 	defer resource.Close()
 
-	cfg := benchflix.Must(pgxpool.ParseConfig(conn))
-
-	pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
-	repo := sqltflix.New(pool, sqlt.Logger(func(ctx context.Context, info sqlt.Info) {
-		// fmt.Println(info.CollapsedSQL(), info.Args)
-	}))
+	repo := sqltflix.NewRepository(conn, 3, 6, 2*time.Second, sqlt.Config{})
 
 	prompt := benchflix.Must(io.ReadAll(os.Stdin))
 

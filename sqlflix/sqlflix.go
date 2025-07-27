@@ -5,49 +5,60 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/go-sqlt/benchflix"
 	"github.com/lib/pq"
 )
 
+func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repository {
+	db := benchflix.Must(sql.Open("pgx", conn))
+
+	db.SetMaxOpenConns(max)
+	db.SetMaxIdleConns(min)
+	db.SetConnMaxIdleTime(idle)
+
+	return Repository{
+		DB: db,
+	}
+}
+
 type Repository struct {
 	DB *sql.DB
 }
 
-const queryListStatement = `
-	SELECT
-		m.id
-		, m.title
-		, m.added_at
-		, m.rating
-		, d.directors
-	FROM movies m
-	LEFT JOIN LATERAL (
-		SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
-		FROM movie_directors md
-		JOIN people p ON p.id = md.person_id
-		WHERE md.movie_id = m.id
-	) d ON true
-	WHERE
-		(
-			$1 = ''
-			OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
-			OR EXISTS (
-				SELECT 1
-				FROM movie_directors md
-				JOIN people p ON p.id = md.person_id
-				WHERE md.movie_id = m.id
-				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
-			)
-		)
-		AND ($2 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
-		AND ($3 = 0 OR m.rating >= $3)
-	ORDER BY m.rating DESC
-	LIMIT CASE WHEN $4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END;
-`
-
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	rows, err := r.DB.QueryContext(ctx, queryListStatement, params.Search, params.YearAdded, params.MinRating, params.Limit)
+	rows, err := r.DB.QueryContext(ctx, `
+		SELECT
+			m.id
+			, m.title
+			, m.added_at
+			, m.rating
+			, d.directors
+		FROM movies m
+		LEFT JOIN LATERAL (
+			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
+			FROM movie_directors md
+			JOIN people p ON p.id = md.person_id
+			WHERE md.movie_id = m.id
+		) d ON true
+		WHERE
+			(
+				$1 = ''
+				OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
+				OR EXISTS (
+					SELECT 1
+					FROM movie_directors md
+					JOIN people p ON p.id = md.person_id
+					WHERE md.movie_id = m.id
+					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+				)
+			)
+			AND ($2 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
+			AND ($3 = 0 OR m.rating >= $3)
+		ORDER BY m.rating DESC
+		LIMIT CASE WHEN $4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END;
+	`, params.Search, params.YearAdded, params.MinRating, params.Limit)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +89,15 @@ func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) 
 	return movies, nil
 }
 
-const (
-	queryListPreloadStatement = `
+func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
+	var (
+		movies = make([]benchflix.Movie, 0, params.Limit)
+		index  = 0
+		ids    = make([]int64, 0, params.Limit)
+		idMap  = make(map[int64]int, params.Limit)
+	)
+
+	rows, err := r.DB.QueryContext(ctx, `
 		SELECT
 			m.id
 			, m.title
@@ -102,25 +120,7 @@ const (
 			AND ($3 = 0 OR m.rating >= $3)
 		ORDER BY m.rating DESC
 		LIMIT CASE WHEN $4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END;
-	`
-	queryMovieDirectors = `
-		SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name) AS directors
-		FROM movie_directors md
-		JOIN people ON people.id = md.person_id
-		WHERE md.movie_id = ANY ($1)
-		GROUP BY md.movie_id;
-	`
-)
-
-func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	var (
-		movies = make([]benchflix.Movie, 0, params.Limit)
-		index  = 0
-		ids    = make([]int64, 0, params.Limit)
-		idMap  = make(map[int64]int, params.Limit)
-	)
-
-	rows, err := r.DB.QueryContext(ctx, queryListPreloadStatement, params.Search, params.YearAdded, params.MinRating, params.Limit)
+	`, params.Search, params.YearAdded, params.MinRating, params.Limit)
 	if err != nil {
 		return nil, err
 	}
@@ -152,7 +152,13 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 		return movies, nil
 	}
 
-	dirRows, err := r.DB.QueryContext(ctx, queryMovieDirectors, ids)
+	dirRows, err := r.DB.QueryContext(ctx, `
+		SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name) AS directors
+		FROM movie_directors md
+		JOIN people ON people.id = md.person_id
+		WHERE md.movie_id = ANY ($1)
+		GROUP BY md.movie_id;
+	`, ids)
 	if err != nil {
 		return nil, err
 	}
@@ -388,7 +394,13 @@ func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.
 		return movies, nil
 	}
 
-	dirRows, err := r.DB.QueryContext(ctx, queryMovieDirectors, ids)
+	dirRows, err := r.DB.QueryContext(ctx, `
+		SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name) AS directors
+		FROM movie_directors md
+		JOIN people ON people.id = md.person_id
+		WHERE md.movie_id = ANY ($1)
+		GROUP BY md.movie_id;
+	`, ids)
 	if err != nil {
 		return nil, err
 	}

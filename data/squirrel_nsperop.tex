@@ -1,0 +1,16 @@
+\begin{table}[ht]
+\centering
+\caption{SQUIRREL: Nanosekunden pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		Dashboard & 100 & 307668 & 309273 & 313745 & 6077 & 2.0\% \\
+		DashboardPreload & 100 & 321100 & 328111 & 329171 & 8071 & 2.5\% \\
+		Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 & 2.9\% \\
+		DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 & 2.1\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_squirrel_nsperop}
+\end{table}
+	

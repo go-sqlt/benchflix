@@ -1,0 +1,16 @@
+\begin{table}[ht]
+\centering
+\caption{SQLC: Nanosekunden pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		List & 100 & 183919 & 184813 & 186519 & 2600 & 1.4\% \\
+		ListPreload & 100 & 161556 & 162355 & 166160 & 4604 & 2.8\% \\
+		List & 1000 & 185965 & 186627 & 187790 & 1825 & 1.0\% \\
+		ListPreload & 1000 & 155755 & 156915 & 158386 & 2631 & 1.7\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlc_nsperop}
+\end{table}
+	

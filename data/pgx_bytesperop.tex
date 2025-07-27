@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\caption{PGX: Speicherverbrauch pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		List & 100 & 195230 & 196462 & 198097 & 2867 & 1.5\% \\
+		ListPreload & 100 & 198030 & 200307 & 205542 & 7512 & 3.8\% \\
+		Dashboard & 100 & 187988 & 188897 & 191004 & 3016 & 1.6\% \\
+		DashboardPreload & 100 & 188553 & 189463 & 192292 & 3739 & 2.0\% \\
+		List & 1000 & 188898 & 192566 & 194448 & 5550 & 2.9\% \\
+		ListPreload & 1000 & 196588 & 197478 & 199882 & 3294 & 1.7\% \\
+		Dashboard & 1000 & 198329 & 199952 & 201725 & 3396 & 1.7\% \\
+		DashboardPreload & 1000 & 182655 & 183925 & 185690 & 3035 & 1.7\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_pgx_bytesperop}
+\end{table}
+	

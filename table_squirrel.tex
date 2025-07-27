@@ -1,47 +1,44 @@
 
 \begin{table}[ht]
-\centering
 \caption{SQUIRREL: Nanosekunden pro Operation}
-\begin{tabular}{lccccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	Dashboard & 100 & 307668 & 309273 & 313745 & 6077 & 2\% \\
-	DashboardPreload & 100 & 321100 & 328110.5 & 329171 & 8071 & 2\% \\
-	Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 & 3\% \\
-	DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 & 2\% \\
+	Dashboard & 100 & 307668 & 309273 & 313745 & 6077 & 2.0\% \\
+	DashboardPreload & 100 & 321100 & 328111 & 329171 & 8071 & 2.5\% \\
+	Dashboard & 1000 & 315485 & 318723 & 324689 & 9204 & 2.9\% \\
+	DashboardPreload & 1000 & 314591 & 319386 & 321432 & 6841 & 2.1\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_nsperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQUIRREL: Speicherverbrauch pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0\% \\
-	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0\% \\
-	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 & 1\% \\
-	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 & 0\% \\
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0.2\% \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0.2\% \\
+	Dashboard & 1000 & 26088 & 26120 & 26262 & 174 & 0.7\% \\
+	DashboardPreload & 1000 & 30068 & 30092 & 30113 & 45 & 0.1\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_bytesperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQUIRREL: Allokationen pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0\% \\
-	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0\% \\
-	Dashboard & 1000 & 26088 & 26119.5 & 26262 & 174 & 1\% \\
-	DashboardPreload & 1000 & 30068 & 30091.5 & 30113 & 45 & 0\% \\
+	Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0.2\% \\
+	DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0.2\% \\
+	Dashboard & 1000 & 26088 & 26120 & 26262 & 174 & 0.7\% \\
+	DashboardPreload & 1000 & 30068 & 30092 & 30113 & 45 & 0.1\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_allocsperop}

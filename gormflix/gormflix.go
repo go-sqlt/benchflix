@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"github.com/go-sqlt/benchflix"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type Movie struct {
@@ -23,49 +25,63 @@ type Person struct {
 	Name string `gorm:"unique;not null;index"`
 }
 
+func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repository {
+	db := benchflix.Must(gorm.Open(postgres.Open(conn), &gorm.Config{
+		Logger:                 logger.Default.LogMode(logger.Silent),
+		SkipDefaultTransaction: true,
+		PrepareStmt:            true,
+	}))
+
+	sqldb := benchflix.Must(db.DB())
+
+	sqldb.SetMaxOpenConns(max)
+	sqldb.SetMaxIdleConns(min)
+	sqldb.SetConnMaxIdleTime(idle)
+
+	return Repository{
+		DB: db,
+	}
+}
+
 type Repository struct {
 	DB *gorm.DB
 }
 
+//nolint:maintidx
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
-
-const queryListPreloadStatement = `
-	SELECT
-		m.id
-		, m.title
-		, m.added_at
-		, m.rating
-	FROM movies m
-	WHERE
-		(
-			@search = ''
-			OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', @search)
-			OR EXISTS (
-				SELECT 1
-				FROM movie_directors md
-				JOIN people p ON p.id = md.person_id
-				WHERE md.movie_id = m.id
-				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', @search)
-			)
-		)
-		AND (@year_added = 0 OR EXTRACT(YEAR FROM m.added_at) = @year_added)
-		AND (@min_rating = 0 OR m.rating >= @min_rating)
-	ORDER BY m.rating DESC
-	LIMIT CASE WHEN @limit BETWEEN 1 AND 1000 THEN @limit ELSE 1000 END;
-`
 
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	var rows = make([]Movie, 0, params.Limit)
 
 	if err := r.DB.Preload("Directors", func(db *gorm.DB) *gorm.DB {
 		return db.Order("people.name DESC")
-	}).Raw(queryListPreloadStatement,
-		sql.Named("search", params.Search),
-		sql.Named("year_added", params.YearAdded),
-		sql.Named("min_rating", params.MinRating),
-		sql.Named("limit", params.Limit)).
+	}).Raw(`
+		SELECT
+			m.id
+			, m.title
+			, m.added_at
+			, m.rating
+		FROM movies m
+		WHERE
+			(
+				@search = ''
+				OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', @search)
+				OR EXISTS (
+					SELECT 1
+					FROM movie_directors md
+					JOIN people p ON p.id = md.person_id
+					WHERE md.movie_id = m.id
+					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', @search)
+				)
+			)
+			AND (@year_added = 0 OR EXTRACT(YEAR FROM m.added_at) = @year_added)
+			AND (@min_rating = 0 OR m.rating >= @min_rating)
+		ORDER BY m.rating DESC
+		LIMIT CASE WHEN @limit BETWEEN 1 AND 1000 THEN @limit ELSE 1000 END;
+	`, sql.Named("search", params.Search), sql.Named("year_added", params.YearAdded),
+		sql.Named("min_rating", params.MinRating), sql.Named("limit", params.Limit)).
 		Find(&rows).Error; err != nil {
 		return nil, err
 	}
@@ -98,6 +114,7 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 	return movies, nil
 }
 
+//nolint:maintidx
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }

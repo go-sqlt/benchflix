@@ -1,59 +1,56 @@
 
 \begin{table}[ht]
-\centering
 \caption{SQLX: Nanosekunden pro Operation}
-\begin{tabular}{lccccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 236226 & 236966.5 & 239354 & 3128 & 1\% \\
-	ListPreload & 100 & 267810 & 270182.5 & 274021 & 6211 & 2\% \\
-	Dashboard & 100 & 242890 & 244049 & 245948 & 3058 & 1\% \\
-	DashboardPreload & 100 & 256108 & 258164.5 & 263776 & 7668 & 3\% \\
-	List & 1000 & 231731 & 232761.5 & 234089 & 2358 & 1\% \\
-	ListPreload & 1000 & 260495 & 261275.5 & 261689 & 1194 & 0\% \\
-	Dashboard & 1000 & 234726 & 241243.5 & 242045 & 7319 & 3\% \\
-	DashboardPreload & 1000 & 245528 & 246294 & 249209 & 3681 & 1\% \\
+	List & 100 & 236226 & 236967 & 239354 & 3128 & 1.3\% \\
+	ListPreload & 100 & 267810 & 270183 & 274021 & 6211 & 2.3\% \\
+	Dashboard & 100 & 242890 & 244049 & 245948 & 3058 & 1.3\% \\
+	DashboardPreload & 100 & 256108 & 258165 & 263776 & 7668 & 3.0\% \\
+	List & 1000 & 231731 & 232762 & 234089 & 2358 & 1.0\% \\
+	ListPreload & 1000 & 260495 & 261276 & 261689 & 1194 & 0.5\% \\
+	Dashboard & 1000 & 234726 & 241244 & 242045 & 7319 & 3.0\% \\
+	DashboardPreload & 1000 & 245528 & 246294 & 249209 & 3681 & 1.5\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlx_nsperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQLX: Speicherverbrauch pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 8863 & 8900 & 8912 & 49 & 1\% \\
-	ListPreload & 100 & 12348 & 12359.5 & 12390 & 42 & 0\% \\
-	Dashboard & 100 & 11634 & 11646 & 11651 & 17 & 0\% \\
-	DashboardPreload & 100 & 12682 & 12688.5 & 12703 & 21 & 0\% \\
-	List & 1000 & 9663 & 9693 & 9722 & 59 & 1\% \\
-	ListPreload & 1000 & 12978 & 12982 & 13010 & 32 & 0\% \\
-	Dashboard & 1000 & 12082 & 12090 & 12101 & 19 & 0\% \\
-	DashboardPreload & 1000 & 13193 & 13229 & 13241 & 48 & 0\% \\
+	List & 100 & 8863 & 8900 & 8912 & 49 & 0.6\% \\
+	ListPreload & 100 & 12348 & 12360 & 12390 & 42 & 0.3\% \\
+	Dashboard & 100 & 11634 & 11646 & 11651 & 17 & 0.1\% \\
+	DashboardPreload & 100 & 12682 & 12689 & 12703 & 21 & 0.2\% \\
+	List & 1000 & 9663 & 9693 & 9722 & 59 & 0.6\% \\
+	ListPreload & 1000 & 12978 & 12982 & 13010 & 32 & 0.2\% \\
+	Dashboard & 1000 & 12082 & 12090 & 12101 & 19 & 0.2\% \\
+	DashboardPreload & 1000 & 13193 & 13229 & 13241 & 48 & 0.4\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlx_bytesperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQLX: Allokationen pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 8863 & 8900 & 8912 & 49 & 1\% \\
-	ListPreload & 100 & 12348 & 12359.5 & 12390 & 42 & 0\% \\
-	Dashboard & 100 & 11634 & 11646 & 11651 & 17 & 0\% \\
-	DashboardPreload & 100 & 12682 & 12688.5 & 12703 & 21 & 0\% \\
-	List & 1000 & 9663 & 9693 & 9722 & 59 & 1\% \\
-	ListPreload & 1000 & 12978 & 12982 & 13010 & 32 & 0\% \\
-	Dashboard & 1000 & 12082 & 12090 & 12101 & 19 & 0\% \\
-	DashboardPreload & 1000 & 13193 & 13229 & 13241 & 48 & 0\% \\
+	List & 100 & 8863 & 8900 & 8912 & 49 & 0.6\% \\
+	ListPreload & 100 & 12348 & 12360 & 12390 & 42 & 0.3\% \\
+	Dashboard & 100 & 11634 & 11646 & 11651 & 17 & 0.1\% \\
+	DashboardPreload & 100 & 12682 & 12689 & 12703 & 21 & 0.2\% \\
+	List & 1000 & 9663 & 9693 & 9722 & 59 & 0.6\% \\
+	ListPreload & 1000 & 12978 & 12982 & 13010 & 32 & 0.2\% \\
+	Dashboard & 1000 & 12082 & 12090 & 12101 & 19 & 0.2\% \\
+	DashboardPreload & 1000 & 13193 & 13229 & 13241 & 48 & 0.4\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlx_allocsperop}

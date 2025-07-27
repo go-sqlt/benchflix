@@ -1,59 +1,56 @@
 
 \begin{table}[ht]
-\centering
 \caption{PGX: Nanosekunden pro Operation}
-\begin{tabular}{lccccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 195850 & 196951.5 & 198097 & 2247 & 1\% \\
-	ListPreload & 100 & 198720 & 200622.5 & 205542 & 6822 & 3\% \\
-	Dashboard & 100 & 188052 & 189221.5 & 191004 & 2952 & 2\% \\
-	DashboardPreload & 100 & 188683 & 189678.5 & 192292 & 3609 & 2\% \\
-	List & 1000 & 189133 & 192593 & 194448 & 5315 & 3\% \\
-	ListPreload & 1000 & 196948 & 197479.5 & 199882 & 2934 & 1\% \\
-	Dashboard & 1000 & 198431 & 200004.5 & 201725 & 3294 & 2\% \\
-	DashboardPreload & 1000 & 182725 & 184233 & 185690 & 2965 & 2\% \\
+	List & 100 & 195850 & 196952 & 198097 & 2247 & 1.1\% \\
+	ListPreload & 100 & 198720 & 200623 & 205542 & 6822 & 3.4\% \\
+	Dashboard & 100 & 188052 & 189222 & 191004 & 2952 & 1.6\% \\
+	DashboardPreload & 100 & 188683 & 189679 & 192292 & 3609 & 1.9\% \\
+	List & 1000 & 189133 & 192593 & 194448 & 5315 & 2.8\% \\
+	ListPreload & 1000 & 196948 & 197480 & 199882 & 2934 & 1.5\% \\
+	Dashboard & 1000 & 198431 & 200005 & 201725 & 3294 & 1.6\% \\
+	DashboardPreload & 1000 & 182725 & 184233 & 185690 & 2965 & 1.6\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_nsperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{PGX: Speicherverbrauch pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 5849 & 5851.5 & 5868 & 19 & 0\% \\
-	ListPreload & 100 & 8667 & 8675.5 & 8691 & 24 & 0\% \\
-	Dashboard & 100 & 9379 & 9394.5 & 9398 & 19 & 0\% \\
-	DashboardPreload & 100 & 11307 & 11322 & 11333 & 26 & 0\% \\
-	List & 1000 & 7110 & 7113 & 7126 & 16 & 0\% \\
-	ListPreload & 1000 & 10200 & 10226.5 & 10250 & 50 & 0\% \\
-	Dashboard & 1000 & 10492 & 10509.5 & 10523 & 31 & 0\% \\
-	DashboardPreload & 1000 & 12436 & 12439 & 12442 & 6 & 0\% \\
+	List & 100 & 5849 & 5852 & 5868 & 19 & 0.3\% \\
+	ListPreload & 100 & 8667 & 8676 & 8691 & 24 & 0.3\% \\
+	Dashboard & 100 & 9379 & 9395 & 9398 & 19 & 0.2\% \\
+	DashboardPreload & 100 & 11307 & 11322 & 11333 & 26 & 0.2\% \\
+	List & 1000 & 7110 & 7113 & 7126 & 16 & 0.2\% \\
+	ListPreload & 1000 & 10200 & 10227 & 10250 & 50 & 0.5\% \\
+	Dashboard & 1000 & 10492 & 10510 & 10523 & 31 & 0.3\% \\
+	DashboardPreload & 1000 & 12436 & 12439 & 12442 & 6 & 0.0\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_bytesperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{PGX: Allokationen pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 5849 & 5851.5 & 5868 & 19 & 0\% \\
-	ListPreload & 100 & 8667 & 8675.5 & 8691 & 24 & 0\% \\
-	Dashboard & 100 & 9379 & 9394.5 & 9398 & 19 & 0\% \\
-	DashboardPreload & 100 & 11307 & 11322 & 11333 & 26 & 0\% \\
-	List & 1000 & 7110 & 7113 & 7126 & 16 & 0\% \\
-	ListPreload & 1000 & 10200 & 10226.5 & 10250 & 50 & 0\% \\
-	Dashboard & 1000 & 10492 & 10509.5 & 10523 & 31 & 0\% \\
-	DashboardPreload & 1000 & 12436 & 12439 & 12442 & 6 & 0\% \\
+	List & 100 & 5849 & 5852 & 5868 & 19 & 0.3\% \\
+	ListPreload & 100 & 8667 & 8676 & 8691 & 24 & 0.3\% \\
+	Dashboard & 100 & 9379 & 9395 & 9398 & 19 & 0.2\% \\
+	DashboardPreload & 100 & 11307 & 11322 & 11333 & 26 & 0.2\% \\
+	List & 1000 & 7110 & 7113 & 7126 & 16 & 0.2\% \\
+	ListPreload & 1000 & 10200 & 10227 & 10250 & 50 & 0.5\% \\
+	Dashboard & 1000 & 10492 & 10510 & 10523 & 31 & 0.3\% \\
+	DashboardPreload & 1000 & 12436 & 12439 & 12442 & 6 & 0.0\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_allocsperop}

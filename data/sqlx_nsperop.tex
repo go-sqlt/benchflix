@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\caption{SQLX: Nanosekunden pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		List & 100 & 236226 & 236967 & 239354 & 3128 & 1.3\% \\
+		ListPreload & 100 & 267810 & 270183 & 274021 & 6211 & 2.3\% \\
+		Dashboard & 100 & 242890 & 244049 & 245948 & 3058 & 1.3\% \\
+		DashboardPreload & 100 & 256108 & 258165 & 263776 & 7668 & 3.0\% \\
+		List & 1000 & 231731 & 232762 & 234089 & 2358 & 1.0\% \\
+		ListPreload & 1000 & 260495 & 261276 & 261689 & 1194 & 0.5\% \\
+		Dashboard & 1000 & 234726 & 241244 & 242045 & 7319 & 3.0\% \\
+		DashboardPreload & 1000 & 245528 & 246294 & 249209 & 3681 & 1.5\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sqlx_nsperop}
+\end{table}
+	

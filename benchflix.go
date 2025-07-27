@@ -1,11 +1,13 @@
 package benchflix
 
 import (
+	"bufio"
 	"context"
 	"database/sql"
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"slices"
 	"strconv"
@@ -15,6 +17,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
+	"golang.org/x/tools/benchmark/parse"
 )
 
 var (
@@ -240,4 +243,94 @@ func removePostgresContainer(pool *dockertest.Pool, name string) error {
 	}
 
 	return nil
+}
+
+type Benchmark struct {
+	SQL, PGX, SQUIRREL, SQLX, GORM, SQLC, SQLT, SQLTCACHE Framework
+}
+
+type Framework struct {
+	List, ListPreload, Dashboard, DashboardPreload Szenario
+}
+
+type Szenario struct {
+	Hundred, Thousand Params
+}
+
+type Params struct {
+	NsPerOp, BytesPerOp, AllocsPerOp []float64
+}
+
+func ReadAll(reader io.Reader) (Benchmark, error) {
+	bench := Benchmark{}
+
+	scan := bufio.NewScanner(reader)
+
+	for scan.Scan() {
+		line := scan.Text()
+
+		if !strings.HasPrefix(line, "Benchmark") {
+			continue
+		}
+
+		b, err := parse.ParseLine(line)
+		if err != nil {
+			panic(err)
+		}
+
+		parts := strings.Split(b.Name, "/")
+
+		var framework *Framework
+
+		switch parts[1] {
+		case "SQL":
+			framework = &bench.SQL
+		case "PGX":
+			framework = &bench.PGX
+		case "SQUIRREL":
+			framework = &bench.SQUIRREL
+		case "SQLX":
+			framework = &bench.SQLX
+		case "GORM":
+			framework = &bench.GORM
+		case "SQLC":
+			framework = &bench.SQLC
+		case "SQLT":
+			framework = &bench.SQLT
+		case "SQLT-Cache":
+			framework = &bench.SQLTCACHE
+		default:
+			return bench, fmt.Errorf("invalid framework: %s", parts[1])
+		}
+
+		var szenario *Szenario
+
+		switch parts[2] {
+		case "List":
+			szenario = &framework.List
+		case "ListPreload":
+			szenario = &framework.ListPreload
+		case "Dashboard":
+			szenario = &framework.Dashboard
+		case "DashboardPreload":
+			szenario = &framework.DashboardPreload
+		default:
+			return bench, fmt.Errorf("invalid szenario: %s", parts[2])
+		}
+
+		switch {
+		case strings.HasPrefix(parts[3], "100-"):
+			szenario.Hundred.NsPerOp = append(szenario.Hundred.NsPerOp, b.NsPerOp)
+			szenario.Hundred.BytesPerOp = append(szenario.Hundred.NsPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Hundred.AllocsPerOp = append(szenario.Hundred.NsPerOp, float64(b.AllocedBytesPerOp))
+		case strings.HasPrefix(parts[3], "1000-"):
+			szenario.Thousand.NsPerOp = append(szenario.Thousand.NsPerOp, b.NsPerOp)
+			szenario.Thousand.BytesPerOp = append(szenario.Thousand.NsPerOp, float64(b.AllocedBytesPerOp))
+			szenario.Thousand.AllocsPerOp = append(szenario.Thousand.NsPerOp, float64(b.AllocedBytesPerOp))
+		default:
+			return bench, fmt.Errorf("invalid params: %s", parts[3])
+		}
+	}
+
+	return bench, nil
 }

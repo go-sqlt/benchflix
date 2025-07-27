@@ -2,7 +2,6 @@ package benchflix_test
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"io"
 	"os"
@@ -10,7 +9,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Masterminds/squirrel"
 	"github.com/go-sqlt/benchflix"
 	"github.com/go-sqlt/benchflix/gormflix"
 	"github.com/go-sqlt/benchflix/pgxflix"
@@ -20,13 +18,8 @@ import (
 	"github.com/go-sqlt/benchflix/sqlxflix"
 	"github.com/go-sqlt/benchflix/squirrelflix"
 	"github.com/go-sqlt/sqlt"
-	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
 	"golang.org/x/sync/errgroup"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var (
@@ -39,131 +32,44 @@ var (
 
 type NamedRepository struct {
 	Name       string
-	Repository func(conn string) benchflix.Repository
+	Repository func(conn string, min, max int, idle time.Duration) benchflix.Repository
 }
 
 var repositories = []NamedRepository{
 	{
-		Name: "SQL",
-		Repository: func(conn string) benchflix.Repository {
-			db := benchflix.Must(sql.Open("pgx", conn))
-
-			db.SetMaxOpenConns(MaxConns)
-			db.SetMaxIdleConns(MinConns)
-			db.SetConnMaxIdleTime(IdleTimeout)
-
-			return sqlflix.Repository{
-				DB: db,
-			}
-		},
+		Name:       "SQL",
+		Repository: sqlflix.NewRepository,
 	},
 	{
-		Name: "PGX",
-		Repository: func(conn string) benchflix.Repository {
-			cfg := benchflix.Must(pgxpool.ParseConfig(conn))
-
-			cfg.MaxConns = int32(MaxConns)
-			cfg.MinConns = int32(MinConns)
-			cfg.MaxConnIdleTime = IdleTimeout
-
-			pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
-			return pgxflix.Repository{
-				Pool: pool,
-			}
-		},
+		Name:       "PGX",
+		Repository: pgxflix.NewRepository,
 	},
 	{
-		Name: "SQUIRREL",
-		Repository: func(conn string) benchflix.Repository {
-			db := benchflix.Must(sql.Open("pgx", conn))
-
-			db.SetMaxOpenConns(MaxConns)
-			db.SetMaxIdleConns(MinConns)
-			db.SetConnMaxIdleTime(IdleTimeout)
-
-			return squirrelflix.Repository{
-				DB:     db,
-				Select: squirrel.Select().PlaceholderFormat(squirrel.Dollar),
-			}
-		},
+		Name:       "SQUIRREL",
+		Repository: squirrelflix.NewRepository,
 	},
 	{
-		Name: "SQLX",
-		Repository: func(conn string) benchflix.Repository {
-			db := benchflix.Must(sqlx.Connect("postgres", conn))
-
-			db.SetMaxOpenConns(MaxConns)
-			db.SetMaxIdleConns(MinConns)
-			db.SetConnMaxIdleTime(IdleTimeout)
-
-			return sqlxflix.Repository{
-				DB: db,
-			}
-		},
+		Name:       "SQLX",
+		Repository: sqlxflix.NewRepository,
 	},
 	{
-		Name: "GORM",
-		Repository: func(conn string) benchflix.Repository {
-			db := benchflix.Must(gorm.Open(postgres.Open(conn), &gorm.Config{
-				Logger:                 logger.Default.LogMode(logger.Silent),
-				SkipDefaultTransaction: true,
-				PrepareStmt:            true,
-			}))
-
-			sqldb := benchflix.Must(db.DB())
-
-			sqldb.SetMaxOpenConns(MaxConns)
-			sqldb.SetMaxIdleConns(MinConns)
-			sqldb.SetConnMaxIdleTime(IdleTimeout)
-
-			return gormflix.Repository{
-				DB: db,
-			}
-		},
+		Name:       "GORM",
+		Repository: gormflix.NewRepository,
 	},
 	{
-		Name: "SQLC",
-		Repository: func(conn string) benchflix.Repository {
-			cfg := benchflix.Must(pgxpool.ParseConfig(conn))
-
-			cfg.MaxConns = int32(MaxConns)
-			cfg.MinConns = int32(MinConns)
-			cfg.MaxConnIdleTime = IdleTimeout
-
-			pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
-			return sqlcflix.Repository{
-				Queries: sqlcflix.New(pool),
-			}
+		Name:       "SQLC",
+		Repository: sqlcflix.NewRepository,
+	},
+	{
+		Name: "SQLT",
+		Repository: func(conn string, min, max int, idle time.Duration) benchflix.Repository {
+			return sqltflix.NewRepository(conn, min, max, idle, sqlt.Config{})
 		},
 	},
 	{
 		Name: "SQLT-Cache",
-		Repository: func(conn string) benchflix.Repository {
-			cfg := benchflix.Must(pgxpool.ParseConfig(conn))
-
-			cfg.MaxConns = int32(MaxConns)
-			cfg.MinConns = int32(MinConns)
-			cfg.MaxConnIdleTime = IdleTimeout
-
-			pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
-			return sqltflix.New(pool, sqlt.ExpressionSize(10_000))
-		},
-	},
-	{
-		Name: "SQLT",
-		Repository: func(conn string) benchflix.Repository {
-			cfg := benchflix.Must(pgxpool.ParseConfig(conn))
-
-			cfg.MaxConns = int32(MaxConns)
-			cfg.MinConns = int32(MinConns)
-			cfg.MaxConnIdleTime = IdleTimeout
-
-			pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
-			return sqltflix.New(pool, sqlt.Config{})
+		Repository: func(conn string, min, max int, idle time.Duration) benchflix.Repository {
+			return sqltflix.NewRepository(conn, min, max, idle, sqlt.ExpressionSize(10_000))
 		},
 	},
 }
@@ -245,7 +151,7 @@ func Benchmark(b *testing.B) {
 
 			defer resource.Close()
 
-			repo := r.Repository(conn)
+			repo := r.Repository(conn, MinConns, MaxConns, IdleTimeout)
 
 			b.Run("List", func(b *testing.B) {
 				b.Run("100", func(b *testing.B) {

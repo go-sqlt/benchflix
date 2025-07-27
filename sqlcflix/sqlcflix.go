@@ -2,9 +2,25 @@ package sqlcflix
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-sqlt/benchflix"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repository {
+	cfg := benchflix.Must(pgxpool.ParseConfig(conn))
+
+	cfg.MaxConns = int32(max)
+	cfg.MinConns = int32(min)
+	cfg.MaxConnIdleTime = idle
+
+	pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
+
+	return Repository{
+		Queries: New(pool),
+	}
+}
 
 type Repository struct {
 	Queries *Queries
@@ -65,10 +81,12 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 	return movies, nil
 }
 
+//nolint:maintidx
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
 
+//nolint:maintidx
 func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }

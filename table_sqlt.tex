@@ -1,59 +1,56 @@
 
 \begin{table}[ht]
-\centering
 \caption{SQLT: Nanosekunden pro Operation}
-\begin{tabular}{lccccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 191776 & 193053.5 & 195057 & 3281 & 2\% \\
-	ListPreload & 100 & 194403 & 194894 & 198892 & 4489 & 2\% \\
-	Dashboard & 100 & 202902 & 203986.5 & 205037 & 2135 & 1\% \\
-	DashboardPreload & 100 & 191508 & 193434 & 194897 & 3389 & 2\% \\
-	List & 1000 & 187291 & 189724 & 190550 & 3259 & 2\% \\
-	ListPreload & 1000 & 192134 & 192622.5 & 193596 & 1462 & 1\% \\
-	Dashboard & 1000 & 185076 & 186198.5 & 186684 & 1608 & 1\% \\
-	DashboardPreload & 1000 & 178442 & 179527 & 181207 & 2765 & 2\% \\
+	List & 100 & 191776 & 193054 & 195057 & 3281 & 1.7\% \\
+	ListPreload & 100 & 194403 & 194894 & 198892 & 4489 & 2.3\% \\
+	Dashboard & 100 & 202902 & 203987 & 205037 & 2135 & 1.0\% \\
+	DashboardPreload & 100 & 191508 & 193434 & 194897 & 3389 & 1.8\% \\
+	List & 1000 & 187291 & 189724 & 190550 & 3259 & 1.7\% \\
+	ListPreload & 1000 & 192134 & 192623 & 193596 & 1462 & 0.8\% \\
+	Dashboard & 1000 & 185076 & 186199 & 186684 & 1608 & 0.9\% \\
+	DashboardPreload & 1000 & 178442 & 179527 & 181207 & 2765 & 1.5\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt_nsperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQLT: Speicherverbrauch pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 16411 & 16441.5 & 16457 & 46 & 0\% \\
-	ListPreload & 100 & 18340 & 18363 & 18397 & 57 & 0\% \\
-	Dashboard & 100 & 15091 & 15097.5 & 15102 & 11 & 0\% \\
-	DashboardPreload & 100 & 16264 & 16307 & 16329 & 65 & 0\% \\
-	List & 1000 & 17269 & 17301 & 17312 & 43 & 0\% \\
-	ListPreload & 1000 & 19523 & 19553.5 & 19572 & 49 & 0\% \\
-	Dashboard & 1000 & 15900 & 15924 & 15957 & 57 & 0\% \\
-	DashboardPreload & 1000 & 17147 & 17158.5 & 17165 & 18 & 0\% \\
+	List & 100 & 16411 & 16442 & 16457 & 46 & 0.3\% \\
+	ListPreload & 100 & 18340 & 18363 & 18397 & 57 & 0.3\% \\
+	Dashboard & 100 & 15091 & 15098 & 15102 & 11 & 0.1\% \\
+	DashboardPreload & 100 & 16264 & 16307 & 16329 & 65 & 0.4\% \\
+	List & 1000 & 17269 & 17301 & 17312 & 43 & 0.2\% \\
+	ListPreload & 1000 & 19523 & 19554 & 19572 & 49 & 0.3\% \\
+	Dashboard & 1000 & 15900 & 15924 & 15957 & 57 & 0.4\% \\
+	DashboardPreload & 1000 & 17147 & 17159 & 17165 & 18 & 0.1\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt_bytesperop}
 \end{table}
 	
 \begin{table}[ht]
-\centering
 \caption{SQLT: Allokationen pro Operation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lrrrrrr}
 \toprule
 Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
 \midrule
-	List & 100 & 16411 & 16441.5 & 16457 & 46 & 0\% \\
-	ListPreload & 100 & 18340 & 18363 & 18397 & 57 & 0\% \\
-	Dashboard & 100 & 15091 & 15097.5 & 15102 & 11 & 0\% \\
-	DashboardPreload & 100 & 16264 & 16307 & 16329 & 65 & 0\% \\
-	List & 1000 & 17269 & 17301 & 17312 & 43 & 0\% \\
-	ListPreload & 1000 & 19523 & 19553.5 & 19572 & 49 & 0\% \\
-	Dashboard & 1000 & 15900 & 15924 & 15957 & 57 & 0\% \\
-	DashboardPreload & 1000 & 17147 & 17158.5 & 17165 & 18 & 0\% \\
+	List & 100 & 16411 & 16442 & 16457 & 46 & 0.3\% \\
+	ListPreload & 100 & 18340 & 18363 & 18397 & 57 & 0.3\% \\
+	Dashboard & 100 & 15091 & 15098 & 15102 & 11 & 0.1\% \\
+	DashboardPreload & 100 & 16264 & 16307 & 16329 & 65 & 0.4\% \\
+	List & 1000 & 17269 & 17301 & 17312 & 43 & 0.2\% \\
+	ListPreload & 1000 & 19523 & 19554 & 19572 & 49 & 0.3\% \\
+	Dashboard & 1000 & 15900 & 15924 & 15957 & 57 & 0.4\% \\
+	DashboardPreload & 1000 & 17147 & 17159 & 17165 & 18 & 0.1\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt_allocsperop}

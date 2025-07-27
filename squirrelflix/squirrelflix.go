@@ -5,21 +5,37 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/go-sqlt/benchflix"
 	"github.com/lib/pq"
 )
 
+func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repository {
+	db := benchflix.Must(sql.Open("pgx", conn))
+
+	db.SetMaxOpenConns(max)
+	db.SetMaxIdleConns(min)
+	db.SetConnMaxIdleTime(idle)
+
+	return Repository{
+		DB:     db,
+		Select: squirrel.Select().PlaceholderFormat(squirrel.Dollar),
+	}
+}
+
 type Repository struct {
 	DB     *sql.DB
 	Select squirrel.SelectBuilder
 }
 
+//nolint:maintidx
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
 
+//nolint:maintidx
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
@@ -115,16 +131,6 @@ func (r Repository) QueryDashboard(ctx context.Context, params benchflix.Dashboa
 
 	return movies, nil
 }
-
-const QueryDirectors = `
-	SELECT
-		md.movie_id
-		, ARRAY_AGG(people.name ORDER BY people.name) AS directors
-	FROM movie_directors md
-	JOIN people ON people.id = md.person_id
-	WHERE md.movie_id = ANY ($1)
-	GROUP BY md.movie_id;
-`
 
 func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").From("movies AS m")

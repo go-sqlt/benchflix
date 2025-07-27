@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\caption{SQL: Allokationen pro Operation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+\midrule
+		List & 100 & 197822 & 199260 & 200730 & 2908 & 1.5\% \\
+		ListPreload & 100 & 199092 & 201232 & 211879 & 12787 & 6.4\% \\
+		Dashboard & 100 & 189181 & 190909 & 192038 & 2857 & 1.5\% \\
+		DashboardPreload & 100 & 193868 & 195524 & 199452 & 5584 & 2.9\% \\
+		List & 1000 & 191487 & 193646 & 194319 & 2832 & 1.5\% \\
+		ListPreload & 1000 & 196122 & 197495 & 198646 & 2524 & 1.3\% \\
+		Dashboard & 1000 & 202141 & 204913 & 206942 & 4801 & 2.3\% \\
+		DashboardPreload & 1000 & 193501 & 194758 & 196350 & 2849 & 1.5\% \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmark_sql_allocsperop}
+\end{table}
+	
