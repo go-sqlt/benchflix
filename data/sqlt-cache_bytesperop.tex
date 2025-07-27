@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLT-Cache: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLT-Cache}}$ & ${QA_{SQLT-Cache}}$ & ${\Delta M_{SQLT-Cache,SQL}}$ \\
 \midrule
-		List & 100 & 5444 & 5457 & 5482 & 38 & 0.7\% \\
-		ListPreload & 100 & 7452 & 7485 & 7517 & 65 & 0.9\% \\
-		Dashboard & 100 & 5089 & 5094 & 5109 & 20 & 0.4\% \\
-		DashboardPreload & 100 & 6038 & 6064 & 6093 & 55 & 0.9\% \\
-		List & 1000 & 6402 & 6426 & 6438 & 36 & 0.6\% \\
-		ListPreload & 1000 & 8805 & 8821 & 8837 & 32 & 0.4\% \\
-		Dashboard & 1000 & 6093 & 6102 & 6115 & 22 & 0.4\% \\
-		DashboardPreload & 1000 & 7310 & 7332 & 7339 & 29 & 0.4\% \\
+
+	List & 100 & 5457 & 38 & -41.4\% \\
+	ListPreload & 100 & 7485 & 65 & -37.4\% \\
+	Dashboard & 100 & 5094 & 20 & -49.1\% \\
+	DashboardPreload & 100 & 6064 & 55 & -48.2\% \\
+	List & 1000 & 6426 & 36 & -38.1\% \\
+	ListPreload & 1000 & 8821 & 32 & -33.5\% \\
+	Dashboard & 1000 & 6102 & 22 & -44.3\% \\
+	DashboardPreload & 1000 & 7332 & 29 & -42.9\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt-cache_bytesperop}

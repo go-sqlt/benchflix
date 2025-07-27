@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{PGX: Nanosekunden pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{PGX}}$ & ${QA_{PGX}}$ & ${\Delta M_{PGX,SQL}}$  \\
 \midrule
-		List & 100 & 195850 & 196952 & 198097 & 2247 & 1.1\% \\
-		ListPreload & 100 & 198720 & 200623 & 205542 & 6822 & 3.4\% \\
-		Dashboard & 100 & 188052 & 189222 & 191004 & 2952 & 1.6\% \\
-		DashboardPreload & 100 & 188683 & 189679 & 192292 & 3609 & 1.9\% \\
-		List & 1000 & 189133 & 192593 & 194448 & 5315 & 2.8\% \\
-		ListPreload & 1000 & 196948 & 197480 & 199882 & 2934 & 1.5\% \\
-		Dashboard & 1000 & 198431 & 200005 & 201725 & 3294 & 1.6\% \\
-		DashboardPreload & 1000 & 182725 & 184233 & 185690 & 2965 & 1.6\% \\
+
+	List & 100 & 196952 & 2247 & -1.2\% \\
+	ListPreload & 100 & 200623 & 6822 & -0.4\% \\
+	Dashboard & 100 & 189222 & 2952 & -0.9\% \\
+	DashboardPreload & 100 & 189679 & 3609 & -3.0\% \\
+	List & 1000 & 192593 & 5315 & -0.7\% \\
+	ListPreload & 1000 & 197480 & 2934 & 0.0\% \\
+	Dashboard & 1000 & 200005 & 3294 & -2.4\% \\
+	DashboardPreload & 1000 & 184233 & 2965 & -5.6\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_nsperop}

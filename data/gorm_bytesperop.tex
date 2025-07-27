@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{GORM: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{GORM}}$ & ${QA_{GORM}}$ & ${\Delta M_{GORM,SQL}}$ \\
 \midrule
-		ListPreload & 100 & 39410 & 39775 & 39812 & 402 & 1.0\% \\
-		DashboardPreload & 100 & 27756 & 27774 & 27811 & 55 & 0.2\% \\
-		ListPreload & 1000 & 42194 & 42440 & 42621 & 427 & 1.0\% \\
-		DashboardPreload & 1000 & 29623 & 29743 & 30385 & 762 & 2.6\% \\
+
+	ListPreload & 100 & 39775 & 402 & 232.5\% \\
+	DashboardPreload & 100 & 27774 & 55 & 137.3\% \\
+	ListPreload & 1000 & 42440 & 427 & 220.1\% \\
+	DashboardPreload & 1000 & 29743 & 762 & 131.5\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_gorm_bytesperop}

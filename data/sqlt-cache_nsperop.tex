@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLT-Cache: Nanosekunden pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLT-Cache}}$ & ${QA_{SQLT-Cache}}$ & ${\Delta M_{SQLT-Cache,SQL}}$  \\
 \midrule
-		List & 100 & 186591 & 188084 & 190975 & 4384 & 2.3\% \\
-		ListPreload & 100 & 185070 & 186018 & 190201 & 5131 & 2.8\% \\
-		Dashboard & 100 & 199207 & 200396 & 201462 & 2255 & 1.1\% \\
-		DashboardPreload & 100 & 188354 & 191268 & 192707 & 4353 & 2.3\% \\
-		List & 1000 & 182355 & 184301 & 189451 & 7096 & 3.9\% \\
-		ListPreload & 1000 & 184550 & 185308 & 186521 & 1971 & 1.1\% \\
-		Dashboard & 1000 & 180526 & 181890 & 182633 & 2107 & 1.2\% \\
-		DashboardPreload & 1000 & 177811 & 179696 & 181609 & 3798 & 2.1\% \\
+
+	List & 100 & 188084 & 4384 & -5.6\% \\
+	ListPreload & 100 & 186018 & 5131 & -7.6\% \\
+	Dashboard & 100 & 200396 & 2255 & 4.9\% \\
+	DashboardPreload & 100 & 191268 & 4353 & -2.2\% \\
+	List & 1000 & 184301 & 7096 & -4.9\% \\
+	ListPreload & 1000 & 185308 & 1971 & -6.2\% \\
+	Dashboard & 1000 & 181890 & 2107 & -11.2\% \\
+	DashboardPreload & 1000 & 179696 & 3798 & -7.9\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt-cache_nsperop}

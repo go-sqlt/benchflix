@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{PGX: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{PGX}}$ & ${QA_{PGX}}$ & ${\Delta M_{PGX,SQL}}$ \\
 \midrule
-		List & 100 & 127 & 128 & 128 & 1 & 0.8\% \\
-		ListPreload & 100 & 184 & 185 & 185 & 1 & 0.5\% \\
-		Dashboard & 100 & 154 & 154 & 154 & 0 & 0.0\% \\
-		DashboardPreload & 100 & 181 & 181 & 181 & 0 & 0.0\% \\
-		List & 1000 & 152 & 152 & 152 & 0 & 0.0\% \\
-		ListPreload & 1000 & 220 & 221 & 221 & 1 & 0.5\% \\
-		Dashboard & 1000 & 174 & 175 & 175 & 1 & 0.6\% \\
-		DashboardPreload & 1000 & 204 & 204 & 205 & 1 & 0.5\% \\
+
+	List & 100 & 128 & 1 & -38.2\% \\
+	ListPreload & 100 & 185 & 1 & -29.0\% \\
+	Dashboard & 100 & 154 & 0 & -12.5\% \\
+	DashboardPreload & 100 & 181 & 0 & -8.1\% \\
+	List & 1000 & 152 & 0 & -37.8\% \\
+	ListPreload & 1000 & 221 & 1 & -28.2\% \\
+	Dashboard & 1000 & 175 & 1 & -11.8\% \\
+	DashboardPreload & 1000 & 204 & 1 & -10.9\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_allocsperop}

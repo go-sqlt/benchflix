@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLT: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLT}}$ & ${QA_{SQLT}}$ & ${\Delta M_{SQLT,SQL}}$ \\
 \midrule
-		List & 100 & 16411 & 16442 & 16457 & 46 & 0.3\% \\
-		ListPreload & 100 & 18340 & 18363 & 18397 & 57 & 0.3\% \\
-		Dashboard & 100 & 15091 & 15098 & 15102 & 11 & 0.1\% \\
-		DashboardPreload & 100 & 16264 & 16307 & 16329 & 65 & 0.4\% \\
-		List & 1000 & 17269 & 17301 & 17312 & 43 & 0.2\% \\
-		ListPreload & 1000 & 19523 & 19554 & 19572 & 49 & 0.3\% \\
-		Dashboard & 1000 & 15900 & 15924 & 15957 & 57 & 0.4\% \\
-		DashboardPreload & 1000 & 17147 & 17159 & 17165 & 18 & 0.1\% \\
+
+	List & 100 & 16442 & 46 & 76.5\% \\
+	ListPreload & 100 & 18363 & 57 & 53.5\% \\
+	Dashboard & 100 & 15098 & 11 & 51.0\% \\
+	DashboardPreload & 100 & 16307 & 65 & 39.3\% \\
+	List & 1000 & 17301 & 43 & 66.5\% \\
+	ListPreload & 1000 & 19554 & 49 & 47.5\% \\
+	Dashboard & 1000 & 15924 & 57 & 45.3\% \\
+	DashboardPreload & 1000 & 17159 & 18 & 33.5\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt_bytesperop}

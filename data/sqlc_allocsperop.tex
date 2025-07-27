@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLC: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLC}}$ & ${QA_{SQLC}}$ & ${\Delta M_{SQLC,SQL}}$ \\
 \midrule
-		List & 100 & 122 & 122 & 123 & 1 & 0.8\% \\
-		ListPreload & 100 & 157 & 158 & 158 & 1 & 0.6\% \\
-		List & 1000 & 140 & 140 & 141 & 1 & 0.7\% \\
-		ListPreload & 1000 & 188 & 194 & 196 & 8 & 4.1\% \\
+
+	List & 100 & 122 & 1 & -41.1\% \\
+	ListPreload & 100 & 158 & 1 & -39.4\% \\
+	List & 1000 & 140 & 1 & -42.7\% \\
+	ListPreload & 1000 & 194 & 8 & -36.8\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlc_allocsperop}

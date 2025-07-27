@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQUIRREL: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQUIRREL}}$ & ${QA_{SQUIRREL}}$ & ${\Delta M_{SQUIRREL,SQL}}$ \\
 \midrule
-		Dashboard & 100 & 24723 & 24748 & 24778 & 55 & 0.2\% \\
-		DashboardPreload & 100 & 28846 & 28859 & 28901 & 55 & 0.2\% \\
-		Dashboard & 1000 & 26088 & 26120 & 26262 & 174 & 0.7\% \\
-		DashboardPreload & 1000 & 30068 & 30092 & 30113 & 45 & 0.1\% \\
+
+	Dashboard & 100 & 24748 & 55 & 147.5\% \\
+	DashboardPreload & 100 & 28859 & 55 & 146.6\% \\
+	Dashboard & 1000 & 26120 & 174 & 138.4\% \\
+	DashboardPreload & 1000 & 30092 & 45 & 134.2\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_bytesperop}

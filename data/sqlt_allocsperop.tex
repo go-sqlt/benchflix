@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLT: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLT}}$ & ${QA_{SQLT}}$ & ${\Delta M_{SQLT,SQL}}$ \\
 \midrule
-		List & 100 & 377 & 378 & 378 & 1 & 0.3\% \\
-		ListPreload & 100 & 416 & 416 & 417 & 1 & 0.2\% \\
-		Dashboard & 100 & 349 & 350 & 350 & 1 & 0.3\% \\
-		DashboardPreload & 100 & 372 & 372 & 373 & 1 & 0.3\% \\
-		List & 1000 & 395 & 396 & 396 & 1 & 0.3\% \\
-		ListPreload & 1000 & 437 & 438 & 438 & 1 & 0.2\% \\
-		Dashboard & 1000 & 366 & 367 & 367 & 1 & 0.3\% \\
-		DashboardPreload & 1000 & 388 & 388 & 388 & 0 & 0.0\% \\
+
+	List & 100 & 378 & 1 & 82.6\% \\
+	ListPreload & 100 & 416 & 1 & 60.0\% \\
+	Dashboard & 100 & 350 & 1 & 98.6\% \\
+	DashboardPreload & 100 & 372 & 1 & 88.8\% \\
+	List & 1000 & 396 & 1 & 62.0\% \\
+	ListPreload & 1000 & 438 & 1 & 42.7\% \\
+	Dashboard & 1000 & 367 & 1 & 84.6\% \\
+	DashboardPreload & 1000 & 388 & 0 & 69.4\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlt_allocsperop}

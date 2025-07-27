@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLC: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLC}}$ & ${QA_{SQLC}}$ & ${\Delta M_{SQLC,SQL}}$ \\
 \midrule
-		List & 100 & 6415 & 6432 & 6462 & 47 & 0.7\% \\
-		ListPreload & 100 & 7684 & 7696 & 7717 & 33 & 0.4\% \\
-		List & 1000 & 7518 & 7538 & 7564 & 46 & 0.6\% \\
-		ListPreload & 1000 & 9497 & 9865 & 9963 & 466 & 4.7\% \\
+
+	List & 100 & 6432 & 47 & -30.9\% \\
+	ListPreload & 100 & 7696 & 33 & -35.7\% \\
+	List & 1000 & 7538 & 46 & -27.4\% \\
+	ListPreload & 1000 & 9865 & 466 & -25.6\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlc_bytesperop}

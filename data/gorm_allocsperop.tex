@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{GORM: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{GORM}}$ & ${QA_{GORM}}$ & ${\Delta M_{GORM,SQL}}$ \\
 \midrule
-		ListPreload & 100 & 715 & 723 & 724 & 9 & 1.2\% \\
-		DashboardPreload & 100 & 478 & 479 & 480 & 2 & 0.4\% \\
-		ListPreload & 1000 & 772 & 778 & 783 & 11 & 1.4\% \\
-		DashboardPreload & 1000 & 518 & 521 & 536 & 18 & 3.5\% \\
+
+	ListPreload & 100 & 723 & 9 & 178.1\% \\
+	DashboardPreload & 100 & 479 & 2 & 143.1\% \\
+	ListPreload & 1000 & 778 & 11 & 153.4\% \\
+	DashboardPreload & 1000 & 521 & 18 & 127.3\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_gorm_allocsperop}

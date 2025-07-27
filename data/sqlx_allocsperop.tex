@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLX: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLX}}$ & ${QA_{SQLX}}$ & ${\Delta M_{SQLX,SQL}}$ \\
 \midrule
-		List & 100 & 192 & 193 & 193 & 1 & 0.5\% \\
-		ListPreload & 100 & 221 & 221 & 222 & 1 & 0.5\% \\
-		Dashboard & 100 & 169 & 170 & 170 & 1 & 0.6\% \\
-		DashboardPreload & 100 & 181 & 181 & 181 & 0 & 0.0\% \\
-		List & 1000 & 210 & 210 & 211 & 1 & 0.5\% \\
-		ListPreload & 1000 & 237 & 237 & 238 & 1 & 0.4\% \\
-		Dashboard & 1000 & 183 & 184 & 184 & 1 & 0.5\% \\
-		DashboardPreload & 1000 & 193 & 194 & 195 & 2 & 1.0\% \\
+
+	List & 100 & 193 & 1 & -6.8\% \\
+	ListPreload & 100 & 221 & 1 & -15.0\% \\
+	Dashboard & 100 & 170 & 1 & -3.4\% \\
+	DashboardPreload & 100 & 181 & 0 & -8.1\% \\
+	List & 1000 & 210 & 1 & -14.1\% \\
+	ListPreload & 1000 & 237 & 1 & -22.8\% \\
+	Dashboard & 1000 & 184 & 1 & -7.3\% \\
+	DashboardPreload & 1000 & 194 & 2 & -15.3\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlx_allocsperop}

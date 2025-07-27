@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQLX: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQLX}}$ & ${QA_{SQLX}}$ & ${\Delta M_{SQLX,SQL}}$ \\
 \midrule
-		List & 100 & 8863 & 8900 & 8912 & 49 & 0.6\% \\
-		ListPreload & 100 & 12348 & 12360 & 12390 & 42 & 0.3\% \\
-		Dashboard & 100 & 11634 & 11646 & 11651 & 17 & 0.1\% \\
-		DashboardPreload & 100 & 12682 & 12689 & 12703 & 21 & 0.2\% \\
-		List & 1000 & 9663 & 9693 & 9722 & 59 & 0.6\% \\
-		ListPreload & 1000 & 12978 & 12982 & 13010 & 32 & 0.2\% \\
-		Dashboard & 1000 & 12082 & 12090 & 12101 & 19 & 0.2\% \\
-		DashboardPreload & 1000 & 13193 & 13229 & 13241 & 48 & 0.4\% \\
+
+	List & 100 & 8900 & 49 & -4.4\% \\
+	ListPreload & 100 & 12360 & 42 & 3.3\% \\
+	Dashboard & 100 & 11646 & 17 & 16.5\% \\
+	DashboardPreload & 100 & 12689 & 21 & 8.4\% \\
+	List & 1000 & 9693 & 59 & -6.7\% \\
+	ListPreload & 1000 & 12982 & 32 & -2.1\% \\
+	Dashboard & 1000 & 12090 & 19 & 10.3\% \\
+	DashboardPreload & 1000 & 13229 & 48 & 2.9\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sqlx_bytesperop}

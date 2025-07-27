@@ -1,14 +1,16 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQUIRREL: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQUIRREL}}$ & ${QA_{SQUIRREL}}$ & ${\Delta M_{SQUIRREL,SQL}}$ \\
 \midrule
-		Dashboard & 100 & 591 & 592 & 593 & 2 & 0.3\% \\
-		DashboardPreload & 100 & 691 & 691 & 693 & 2 & 0.3\% \\
-		Dashboard & 1000 & 634 & 635 & 639 & 5 & 0.8\% \\
-		DashboardPreload & 1000 & 728 & 729 & 730 & 2 & 0.3\% \\
+
+	Dashboard & 100 & 592 & 2 & 236.1\% \\
+	DashboardPreload & 100 & 691 & 2 & 250.8\% \\
+	Dashboard & 1000 & 635 & 5 & 219.9\% \\
+	DashboardPreload & 1000 & 729 & 2 & 218.3\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_squirrel_allocsperop}

@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQL: Allokationen pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQL}}$ & ${QA_{SQL}}$  \\
 \midrule
-		List & 100 & 207 & 207 & 207 & 0 & 0.0\% \\
-		ListPreload & 100 & 260 & 260 & 263 & 3 & 1.2\% \\
-		Dashboard & 100 & 176 & 176 & 176 & 0 & 0.0\% \\
-		DashboardPreload & 100 & 197 & 197 & 197 & 0 & 0.0\% \\
-		List & 1000 & 244 & 245 & 245 & 1 & 0.4\% \\
-		ListPreload & 1000 & 305 & 307 & 307 & 2 & 0.7\% \\
-		Dashboard & 1000 & 198 & 199 & 205 & 7 & 3.5\% \\
-		DashboardPreload & 1000 & 228 & 229 & 229 & 1 & 0.4\% \\
+
+	List & 100 & 207 & 0 \\
+	ListPreload & 100 & 260 & 3 \\
+	Dashboard & 100 & 176 & 0 \\
+	DashboardPreload & 100 & 197 & 0 \\
+	List & 1000 & 245 & 1 \\
+	ListPreload & 1000 & 307 & 2 \\
+	Dashboard & 1000 & 199 & 7 \\
+	DashboardPreload & 1000 & 229 & 1 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sql_allocsperop}

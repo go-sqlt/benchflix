@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{PGX: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{PGX}}$ & ${QA_{PGX}}$ & ${\Delta M_{PGX,SQL}}$ \\
 \midrule
-		List & 100 & 5849 & 5852 & 5868 & 19 & 0.3\% \\
-		ListPreload & 100 & 8667 & 8676 & 8691 & 24 & 0.3\% \\
-		Dashboard & 100 & 9379 & 9395 & 9398 & 19 & 0.2\% \\
-		DashboardPreload & 100 & 11307 & 11322 & 11333 & 26 & 0.2\% \\
-		List & 1000 & 7110 & 7113 & 7126 & 16 & 0.2\% \\
-		ListPreload & 1000 & 10200 & 10227 & 10250 & 50 & 0.5\% \\
-		Dashboard & 1000 & 10492 & 10510 & 10523 & 31 & 0.3\% \\
-		DashboardPreload & 1000 & 12436 & 12439 & 12442 & 6 & 0.0\% \\
+
+	List & 100 & 5852 & 19 & -37.2\% \\
+	ListPreload & 100 & 8676 & 24 & -27.5\% \\
+	Dashboard & 100 & 9395 & 19 & -6.1\% \\
+	DashboardPreload & 100 & 11322 & 26 & -3.3\% \\
+	List & 1000 & 7113 & 16 & -31.5\% \\
+	ListPreload & 1000 & 10227 & 50 & -22.9\% \\
+	Dashboard & 1000 & 10510 & 31 & -4.1\% \\
+	DashboardPreload & 1000 & 12439 & 6 & -3.2\% \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_pgx_bytesperop}

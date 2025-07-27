@@ -1,18 +1,20 @@
+
 \begin{table}[ht]
 \centering
 \caption{SQL: Nanosekunden pro Operation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Szenario & Params & Q1 & Q2 & Q3 & QA & QA/Q2 \\
+Szenario & Params & ${M_{SQL}}$ & ${QA_{SQL}}$   \\
 \midrule
-		List & 100 & 198127 & 199289 & 200730 & 2603 & 1.3\% \\
-		ListPreload & 100 & 199114 & 201401 & 211879 & 12765 & 6.3\% \\
-		Dashboard & 100 & 189962 & 190976 & 192038 & 2076 & 1.1\% \\
-		DashboardPreload & 100 & 193954 & 195629 & 199452 & 5498 & 2.8\% \\
-		List & 1000 & 191579 & 193888 & 194319 & 2740 & 1.4\% \\
-		ListPreload & 1000 & 196624 & 197545 & 198646 & 2022 & 1.0\% \\
-		Dashboard & 1000 & 202730 & 204926 & 206942 & 4212 & 2.1\% \\
-		DashboardPreload & 1000 & 194035 & 195135 & 196350 & 2315 & 1.2\% \\
+
+	List & 100 & 199289 & 2603 \\
+	ListPreload & 100 & 201401 & 12765 \\
+	Dashboard & 100 & 190976 & 2076 \\
+	DashboardPreload & 100 & 195629 & 5498 \\
+	List & 1000 & 193888 & 2740 \\
+	ListPreload & 1000 & 197545 & 2022 \\
+	Dashboard & 1000 & 204926 & 4212 \\
+	DashboardPreload & 1000 & 195135 & 2315 \\
 \bottomrule
 \end{tabular}
 \label{tab:benchmark_sql_nsperop}
