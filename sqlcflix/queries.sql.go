@@ -11,12 +11,7 @@ import (
 )
 
 const query = `-- name: Query :many
-SELECT
-    m.id
-    , m.title
-    , m.added_at
-    , m.rating
-    , d.directors::TEXT[] AS directors
+SELECT m.id, m.title, m.added_at, m.rating, d.directors::TEXT[] AS directors
 FROM movies m
 LEFT JOIN LATERAL (
     SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
@@ -89,9 +84,7 @@ func (q *Queries) Query(ctx context.Context, arg QueryParams) ([]QueryRow, error
 }
 
 const queryDirectors = `-- name: QueryDirectors :many
-SELECT
-    md.movie_id
-    , ARRAY_AGG(people.name ORDER BY people.name)::TEXT[] AS directors
+SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name)::TEXT[] AS directors
 FROM movie_directors md
 JOIN people ON people.id = md.person_id
 WHERE md.movie_id = ANY ($1::INT8[])
@@ -124,11 +117,7 @@ func (q *Queries) QueryDirectors(ctx context.Context, dollar_1 []int64) ([]Query
 }
 
 const queryPreload = `-- name: QueryPreload :many
-SELECT
-    id
-    , title
-    , added_at
-    , rating
+SELECT id, title, added_at, rating
 FROM movies m
 WHERE
     (

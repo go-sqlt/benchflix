@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{SQLT-Cache: Mittelwerte (Allocs)}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	List & 100 & 131 & 149 & 177 & 174 & 154 \\
+	List & 1000 & 167 & 196 & 160 & 172 & 168 \\
+	List & 10000 & 188 & 171 & 165 & 184 & 170 \\
+	ListPreload & 100 & 171 & 193 & 233 & 227 & 196 \\
+	ListPreload & 1000 & 216 & 260 & 209 & 222 & 219 \\
+	ListPreload & 10000 & 246 & 227 & 212 & 239 & 221 \\
+	Dashboard & 100 & 119 & 142 & 143 & 140 & 127 \\
+	Dashboard & 1000 & 141 & 165 & 140 & 147 & 145 \\
+	Dashboard & 10000 & 159 & 150 & 149 & 157 & 148 \\
+	DashboardPreload & 100 & 144 & 179 & 161 & 156 & 141 \\
+	DashboardPreload & 1000 & 163 & 191 & 163 & 174 & 176 \\
+	DashboardPreload & 10000 & 186 & 179 & 168 & 184 & 174 \\
+\bottomrule
+\end{tabular}
+\label{tab:mittelwerte_sqlt-cache_allocs}
+\end{table}
+	

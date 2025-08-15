@@ -1,18 +1,13 @@
 # Benchflix
 
 ```sh
-## generate params
-go run cmd/params/main.go --size=1000 > params.json
+go test -bench=. -benchmem -timeout=500m -count=10 > data/bench.txt
 
-go test -bench='^Benchmark/.*/List$/.*' -benchmem -timeout=120m -count=14 > list.bench
-go test -bench='^Benchmark/.*/ListPreload$/.*' -benchmem -timeout=120m -count=14 > list_preload.bench
-go test -bench='^Benchmark/.*/Dashboard$/.*' -benchmem -timeout=120m -count=14 > dashboard.bench
-go test -bench='^Benchmark/.*/DashboardPreload$/.*' -benchmem -timeout=120m -count=14 > dashboard_preload.bench
+go run cmd/params/main.go
+cat data/bench.txt | go run cmd/tables/main.go 
+cat data/bench.txt | go run cmd/charts/main.go
 
-cat data/*.bench | go run cmd/charts/main.go
-cat data/*.bench | go run cmd/tables/main.go
-
-go get github.com/yagipy/maintidx/cmd/maintidx
+go get -u github.com/yagipy/maintidx/cmd/maintidx
 go run github.com/yagipy/maintidx/cmd/maintidx -under=500 ./... 2>&1 | go run cmd/maintainability/main.go
 ```
 

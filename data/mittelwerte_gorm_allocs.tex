@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{GORM: Mittelwerte (Allocs)}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	ListPreload & 100 & 731 & 829 & 1010 & 976 & 852 \\
+	ListPreload & 1000 & 924 & 1071 & 884 & 953 & 903 \\
+	ListPreload & 10000 & 961 & 952 & 917 & 1028 & 893 \\
+	DashboardPreload & 100 & 585 & 761 & 523 & 511 & 482 \\
+	DashboardPreload & 1000 & 579 & 634 & 613 & 630 & 686 \\
+	DashboardPreload & 10000 & 631 & 637 & 589 & 663 & 599 \\
+\bottomrule
+\end{tabular}
+\label{tab:mittelwerte_gorm_allocs}
+\end{table}
+	

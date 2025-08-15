@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{SQLC: Benchmarkdifferenz (Ns) in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{green!12}  93.9 & \cellcolor{green!21}  72.8 & \cellcolor{green!15}  88.6 & \cellcolor{green!14}  89.8 & \cellcolor{green!15}  87.7 \\
+	List & 1000 & \cellcolor{green!12}  95.8 & \cellcolor{green!13}  92.2 & \cellcolor{green!13}  92.9 & \cellcolor{green!11}  96.3 & \cellcolor{green!13}  93.3 \\
+	List & 10000 & \cellcolor{green!13}  92.4 & \cellcolor{green!12}  94.8 & \cellcolor{red!11}  102.5 & \cellcolor{green!13}  92.6 & \cellcolor{green!11}  97.0 \\
+	ListPreload & 100 & \cellcolor{green!21}  73.0 & \cellcolor{green!24}  65.3 & \cellcolor{green!19}  77.1 & \cellcolor{green!22}  70.7 & \cellcolor{green!22}  70.1 \\
+	ListPreload & 1000 & \cellcolor{green!19}  78.0 & \cellcolor{green!19}  78.0 & \cellcolor{green!18}  79.0 & \cellcolor{green!16}  84.1 & \cellcolor{green!19}  77.7 \\
+	ListPreload & 10000 & \cellcolor{green!19}  77.8 & \cellcolor{green!18}  79.4 & \cellcolor{green!16}  85.7 & \cellcolor{green!18}  78.8 & \cellcolor{green!17}  82.7 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmarkdifferenz_sqlc_ns}
+\end{table}
+	

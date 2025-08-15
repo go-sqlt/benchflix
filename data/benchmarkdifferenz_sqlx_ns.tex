@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{SQLX: Benchmarkdifferenz (Ns) in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{red!19}  121.4 & \cellcolor{red!17}  117.1 & \cellcolor{red!16}  115.5 & \cellcolor{red!17}  117.1 & \cellcolor{red!20}  123.9 \\
+	List & 1000 & \cellcolor{red!16}  115.6 & \cellcolor{red!18}  120.4 & \cellcolor{red!18}  121.0 & \cellcolor{red!18}  119.6 & \cellcolor{red!18}  120.8 \\
+	List & 10000 & \cellcolor{red!17}  117.2 & \cellcolor{red!17}  118.7 & \cellcolor{red!18}  119.8 & \cellcolor{red!18}  120.8 & \cellcolor{red!18}  120.4 \\
+	ListPreload & 100 & \cellcolor{red!22}  130.0 & \cellcolor{red!22}  130.7 & \cellcolor{red!20}  126.1 & \cellcolor{red!21}  128.1 & \cellcolor{red!25}  136.4 \\
+	ListPreload & 1000 & \cellcolor{red!23}  131.8 & \cellcolor{red!24}  133.9 & \cellcolor{red!24}  134.0 & \cellcolor{red!23}  132.9 & \cellcolor{red!23}  132.3 \\
+	ListPreload & 10000 & \cellcolor{red!22}  129.9 & \cellcolor{red!23}  133.3 & \cellcolor{red!24}  133.9 & \cellcolor{red!23}  133.0 & \cellcolor{red!24}  135.8 \\
+	Dashboard & 100 & \cellcolor{red!17}  118.1 & \cellcolor{red!30}  158.8 & \cellcolor{red!12}  105.8 & \cellcolor{red!23}  132.5 & \cellcolor{red!24}  134.9 \\
+	Dashboard & 1000 & \cellcolor{red!17}  117.9 & \cellcolor{red!18}  118.9 & \cellcolor{red!19}  123.1 & \cellcolor{red!19}  122.7 & \cellcolor{red!20}  125.5 \\
+	Dashboard & 10000 & \cellcolor{red!17}  117.2 & \cellcolor{red!18}  119.2 & \cellcolor{red!17}  117.5 & \cellcolor{red!19}  121.6 & \cellcolor{red!18}  119.8 \\
+	DashboardPreload & 100 & \cellcolor{red!20}  125.9 & \cellcolor{red!27}  143.4 & \cellcolor{red!13}  108.5 & \cellcolor{red!25}  136.4 & \cellcolor{red!26}  140.3 \\
+	DashboardPreload & 1000 & \cellcolor{red!22}  129.6 & \cellcolor{red!21}  126.7 & \cellcolor{red!22}  130.9 & \cellcolor{red!22}  129.6 & \cellcolor{red!22}  130.3 \\
+	DashboardPreload & 10000 & \cellcolor{red!20}  124.5 & \cellcolor{red!21}  128.3 & \cellcolor{red!20}  124.7 & \cellcolor{red!21}  127.8 & \cellcolor{red!21}  127.2 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmarkdifferenz_sqlx_ns}
+\end{table}
+	

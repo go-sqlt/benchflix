@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"math"
 	"os"
-	"reflect"
 	"strings"
 
 	"github.com/go-sqlt/benchflix"
@@ -15,205 +13,244 @@ import (
 func main() {
 	b := benchflix.Must(benchflix.ReadAll(os.Stdin))
 
-	NsPerOp("SQL", b.SQL, benchflix.Framework{})
-	NsPerOp("PGX", b.PGX, b.SQL)
-	NsPerOp("SQUIRREL", b.SQUIRREL, b.SQL)
-	NsPerOp("SQLX", b.SQLX, b.SQL)
-	NsPerOp("GORM", b.GORM, b.SQL)
-	NsPerOp("SQLC", b.SQLC, b.SQL)
-	NsPerOp("SQLT", b.SQLT, b.SQL)
-	NsPerOp("SQLT-Cache", b.SQLTCACHE, b.SQL)
+	Variationskoeffizient(b, "SQL")
+	Variationskoeffizient(b, "PGX")
+	Variationskoeffizient(b, "SQUIRREL")
+	Variationskoeffizient(b, "SQLX")
+	Variationskoeffizient(b, "GORM")
+	Variationskoeffizient(b, "SQLC")
+	Variationskoeffizient(b, "SQLT")
+	Variationskoeffizient(b, "SQLT-Cache")
 
-	BytesPerOp("SQL", b.SQL, benchflix.Framework{})
-	BytesPerOp("PGX", b.PGX, b.SQL)
-	BytesPerOp("SQUIRREL", b.SQUIRREL, b.SQL)
-	BytesPerOp("SQLX", b.SQLX, b.SQL)
-	BytesPerOp("GORM", b.GORM, b.SQL)
-	BytesPerOp("SQLC", b.SQLC, b.SQL)
-	BytesPerOp("SQLT", b.SQLT, b.SQL)
-	BytesPerOp("SQLT-Cache", b.SQLTCACHE, b.SQL)
+	Mittelwerte(b, "SQL", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQL", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQL", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "PGX", benchflix.NsPerOp{})
+	Mittelwerte(b, "PGX", benchflix.BytesPerOp{})
+	Mittelwerte(b, "PGX", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "SQUIRREL", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQUIRREL", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQUIRREL", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "SQLX", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQLX", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQLX", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "GORM", benchflix.NsPerOp{})
+	Mittelwerte(b, "GORM", benchflix.BytesPerOp{})
+	Mittelwerte(b, "GORM", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "SQLC", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQLC", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQLC", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "SQLT", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQLT", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQLT", benchflix.AllocsPerOp{})
+	Mittelwerte(b, "SQLT-Cache", benchflix.NsPerOp{})
+	Mittelwerte(b, "SQLT-Cache", benchflix.BytesPerOp{})
+	Mittelwerte(b, "SQLT-Cache", benchflix.AllocsPerOp{})
 
-	AllocsPerOp("SQL", b.SQL, benchflix.Framework{})
-	AllocsPerOp("PGX", b.PGX, b.SQL)
-	AllocsPerOp("SQUIRREL", b.SQUIRREL, b.SQL)
-	AllocsPerOp("SQLX", b.SQLX, b.SQL)
-	AllocsPerOp("GORM", b.GORM, b.SQL)
-	AllocsPerOp("SQLC", b.SQLC, b.SQL)
-	AllocsPerOp("SQLT", b.SQLT, b.SQL)
-	AllocsPerOp("SQLT-Cache", b.SQLTCACHE, b.SQL)
+	Benchmarkdifferenz(b, "PGX", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "SQUIRREL", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "SQLX", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "GORM", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "SQLC", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "SQLT", benchflix.NsPerOp{})
+	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.NsPerOp{})
+
+	Benchmarkdifferenz(b, "PGX", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "SQUIRREL", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "SQLX", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "GORM", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "SQLC", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "SQLT", benchflix.BytesPerOp{})
+	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.BytesPerOp{})
+
+	Benchmarkdifferenz(b, "PGX", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "SQUIRREL", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "SQLX", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "GORM", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "SQLC", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "SQLT", benchflix.AllocsPerOp{})
+	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.AllocsPerOp{})
 }
 
-func NsPerOp(name string, framework benchflix.Framework, base benchflix.Framework) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s_nsperop.tex", strings.ToLower(name))))
-
-	delta := fmt.Sprintf(`& ${\Delta M_{%s,SQL}}$`, name)
-	if reflect.DeepEqual(base, benchflix.Framework{}) {
-		delta = ""
-	}
+func Variationskoeffizient(b benchflix.Benchmark, framework string) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/variationskoeffizienten_%s.tex", strings.ToLower(framework))))
 
 	fmt.Fprintf(file, `
 \begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
 \centering
-\caption{%s: Nanosekunden pro Operation}
-\begin{tabular}{lrrrr}
+\caption{%s: Variantionskoeffizienten in \%%}
+\begin{tabular}{llrrrrrr}
 \toprule
-Szenario & Params & ${M_{%s}}$ & ${QA_{%s}}$ %s  \\
-\midrule
-`, name, name, name, delta)
+Szenario & Einheit & Parameter & ${CV_1}$ & ${CV_2}$ & ${CV_3}$& ${CV_4}$ & ${CV_5}$ \\
+\midrule`, framework)
 
-	Print(file, "List", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Hundred.NsPerOp)
-	})
-	Print(file, "ListPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Hundred.NsPerOp)
-	})
-	Print(file, "Dashboard", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Hundred.NsPerOp)
-	})
-	Print(file, "DashboardPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Hundred.NsPerOp)
-	})
-	Print(file, "List", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Thousand.NsPerOp)
-	})
-	Print(file, "ListPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Thousand.NsPerOp)
-	})
-	Print(file, "Dashboard", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Thousand.NsPerOp)
-	})
-	Print(file, "DashboardPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Thousand.NsPerOp)
-	})
+	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
+		for _, size := range []string{"100", "1000", "10000"} {
+			s, ok := b[size][framework][szenario]
+			if !ok {
+				continue
+			}
+
+			for _, unit := range []benchflix.Unit{benchflix.NsPerOp{}, benchflix.BytesPerOp{}, benchflix.AllocsPerOp{}} {
+				fmt.Fprintf(file, `
+	%s & %s & %s`,
+					szenario, unit.Name(), size,
+				)
+
+				for _, chunk := range []string{"1", "2", "3", "4", "5"} {
+					c, ok := s[chunk]
+					if !ok {
+						panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
+					}
+
+					nsX := benchflix.Must(stats.Mean(unit.Unit(c)))
+					nsSD := benchflix.Must(stats.StandardDeviation(unit.Unit(c)))
+
+					cv := nsSD / nsX * 100
+
+					fmt.Fprintf(file, ` & %s %.1f`,
+						cellColor(cv+100), cv,
+					)
+				}
+
+				fmt.Fprintf(file, ` \\`)
+			}
+		}
+	}
 
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_nsperop}
+\label{tab:variationskoeffizienten_%s}
 \end{table}
-	`, strings.ToLower(name))
+	`, strings.ToLower(framework))
 }
 
-func BytesPerOp(name string, framework benchflix.Framework, base benchflix.Framework) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s_bytesperop.tex", strings.ToLower(name))))
-
-	delta := fmt.Sprintf(`& ${\Delta M_{%s,SQL}}$`, name)
-	if reflect.DeepEqual(base, benchflix.Framework{}) {
-		delta = ""
-	}
+func Benchmarkdifferenz(b benchflix.Benchmark, framework string, unit benchflix.Unit) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/benchmarkdifferenz_%s_%s.tex", strings.ToLower(framework), strings.ToLower(unit.Name()))))
 
 	fmt.Fprintf(file, `
 \begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
 \centering
-\caption{%s: Speicherverbrauch pro Operation}
-\begin{tabular}{lrrrr}
+\caption{%s: Benchmarkdifferenz (%s) in \%%}
+\begin{tabular}{llrrrrrr}
 \toprule
-Szenario & Params & ${M_{%s}}$ & ${QA_{%s}}$ %s \\
-\midrule
-`, name, name, name, delta)
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule`, framework, unit.Name())
 
-	Print(file, "List", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Hundred.BytesPerOp)
-	})
-	Print(file, "ListPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Hundred.BytesPerOp)
-	})
-	Print(file, "Dashboard", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Hundred.BytesPerOp)
-	})
-	Print(file, "DashboardPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Hundred.BytesPerOp)
-	})
-	Print(file, "List", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Thousand.BytesPerOp)
-	})
-	Print(file, "ListPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Thousand.BytesPerOp)
-	})
-	Print(file, "Dashboard", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Thousand.BytesPerOp)
-	})
-	Print(file, "DashboardPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Thousand.BytesPerOp)
-	})
+	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
+		for _, size := range []string{"100", "1000", "10000"} {
+			s, ok := b[size][framework][szenario]
+			if !ok {
+				continue
+			}
+
+			fmt.Fprintf(file, `
+	%s & %s`,
+				szenario, size,
+			)
+
+			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
+				c, ok := s[chunk]
+				if !ok {
+					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
+				}
+
+				baseX := benchflix.Must(stats.Mean(unit.Unit(b[size]["SQL"][szenario][chunk])))
+
+				x := benchflix.Must(stats.Mean(unit.Unit(c)))
+
+				percent := x / baseX * 100
+
+				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent), percent)
+			}
+
+			fmt.Fprintf(file, ` \\`)
+		}
+	}
 
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_bytesperop}
+\label{tab:benchmarkdifferenz_%s_%s}
 \end{table}
-	`, strings.ToLower(name))
+	`, strings.ToLower(framework), strings.ToLower(unit.Name()))
 }
 
-func AllocsPerOp(name string, framework benchflix.Framework, base benchflix.Framework) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s_allocsperop.tex", strings.ToLower(name))))
-
-	delta := fmt.Sprintf(`& ${\Delta M_{%s,SQL}}$`, name)
-	if reflect.DeepEqual(base, benchflix.Framework{}) {
-		delta = ""
-	}
+func Mittelwerte(b benchflix.Benchmark, framework string, unit benchflix.Unit) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/mittelwerte_%s_%s.tex", strings.ToLower(framework), strings.ToLower(unit.Name()))))
 
 	fmt.Fprintf(file, `
 \begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
 \centering
-\caption{%s: Allokationen pro Operation}
-\begin{tabular}{lrrrr}
+\caption{%s: Mittelwerte (%s)}
+\begin{tabular}{llrrrrrr}
 \toprule
-Szenario & Params & ${M_{%s}}$ & ${QA_{%s}}$ %s \\
-\midrule
-`, name, name, name, delta)
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule`, framework, unit.Name())
 
-	Print(file, "List", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Hundred.AllocsPerOp)
-	})
-	Print(file, "ListPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Hundred.AllocsPerOp)
-	})
-	Print(file, "Dashboard", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Hundred.AllocsPerOp)
-	})
-	Print(file, "DashboardPreload", "100", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Hundred.AllocsPerOp)
-	})
-	Print(file, "List", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.List.Thousand.AllocsPerOp)
-	})
-	Print(file, "ListPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.ListPreload.Thousand.AllocsPerOp)
-	})
-	Print(file, "Dashboard", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.Dashboard.Thousand.AllocsPerOp)
-	})
-	Print(file, "DashboardPreload", "1000", framework, base, func(f benchflix.Framework) (stats.Quartiles, error) {
-		return stats.Quartile(f.DashboardPreload.Thousand.AllocsPerOp)
-	})
+	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
+		for _, size := range []string{"100", "1000", "10000"} {
+			s, ok := b[size][framework][szenario]
+			if !ok {
+				continue
+			}
+
+			fmt.Fprintf(file, `
+	%s & %s`,
+				szenario, size,
+			)
+
+			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
+				c, ok := s[chunk]
+				if !ok {
+					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
+				}
+
+				x := benchflix.Must(stats.Mean(unit.Unit(c)))
+
+				fmt.Fprintf(file, ` & %.f`, math.Round(x))
+			}
+
+			fmt.Fprintf(file, ` \\`)
+		}
+	}
 
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:benchmark_%s_allocsperop}
+\label{tab:mittelwerte_%s_%s}
 \end{table}
-	`, strings.ToLower(name))
+	`, strings.ToLower(framework), strings.ToLower(unit.Name()))
 }
 
-func Print(w io.Writer, szenario string, params string, framework, base benchflix.Framework, fn func(benchflix.Framework) (stats.Quartiles, error)) {
-	f, err := fn(framework)
-	if err != nil {
-		return
+func cellColor(percent float64) string {
+	delta := percent - 100.0
+	ad := math.Abs(delta)
+
+	if ad < 2.0 {
+		return ""
 	}
 
-	b, err := fn(base)
-	if err != nil {
-		if err == stats.ErrEmptyInput {
-			fmt.Fprintf(w, `
-	%s & %s & %g & %g \\`,
-				szenario, params, math.Round(f.Q2), math.Round(f.Q3-f.Q1))
+	mapIntensity := func(v, maxDev, minInt, maxInt float64) float64 {
+		if v < 0 {
+			v = 0
+		}
+		if v > maxDev {
+			v = maxDev
 		}
 
-		return
+		return minInt + v/maxDev*(maxInt-minInt)
 	}
 
-	fmt.Fprintf(w, `
-	%s & %s & %g & %g & %.1f\%% \\`,
-		szenario, params, math.Round(f.Q2), math.Round(f.Q3-f.Q1), math.Round(f.Q2/b.Q2*1000)/10-100)
+	if delta < 0 {
+		intensity := mapIntensity(-delta, 50.0, 10.0, 30.0)
+		return fmt.Sprintf(`\cellcolor{green!%.0f} `, intensity)
+	} else {
+		intensity := mapIntensity(delta, 50.0, 10.0, 30.0)
+		return fmt.Sprintf(`\cellcolor{red!%.0f} `, intensity)
+	}
 }

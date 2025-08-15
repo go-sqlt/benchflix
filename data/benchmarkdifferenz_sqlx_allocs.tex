@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{SQLX: Benchmarkdifferenz (Allocs) in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{green!18}  81.0 & \cellcolor{green!13}  92.3 & \cellcolor{green!13}  92.9 & \cellcolor{green!12}  94.1 & \cellcolor{green!14}  90.1 \\
+	List & 1000 & \cellcolor{green!14}  89.3 &  98.4 & \cellcolor{green!13}  91.5 & \cellcolor{green!13}  92.7 & \cellcolor{green!13}  93.2 \\
+	List & 10000 & \cellcolor{green!14}  90.0 & \cellcolor{green!12}  95.4 & \cellcolor{green!12}  95.2 & \cellcolor{green!12}  94.8 & \cellcolor{green!14}  89.6 \\
+	ListPreload & 100 & \cellcolor{green!20}  74.9 & \cellcolor{green!16}  84.7 & \cellcolor{green!16}  85.4 & \cellcolor{green!15}  86.3 & \cellcolor{green!17}  82.5 \\
+	ListPreload & 1000 & \cellcolor{green!17}  83.7 & \cellcolor{green!15}  86.5 & \cellcolor{green!16}  85.1 & \cellcolor{green!16}  85.4 & \cellcolor{green!16}  84.3 \\
+	ListPreload & 10000 & \cellcolor{green!17}  83.0 & \cellcolor{green!15}  87.0 & \cellcolor{green!15}  87.6 & \cellcolor{green!16}  85.8 & \cellcolor{green!17}  81.8 \\
+	Dashboard & 100 & \cellcolor{green!11}  96.7 & \cellcolor{green!12}  94.6 &  101.7 &  101.8 &  100.5 \\
+	Dashboard & 1000 & \cellcolor{green!12}  95.8 & \cellcolor{green!12}  95.7 &  99.5 & \cellcolor{green!11}  97.8 & \cellcolor{green!11}  97.3 \\
+	Dashboard & 10000 & \cellcolor{green!12}  94.4 & \cellcolor{green!11}  96.7 &  100.5 &  99.0 & \cellcolor{green!12}  94.9 \\
+	DashboardPreload & 100 & \cellcolor{green!13}  92.2 & \cellcolor{green!14}  89.0 & \cellcolor{green!11}  97.0 & \cellcolor{green!11}  97.7 & \cellcolor{green!12}  95.9 \\
+	DashboardPreload & 1000 & \cellcolor{green!13}  93.1 & \cellcolor{green!13}  93.0 & \cellcolor{green!12}  94.6 & \cellcolor{green!12}  93.9 & \cellcolor{green!13}  91.8 \\
+	DashboardPreload & 10000 & \cellcolor{green!14}  89.5 & \cellcolor{green!13}  92.3 & \cellcolor{green!11}  97.7 & \cellcolor{green!12}  94.5 & \cellcolor{green!14}  90.3 \\
+\bottomrule
+\end{tabular}
+\label{tab:benchmarkdifferenz_sqlx_allocs}
+\end{table}
+	

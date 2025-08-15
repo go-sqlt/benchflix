@@ -11,6 +11,64 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+const (
+	queryList = `
+		SELECT m.id, m.title, m.added_at, m.rating, d.directors::TEXT[] AS directors
+		FROM movies m
+		LEFT JOIN LATERAL (
+			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
+			FROM movie_directors md
+			JOIN people p ON p.id = md.person_id
+			WHERE md.movie_id = m.id
+		) d ON true
+		WHERE
+			(
+				$1::TEXT = ''
+				OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
+				OR EXISTS (
+					SELECT 1
+					FROM movie_directors md
+					JOIN people p ON p.id = md.person_id
+					WHERE md.movie_id = m.id
+					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+				)
+			)
+			AND ($2::INT8 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
+			AND ($3::FLOAT8 = 0 OR m.rating >= $3)
+		ORDER BY m.rating DESC
+		LIMIT CASE WHEN $4::INT4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END
+	`
+
+	queryListPreload = `
+		SELECT id, title, added_at, rating
+		FROM movies m
+		WHERE
+			(
+				$1::TEXT = ''
+				OR to_tsvector('simple', title) @@ plainto_tsquery('simple', $1)
+				OR EXISTS (
+					SELECT 1
+					FROM movie_directors md
+					JOIN people p ON p.id = md.person_id
+					WHERE md.movie_id = id
+					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+				)
+			)
+			AND ($2::INT8 = 0 OR EXTRACT(YEAR FROM added_at) = $2)
+			AND ($3::FLOAT8 = 0 OR rating >= $3)
+		ORDER BY rating DESC
+		LIMIT CASE WHEN $4::INT4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END
+	`
+
+	queryDirectors = `
+		SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name)::TEXT[] AS directors
+		FROM movie_directors md
+		JOIN people ON people.id = md.person_id
+		WHERE md.movie_id = ANY ($1::INT8[])
+		GROUP BY md.movie_id
+	`
+)
+
 func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repository {
 	cfg := benchflix.Must(pgxpool.ParseConfig(conn))
 
@@ -30,102 +88,58 @@ type Repository struct {
 }
 
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	rows, err := r.Pool.Query(ctx, `
-		SELECT
-			m.id
-			, m.title
-			, m.added_at
-			, m.rating
-			, d.directors
-		FROM movies m
-		LEFT JOIN LATERAL (
-			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
-			FROM movie_directors md
-			JOIN people p ON p.id = md.person_id
-			WHERE md.movie_id = m.id
-		) d ON true
-		WHERE
-			(
-				$1 = ''
-				OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
-				OR EXISTS (
-					SELECT 1
-					FROM movie_directors md
-					JOIN people p ON p.id = md.person_id
-					WHERE md.movie_id = m.id
-					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
-				)
-			)
-			AND ($2 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
-			AND ($3 = 0 OR m.rating >= $3)
-		ORDER BY m.rating DESC
-		LIMIT CASE WHEN $4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END;
-	`, params.Search, params.YearAdded, params.MinRating, params.Limit)
+	rows, err := r.Pool.Query(ctx, queryList, params.Search, params.YearAdded, params.MinRating, params.Limit)
 	if err != nil {
 		return nil, err
 	}
 
-	return pgx.CollectRows(rows, func(row pgx.CollectableRow) (benchflix.Movie, error) {
+	defer rows.Close()
+
+	var movies = make([]benchflix.Movie, 0, params.Limit)
+
+	for rows.Next() {
 		var m benchflix.Movie
 
-		if err := row.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating, &m.Directors); err != nil {
-			return m, err
+		if err := rows.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating, &m.Directors); err != nil {
+			return nil, err
 		}
 
-		return m, nil
-	})
+		movies = append(movies, m)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }
 
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	var (
-		index int
-		ids   = make([]int64, 0, params.Limit)
-		idMap = make(map[int64]int, params.Limit)
+		movies = make([]benchflix.Movie, 0, params.Limit)
+		ids    = make([]int64, 0, params.Limit)
+		idMap  = make(map[int64]int, params.Limit)
 	)
 
-	rows, err := r.Pool.Query(ctx, `
-		SELECT
-			m.id
-			, m.title
-			, m.added_at
-			, m.rating
-		FROM movies m
-		WHERE
-			(
-				$1 = ''
-				OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
-				OR EXISTS (
-					SELECT 1
-					FROM movie_directors md
-					JOIN people p ON p.id = md.person_id
-					WHERE md.movie_id = m.id
-					AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
-				)
-			)
-			AND ($2 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
-			AND ($3 = 0 OR m.rating >= $3)
-		ORDER BY m.rating DESC
-		LIMIT CASE WHEN $4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END;
-	`, params.Search, params.YearAdded, params.MinRating, params.Limit,
-	)
+	rows, err := r.Pool.Query(ctx, queryListPreload, params.Search, params.YearAdded, params.MinRating, params.Limit)
 	if err != nil {
 		return nil, err
 	}
 
-	movies, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (benchflix.Movie, error) {
+	defer rows.Close()
+
+	for rows.Next() {
 		var movie benchflix.Movie
 
-		if err := row.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating); err != nil {
-			return movie, err
+		if err := rows.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating); err != nil {
+			return nil, err
 		}
 
-		idMap[movie.ID] = index
-		index++
+		idMap[movie.ID] = len(ids)
 		ids = append(ids, movie.ID)
-
-		return movie, nil
-	})
-	if err != nil {
+		movies = append(movies, movie)
+	}
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
@@ -133,15 +147,9 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 		return movies, nil
 	}
 
-	dirRows, err := r.Pool.Query(ctx, `
-		SELECT
-			md.movie_id
-			, ARRAY_AGG(people.name ORDER BY people.name) AS directors
-		FROM movie_directors md
-		JOIN people ON people.id = md.person_id
-		WHERE md.movie_id = ANY ($1)
-		GROUP BY md.movie_id;
-	`, ids)
+	rows.Close()
+
+	dirRows, err := r.Pool.Query(ctx, queryDirectors, ids)
 	if err != nil {
 		return nil, err
 	}
@@ -169,12 +177,15 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 }
 
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
-	sb := &strings.Builder{}
+	var (
+		movies = make([]benchflix.Movie, 0, params.Limit)
+		sb     = &strings.Builder{}
+	)
 
 	sb.WriteString("SELECT m.id, m.title, m.added_at, m.rating")
 
 	if params.WithDirectors {
-		sb.WriteString(", d.directors")
+		sb.WriteString(", d.directors::TEXT[] AS directors")
 	}
 
 	sb.WriteString(" FROM movies m")
@@ -194,9 +205,9 @@ func (r Repository) QueryDashboard(ctx context.Context, params benchflix.Dashboa
 		sb.WriteString(` AND (
 			to_tsvector('simple', m.title) @@ plainto_tsquery('simple', @search)
 			OR EXISTS (
-			SELECT 1 FROM movie_directors md
-			JOIN people p ON p.id = md.person_id
-			WHERE md.movie_id = m.id
+				SELECT 1 FROM movie_directors md
+				JOIN people p ON p.id = md.person_id
+				WHERE md.movie_id = m.id
 				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', @search)
 			)
 		)`)
@@ -240,29 +251,37 @@ func (r Repository) QueryDashboard(ctx context.Context, params benchflix.Dashboa
 		return nil, err
 	}
 
-	return pgx.CollectRows(rows, func(row pgx.CollectableRow) (benchflix.Movie, error) {
+	defer rows.Close()
+
+	for rows.Next() {
 		var m benchflix.Movie
 
 		if params.WithDirectors {
-			if err := row.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating, &m.Directors); err != nil {
-				return m, err
+			if err := rows.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating, &m.Directors); err != nil {
+				return nil, err
 			}
 		} else {
-			if err := row.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating); err != nil {
-				return m, err
+			if err := rows.Scan(&m.ID, &m.Title, &m.AddedAt, &m.Rating); err != nil {
+				return nil, err
 			}
 		}
 
-		return m, nil
-	})
+		movies = append(movies, m)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }
 
 func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	var (
-		index = 0
-		ids   = make([]int64, 0, params.Limit)
-		idMap = make(map[int64]int, params.Limit)
-		sb    = &strings.Builder{}
+		movies = make([]benchflix.Movie, 0, params.Limit)
+		ids    = make([]int64, 0, params.Limit)
+		idMap  = make(map[int64]int, params.Limit)
+		sb     = &strings.Builder{}
 	)
 
 	sb.WriteString(`
@@ -274,9 +293,9 @@ func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.
 		sb.WriteString(` AND (
 			to_tsvector('simple', m.title) @@ plainto_tsquery('simple', @search)
 			OR EXISTS (
-			SELECT 1 FROM movie_directors md
-			JOIN people p ON p.id = md.person_id
-			WHERE md.movie_id = m.id
+				SELECT 1 FROM movie_directors md
+				JOIN people p ON p.id = md.person_id
+				WHERE md.movie_id = m.id
 				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', @search)
 			)
 		)`)
@@ -320,36 +339,30 @@ func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.
 		return nil, err
 	}
 
-	movies, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (benchflix.Movie, error) {
+	defer rows.Close()
+
+	for rows.Next() {
 		var movie benchflix.Movie
 
-		if err := row.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating); err != nil {
-			return movie, err
+		if err := rows.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating); err != nil {
+			return nil, err
 		}
 
-		idMap[movie.ID] = index
-		index++
-		ids = append(ids, movie.ID)
+		if params.WithDirectors {
+			idMap[movie.ID] = len(ids)
+			ids = append(ids, movie.ID)
+		}
 
-		return movie, nil
-	})
-	if err != nil {
-		return nil, err
+		movies = append(movies, movie)
 	}
 
-	if !params.WithDirectors || len(movies) == 0 {
+	if !params.WithDirectors {
 		return movies, nil
 	}
 
-	dirRows, err := r.Pool.Query(ctx, `
-		SELECT
-			md.movie_id
-			, ARRAY_AGG(people.name ORDER BY people.name) AS directors
-		FROM movie_directors md
-		JOIN people ON people.id = md.person_id
-		WHERE md.movie_id = ANY ($1)
-		GROUP BY md.movie_id;
-	`, ids)
+	rows.Close()
+
+	dirRows, err := r.Pool.Query(ctx, queryDirectors, ids)
 	if err != nil {
 		return nil, err
 	}

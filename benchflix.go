@@ -5,9 +5,11 @@ import (
 	"context"
 	"database/sql"
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"math/rand/v2"
 	"os"
 	"slices"
 	"strconv"
@@ -27,28 +29,28 @@ var (
 )
 
 type Movie struct {
-	ID        int64
-	Title     string
-	AddedAt   time.Time `db:"added_at"`
-	Rating    float64
-	Directors []string
+	ID        int64     `db:"id" json:"id"`
+	Title     string    `db:"title" json:"title"`
+	AddedAt   time.Time `db:"added_at" json:"added_at"`
+	Rating    float64   `db:"rating" json:"rating"`
+	Directors []string  `db:"directors" json:"directors"`
 }
 
 type ListParams struct {
-	Search    string
+	Search    string  `db:"search" json:"search"`
 	YearAdded int64   `db:"year_added" json:"year_added"`
 	MinRating float64 `db:"min_rating" json:"min_rating"`
-	Limit     uint64
+	Limit     uint64  `db:"limit" json:"limit"`
 }
 
 type DashboardParams struct {
-	Search        string
+	Search        string  `db:"search" json:"search"`
 	YearAdded     int64   `db:"year_added" json:"year_added"`
 	MinRating     float64 `db:"min_rating" json:"min_rating"`
-	Limit         uint64
-	Sort          string
-	Desc          bool
-	WithDirectors bool `json:"with_directors"`
+	Limit         uint64  `db:"limit" json:"limit"`
+	Sort          string  `db:"sort" json:"sort"`
+	Desc          bool    `db:"desc" json:"desc"`
+	WithDirectors bool    `db:"with_directors" json:"with_directors"`
 }
 
 type Repository interface {
@@ -245,20 +247,51 @@ func removePostgresContainer(pool *dockertest.Pool, name string) error {
 	return nil
 }
 
-type Benchmark struct {
-	SQL, PGX, SQUIRREL, SQLX, GORM, SQLC, SQLT, SQLTCACHE Framework
-}
+type Benchmark map[string]Size
 
-type Framework struct {
-	List, ListPreload, Dashboard, DashboardPreload Szenario
-}
+type Size map[string]Framework
 
-type Szenario struct {
-	Hundred, Thousand Params
-}
+type Framework map[string]Szenario
 
-type Params struct {
+type Szenario map[string]Chunk
+
+type Chunk struct {
 	NsPerOp, BytesPerOp, AllocsPerOp []float64
+}
+
+type Unit interface {
+	Name() string
+	Unit(c Chunk) []float64
+}
+
+type NsPerOp struct{}
+
+func (NsPerOp) Name() string {
+	return "Ns"
+}
+
+func (NsPerOp) Unit(c Chunk) []float64 {
+	return c.NsPerOp
+}
+
+type BytesPerOp struct{}
+
+func (BytesPerOp) Name() string {
+	return "Bytes"
+}
+
+func (BytesPerOp) Unit(c Chunk) []float64 {
+	return c.BytesPerOp
+}
+
+type AllocsPerOp struct{}
+
+func (AllocsPerOp) Name() string {
+	return "Allocs"
+}
+
+func (AllocsPerOp) Unit(c Chunk) []float64 {
+	return c.AllocsPerOp
 }
 
 func ReadAll(reader io.Reader) (Benchmark, error) {
@@ -280,57 +313,112 @@ func ReadAll(reader io.Reader) (Benchmark, error) {
 
 		parts := strings.Split(b.Name, "/")
 
-		var framework *Framework
+		size := strings.TrimPrefix(parts[1], "Size-")
+		framework := parts[2]
+		szenario := parts[3]
+		chunk := strings.TrimPrefix(strings.TrimSuffix(parts[4], "-12"), "Chunk-")
 
-		switch parts[1] {
-		case "SQL":
-			framework = &bench.SQL
-		case "PGX":
-			framework = &bench.PGX
-		case "SQUIRREL":
-			framework = &bench.SQUIRREL
-		case "SQLX":
-			framework = &bench.SQLX
-		case "GORM":
-			framework = &bench.GORM
-		case "SQLC":
-			framework = &bench.SQLC
-		case "SQLT":
-			framework = &bench.SQLT
-		case "SQLT-Cache":
-			framework = &bench.SQLTCACHE
-		default:
-			return bench, fmt.Errorf("invalid framework: %s", parts[1])
+		if _, ok := bench[size]; !ok {
+			bench[size] = Size{}
 		}
 
-		var szenario *Szenario
-
-		switch parts[2] {
-		case "List":
-			szenario = &framework.List
-		case "ListPreload":
-			szenario = &framework.ListPreload
-		case "Dashboard":
-			szenario = &framework.Dashboard
-		case "DashboardPreload":
-			szenario = &framework.DashboardPreload
-		default:
-			return bench, fmt.Errorf("invalid szenario: %s", parts[2])
+		if _, ok := bench[size][framework]; !ok {
+			bench[size][framework] = Framework{}
 		}
 
-		switch {
-		case strings.HasPrefix(parts[3], "100-"):
-			szenario.Hundred.NsPerOp = append(szenario.Hundred.NsPerOp, b.NsPerOp)
-			szenario.Hundred.BytesPerOp = append(szenario.Hundred.BytesPerOp, float64(b.AllocedBytesPerOp))
-			szenario.Hundred.AllocsPerOp = append(szenario.Hundred.AllocsPerOp, float64(b.AllocsPerOp))
-		case strings.HasPrefix(parts[3], "1000-"):
-			szenario.Thousand.NsPerOp = append(szenario.Thousand.NsPerOp, b.NsPerOp)
-			szenario.Thousand.BytesPerOp = append(szenario.Thousand.BytesPerOp, float64(b.AllocedBytesPerOp))
-			szenario.Thousand.AllocsPerOp = append(szenario.Thousand.AllocsPerOp, float64(b.AllocsPerOp))
-		default:
-			return bench, fmt.Errorf("invalid params: %s", parts[3])
+		if _, ok := bench[size][framework][szenario]; !ok {
+			bench[size][framework][szenario] = Szenario{}
 		}
+
+		c, ok := bench[size][framework][szenario][chunk]
+		if !ok {
+			c = Chunk{}
+		}
+
+		c.NsPerOp = append(c.NsPerOp, b.NsPerOp)
+		c.AllocsPerOp = append(c.AllocsPerOp, float64(b.AllocsPerOp))
+		c.BytesPerOp = append(c.BytesPerOp, float64(b.AllocedBytesPerOp))
+
+		bench[size][framework][szenario][chunk] = c
 	}
 
 	return bench, nil
+}
+
+var (
+	Search        = []string{"", "the", "of", "a", "s", "in", "and", "to", "love", "my", "man", "girl", "one", "for"}
+	Sort          = []string{"title", "added_at", "rating"}
+	Desc          = []bool{true, false}
+	WithDirectors = []bool{true, false}
+	MinRating     = []float64{0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9}
+	Limit         = []uint64{5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100}
+	YearAdded     = []int64{
+		0,
+		2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+		2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
+		2021, 2022, 2023, 2024,
+	}
+)
+
+type Stats struct {
+	Search        map[string]int `json:"search"`
+	YearAdded     map[string]int `json:"year_added"`
+	MinRating     map[string]int `json:"min_rating"`
+	Limit         map[string]int `json:"limit"`
+	Sort          map[string]int `json:"sort"`
+	Desc          map[string]int `json:"desc"`
+	WithDirectors map[string]int `json:"with_directors"`
+}
+
+func (s *Stats) Reset() {
+	*s = Stats{
+		Search:        map[string]int{},
+		Sort:          map[string]int{},
+		Desc:          map[string]int{},
+		WithDirectors: map[string]int{},
+		Limit:         map[string]int{},
+		MinRating:     map[string]int{},
+		YearAdded:     map[string]int{},
+	}
+}
+
+func (s Stats) Print(size, i int) {
+	file := Must(os.Create(fmt.Sprintf("data/stats_%d_%d.json", size, i)))
+
+	if err := json.NewEncoder(file).Encode(s); err != nil {
+		panic(err)
+	}
+}
+
+func (stats *Stats) RandomParams() (ListParams, DashboardParams) {
+	searchValue := Search[rand.IntN(len(Search))]
+	yearAddedValue := YearAdded[rand.IntN(len(YearAdded))]
+	minRatingValue := MinRating[rand.IntN(len(MinRating))]
+	limitValue := Limit[rand.IntN(len(Limit))]
+	sortValue := Sort[rand.IntN(len(Sort))]
+	descValue := Desc[rand.IntN(len(Desc))]
+	withDirectorsValue := WithDirectors[rand.IntN(len(WithDirectors))]
+
+	stats.Search[searchValue]++
+	stats.YearAdded[strconv.FormatInt(yearAddedValue, 10)]++
+	stats.MinRating[strconv.FormatFloat(minRatingValue, 'f', 1, 64)]++
+	stats.Limit[strconv.FormatUint(limitValue, 10)]++
+	stats.Sort[sortValue]++
+	stats.Desc[strconv.FormatBool(descValue)]++
+	stats.WithDirectors[strconv.FormatBool(withDirectorsValue)]++
+
+	return ListParams{
+			Search:    searchValue,
+			YearAdded: yearAddedValue,
+			MinRating: minRatingValue,
+			Limit:     limitValue,
+		}, DashboardParams{
+			Search:        searchValue,
+			YearAdded:     yearAddedValue,
+			MinRating:     minRatingValue,
+			Limit:         limitValue,
+			Sort:          sortValue,
+			Desc:          descValue,
+			WithDirectors: withDirectorsValue,
+		}
 }

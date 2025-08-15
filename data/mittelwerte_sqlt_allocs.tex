@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{SQLT: Mittelwerte (Allocs)}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
+\midrule
+	List & 100 & 379 & 397 & 426 & 422 & 402 \\
+	List & 1000 & 412 & 440 & 404 & 417 & 413 \\
+	List & 10000 & 431 & 416 & 409 & 429 & 413 \\
+	ListPreload & 100 & 432 & 449 & 498 & 492 & 439 \\
+	ListPreload & 1000 & 476 & 520 & 465 & 473 & 472 \\
+	ListPreload & 10000 & 507 & 486 & 467 & 498 & 473 \\
+	Dashboard & 100 & 367 & 382 & 376 & 378 & 361 \\
+	Dashboard & 1000 & 378 & 400 & 375 & 385 & 386 \\
+	Dashboard & 10000 & 395 & 388 & 384 & 393 & 384 \\
+	DashboardPreload & 100 & 400 & 429 & 396 & 389 & 372 \\
+	DashboardPreload & 1000 & 406 & 430 & 408 & 416 & 419 \\
+	DashboardPreload & 10000 & 429 & 422 & 407 & 425 & 409 \\
+\bottomrule
+\end{tabular}
+\label{tab:mittelwerte_sqlt_allocs}
+\end{table}
+	
