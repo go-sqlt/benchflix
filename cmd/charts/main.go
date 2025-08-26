@@ -16,19 +16,19 @@ import (
 func main() {
 	b := benchflix.Must(benchflix.ReadAll(os.Stdin))
 
-	renderSzenario(b, "data/relativer_durchsatz_list.png", "Relative Median-Latenz zu SQL - Szenario List", "List", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relative_latenz_list.png", "Relative Median-Latenz zu SQL - Szenario List", "List", benchflix.NsPerOp{}, 60, stats.Median)
 	renderSzenario(b, "data/relativer_speicherbedarf_list.png", "Relativer Speicherbedarf – Szenario List", "List", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderSzenario(b, "data/relativer_durchsatz_listpreload.png", "Relative Median-Latenz zu SQL - Szenario ListPreload", "ListPreload", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relative_latenz_listpreload.png", "Relative Median-Latenz zu SQL - Szenario ListPreload", "ListPreload", benchflix.NsPerOp{}, 60, stats.Median)
 	renderSzenario(b, "data/relativer_speicherbedarf_listpreload.png", "Relativer Speicherbedarf – Szenario ListPreload", "ListPreload", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderSzenario(b, "data/relativer_durchsatz_dashboard.png", "Relative Median-Latenz zu SQL - Szenario Dashboard", "Dashboard", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relative_latenz_dashboard.png", "Relative Median-Latenz zu SQL - Szenario Dashboard", "Dashboard", benchflix.NsPerOp{}, 60, stats.Median)
 	renderSzenario(b, "data/relativer_speicherbedarf_dashboard.png", "Relativer Speicherbedarf – Szenario Dashboard", "Dashboard", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderSzenario(b, "data/relativer_durchsatz_dashboardpreload.png", "Relative Median-Latenz zu SQL - Szenario DashboardPreload", "DashboardPreload", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relative_latenz_dashboardpreload.png", "Relative Median-Latenz zu SQL - Szenario DashboardPreload", "DashboardPreload", benchflix.NsPerOp{}, 60, stats.Median)
 	renderSzenario(b, "data/relativer_speicherbedarf_dashboardpreload.png", "Relativer Speicherbedarf – Szenario DashboardPreload", "DashboardPreload", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderAll(b, "data/relativer_durchsatz.png", "Relative Median-Latenz zu SQL", benchflix.NsPerOp{}, 60, stats.Median)
+	renderAll(b, "data/relative_latenz.png", "Relative Median-Latenz zu SQL", benchflix.NsPerOp{}, 60, stats.Median)
 	renderAll(b, "data/relativer_speicherbedarf.png", "Relativer Speicherbedarf zu SQL", benchflix.BytesPerOp{}, 40, stats.Median)
 }
 
