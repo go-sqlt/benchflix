@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Relative Median-Latenz von SQLX zu SQL in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{red!19}  121.4 & \cellcolor{red!17}  116.7 & \cellcolor{red!16}  115.9 & \cellcolor{red!17}  117.3 & \cellcolor{red!19}  123.6 \\
+	List & 1000 & \cellcolor{red!16}  115.8 & \cellcolor{red!18}  120.5 & \cellcolor{red!18}  121.1 & \cellcolor{red!18}  119.4 & \cellcolor{red!18}  121.0 \\
+	List & 10000 & \cellcolor{red!17}  117.3 & \cellcolor{red!18}  118.9 & \cellcolor{red!18}  119.4 & \cellcolor{red!18}  120.7 & \cellcolor{red!18}  120.2 \\
+	ListPreload & 100 & \cellcolor{red!22}  130.0 & \cellcolor{red!22}  130.0 & \cellcolor{red!20}  125.9 & \cellcolor{red!21}  127.8 & \cellcolor{red!25}  136.5 \\
+	ListPreload & 1000 & \cellcolor{red!23}  133.0 & \cellcolor{red!24}  134.4 & \cellcolor{red!24}  134.3 & \cellcolor{red!23}  132.5 & \cellcolor{red!23}  132.5 \\
+	ListPreload & 10000 & \cellcolor{red!22}  130.1 & \cellcolor{red!24}  133.8 & \cellcolor{red!24}  134.6 & \cellcolor{red!23}  133.5 & \cellcolor{red!24}  135.5 \\
+	Dashboard & 100 & \cellcolor{red!17}  117.6 & \cellcolor{red!30}  159.8 & \cellcolor{red!12}  105.8 & \cellcolor{red!23}  131.6 & \cellcolor{red!24}  133.9 \\
+	Dashboard & 1000 & \cellcolor{red!17}  117.6 & \cellcolor{red!18}  119.1 & \cellcolor{red!19}  122.4 & \cellcolor{red!19}  123.3 & \cellcolor{red!20}  124.6 \\
+	Dashboard & 10000 & \cellcolor{red!17}  117.2 & \cellcolor{red!17}  118.7 & \cellcolor{red!17}  117.4 & \cellcolor{red!18}  121.1 & \cellcolor{red!18}  119.6 \\
+	DashboardPreload & 100 & \cellcolor{red!20}  125.3 & \cellcolor{red!27}  143.7 & \cellcolor{red!13}  108.6 & \cellcolor{red!25}  136.5 & \cellcolor{red!26}  140.2 \\
+	DashboardPreload & 1000 & \cellcolor{red!22}  129.6 & \cellcolor{red!20}  125.4 & \cellcolor{red!22}  130.5 & \cellcolor{red!22}  129.2 & \cellcolor{red!22}  130.6 \\
+	DashboardPreload & 10000 & \cellcolor{red!20}  124.5 & \cellcolor{red!21}  127.2 & \cellcolor{red!20}  124.7 & \cellcolor{red!21}  127.2 & \cellcolor{red!21}  127.1 \\
+\bottomrule
+\end{tabular}
+\label{tab:relativer_durchsatz_sqlx}
+\end{table}
+	

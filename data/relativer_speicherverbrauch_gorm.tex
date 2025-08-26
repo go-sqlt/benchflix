@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Relativer Speicherverbrauch von GORM zu SQL in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule
+	ListPreload & 100 & \cellcolor{red!30}  307.9 & \cellcolor{red!30}  332.7 & \cellcolor{red!30}  359.1 & \cellcolor{red!30}  349.3 & \cellcolor{red!30}  336.8 \\
+	ListPreload & 1000 & \cellcolor{red!30}  341.8 & \cellcolor{red!30}  367.3 & \cellcolor{red!30}  341.9 & \cellcolor{red!30}  353.0 & \cellcolor{red!30}  344.9 \\
+	ListPreload & 10000 & \cellcolor{red!30}  345.3 & \cellcolor{red!30}  350.5 & \cellcolor{red!30}  345.9 & \cellcolor{red!30}  355.9 & \cellcolor{red!30}  333.8 \\
+	DashboardPreload & 100 & \cellcolor{red!30}  266.9 & \cellcolor{red!30}  295.1 & \cellcolor{red!30}  227.6 & \cellcolor{red!30}  218.3 & \cellcolor{red!30}  224.7 \\
+	DashboardPreload & 1000 & \cellcolor{red!30}  241.0 & \cellcolor{red!30}  247.9 & \cellcolor{red!30}  253.3 & \cellcolor{red!30}  257.1 & \cellcolor{red!30}  276.1 \\
+	DashboardPreload & 10000 & \cellcolor{red!30}  250.2 & \cellcolor{red!30}  254.4 & \cellcolor{red!30}  246.5 & \cellcolor{red!30}  253.4 & \cellcolor{red!30}  243.3 \\
+\bottomrule
+\end{tabular}
+\label{tab:relativer_speicherverbrauch_gorm}
+\end{table}
+	

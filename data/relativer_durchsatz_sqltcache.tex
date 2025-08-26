@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Relative Median-Latenz von SQLT-Cache zu SQL in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule
+	List & 100 &  98.5 & \cellcolor{green!11}  97.4 &  99.7 &  99.4 &  100.9 \\
+	List & 1000 & \cellcolor{green!11}  96.7 & \cellcolor{green!11}  97.9 & \cellcolor{green!11}  97.8 & \cellcolor{green!11}  97.8 & \cellcolor{green!11}  97.9 \\
+	List & 10000 & \cellcolor{green!12}  95.4 & \cellcolor{green!11}  97.4 &  99.3 &  99.5 & \cellcolor{green!11}  97.5 \\
+	ListPreload & 100 & \cellcolor{green!11}  97.5 & \cellcolor{green!11}  97.4 & \cellcolor{green!11}  97.8 &  98.5 & \cellcolor{green!11}  97.1 \\
+	ListPreload & 1000 & \cellcolor{green!11}  97.2 &  98.8 &  98.7 & \cellcolor{green!11}  97.7 & \cellcolor{green!11}  97.8 \\
+	ListPreload & 10000 &  98.3 &  98.5 & \cellcolor{green!11}  97.3 &  98.2 &  99.1 \\
+	Dashboard & 100 &  101.4 & \cellcolor{red!20}  125.2 &  100.4 & \cellcolor{green!11}  97.5 & \cellcolor{green!12}  95.6 \\
+	Dashboard & 1000 & \cellcolor{green!11}  97.8 & \cellcolor{green!11}  97.6 & \cellcolor{green!11}  96.6 & \cellcolor{green!11}  96.8 &  100.0 \\
+	Dashboard & 10000 & \cellcolor{green!15}  87.1 & \cellcolor{green!14}  89.1 & \cellcolor{green!12}  94.9 & \cellcolor{green!13}  92.4 & \cellcolor{green!13}  93.1 \\
+	DashboardPreload & 100 &  102.0 & \cellcolor{green!11}  97.1 & \cellcolor{green!12}  94.0 & \cellcolor{green!12}  96.2 & \cellcolor{red!13}  107.5 \\
+	DashboardPreload & 1000 &  99.8 &  101.0 & \cellcolor{green!12}  95.9 & \cellcolor{green!11}  97.4 &  98.6 \\
+	DashboardPreload & 10000 & \cellcolor{green!11}  96.8 &  99.6 &  101.8 &  98.5 &  99.1 \\
+\bottomrule
+\end{tabular}
+\label{tab:relativer_durchsatz_sqltcache}
+\end{table}
+	

@@ -68,7 +68,6 @@ type Repository struct {
 	DB *gorm.DB
 }
 
-//nolint:maintidx
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
@@ -119,7 +118,6 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 	return movies, nil
 }
 
-//nolint:maintidx
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }

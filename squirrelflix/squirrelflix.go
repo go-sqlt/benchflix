@@ -30,12 +30,10 @@ type Repository struct {
 	Select squirrel.SelectBuilder
 }
 
-//nolint:maintidx
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }
 
-//nolint:maintidx
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
 	return nil, benchflix.ErrSkip
 }

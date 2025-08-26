@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von SQLC [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 6472 & 7908 & 9212 & 8614 & 8505 \\
+	List & 1000 & 8574 & 10336 & 8151 & 8914 & 8708 \\
+	List & 10000 & 9762 & 9024 & 9118 & 9584 & 8864 \\
+	ListPreload & 100 & 7844 & 9610 & 11240 & 11103 & 10257 \\
+	ListPreload & 1000 & 10503 & 12411 & 10021 & 10895 & 10674 \\
+	ListPreload & 10000 & 11920 & 10758 & 10994 & 11384 & 10791 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_sqlc}
+\end{table}
+	

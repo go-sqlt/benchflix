@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Relativer Speicherverbrauch von PGX zu SQL in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{green!19}  77.1 & \cellcolor{green!17}  82.9 & \cellcolor{green!17}  81.9 & \cellcolor{green!17}  83.5 & \cellcolor{green!18}  80.4 \\
+	List & 1000 & \cellcolor{green!17}  81.8 & \cellcolor{green!17}  83.4 & \cellcolor{green!17}  82.3 & \cellcolor{green!17}  81.6 & \cellcolor{green!17}  83.7 \\
+	List & 10000 & \cellcolor{green!17}  83.1 & \cellcolor{green!17}  82.3 & \cellcolor{green!15}  86.5 & \cellcolor{green!17}  82.4 & \cellcolor{green!16}  83.9 \\
+	ListPreload & 100 & \cellcolor{green!17}  82.3 & \cellcolor{green!14}  89.1 & \cellcolor{green!15}  87.9 & \cellcolor{green!15}  88.4 & \cellcolor{green!15}  87.5 \\
+	ListPreload & 1000 & \cellcolor{green!15}  88.4 & \cellcolor{green!15}  88.4 & \cellcolor{green!15}  88.0 & \cellcolor{green!15}  87.6 & \cellcolor{green!14}  89.3 \\
+	ListPreload & 10000 & \cellcolor{green!14}  90.3 & \cellcolor{green!15}  87.8 & \cellcolor{green!13}  91.8 & \cellcolor{green!15}  86.9 & \cellcolor{green!14}  89.2 \\
+	Dashboard & 100 & \cellcolor{red!14}  110.0 & \cellcolor{red!12}  106.2 & \cellcolor{red!16}  113.8 & \cellcolor{red!15}  112.9 & \cellcolor{red!15}  112.8 \\
+	Dashboard & 1000 & \cellcolor{red!13}  108.4 & \cellcolor{red!13}  107.8 & \cellcolor{red!14}  109.6 & \cellcolor{red!14}  108.9 & \cellcolor{red!13}  107.3 \\
+	Dashboard & 10000 & \cellcolor{red!13}  108.4 & \cellcolor{red!13}  107.7 & \cellcolor{red!14}  108.9 & \cellcolor{red!13}  107.1 & \cellcolor{red!14}  109.1 \\
+	DashboardPreload & 100 & \cellcolor{red!16}  113.9 & \cellcolor{red!14}  110.7 & \cellcolor{red!16}  115.6 & \cellcolor{red!17}  116.3 & \cellcolor{red!17}  117.4 \\
+	DashboardPreload & 1000 & \cellcolor{red!15}  113.5 & \cellcolor{red!15}  112.8 & \cellcolor{red!15}  113.0 & \cellcolor{red!15}  113.1 & \cellcolor{red!16}  114.0 \\
+	DashboardPreload & 10000 & \cellcolor{red!15}  113.7 & \cellcolor{red!15}  112.4 & \cellcolor{red!16}  115.7 & \cellcolor{red!15}  112.0 & \cellcolor{red!15}  111.5 \\
+\bottomrule
+\end{tabular}
+\label{tab:relativer_speicherverbrauch_pgx}
+\end{table}
+	

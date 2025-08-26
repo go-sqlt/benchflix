@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von PGX [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 197704 & 176879 & 256930 & 253501 & 158875 \\
+	List & 1000 & 226207 & 213395 & 183430 & 205271 & 194882 \\
+	List & 10000 & 214274 & 207279 & 217248 & 201107 & 203417 \\
+	ListPreload & 100 & 161306 & 146812 & 225330 & 207439 & 128981 \\
+	ListPreload & 1000 & 184645 & 180974 & 157844 & 181557 & 162945 \\
+	ListPreload & 10000 & 182974 & 178155 & 184847 & 174102 & 172646 \\
+	Dashboard & 100 & 214947 & 216978 & 331011 & 256330 & 159774 \\
+	Dashboard & 1000 & 218919 & 219499 & 183665 & 194524 & 190629 \\
+	Dashboard & 10000 & 204411 & 197723 & 196425 & 198971 & 200173 \\
+	DashboardPreload & 100 & 234650 & 239072 & 320930 & 271526 & 176383 \\
+	DashboardPreload & 1000 & 226826 & 234744 & 195792 & 209150 & 205065 \\
+	DashboardPreload & 10000 & 221525 & 213372 & 219912 & 218770 & 213426 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_pgx}
+\end{table}
+	

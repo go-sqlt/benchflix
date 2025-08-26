@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von SQLT [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 16462 & 17539 & 18453 & 17970 & 18126 \\
+	List & 1000 & 18032 & 19309 & 17611 & 18270 & 18147 \\
+	List & 10000 & 18922 & 18244 & 17920 & 18822 & 18060 \\
+	ListPreload & 100 & 19968 & 21203 & 23044 & 22619 & 21249 \\
+	ListPreload & 1000 & 22321 & 24437 & 21697 & 22246 & 22227 \\
+	ListPreload & 10000 & 23866 & 22846 & 21876 & 23424 & 22180 \\
+	Dashboard & 100 & 16164 & 16883 & 17173 & 16999 & 17139 \\
+	Dashboard & 1000 & 17162 & 18294 & 16845 & 17447 & 17351 \\
+	Dashboard & 10000 & 17914 & 17510 & 17456 & 17792 & 17359 \\
+	DashboardPreload & 100 & 17870 & 19233 & 17927 & 17333 & 17525 \\
+	DashboardPreload & 1000 & 18381 & 19666 & 18373 & 18833 & 18987 \\
+	DashboardPreload & 10000 & 19614 & 19176 & 18435 & 19344 & 18202 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_sqlt}
+\end{table}
+	

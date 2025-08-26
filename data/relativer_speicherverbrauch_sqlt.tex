@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Relativer Speicherverbrauch von SQLT zu SQL in \%}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule
+	List & 100 & \cellcolor{red!30}  165.6 & \cellcolor{red!30}  169.0 & \cellcolor{red!30}  163.2 & \cellcolor{red!30}  155.5 & \cellcolor{red!30}  168.1 \\
+	List & 1000 & \cellcolor{red!30}  161.9 & \cellcolor{red!30}  166.9 & \cellcolor{red!30}  164.6 & \cellcolor{red!30}  163.9 & \cellcolor{red!30}  168.2 \\
+	List & 10000 & \cellcolor{red!30}  164.5 & \cellcolor{red!30}  162.2 & \cellcolor{red!30}  164.5 & \cellcolor{red!30}  159.6 & \cellcolor{red!30}  161.7 \\
+	ListPreload & 100 & \cellcolor{red!30}  156.7 & \cellcolor{red!30}  158.5 & \cellcolor{red!30}  160.4 & \cellcolor{red!30}  152.3 & \cellcolor{red!30}  156.9 \\
+	ListPreload & 1000 & \cellcolor{red!30}  157.9 & \cellcolor{red!30}  164.8 & \cellcolor{red!30}  158.7 & \cellcolor{red!30}  156.9 & \cellcolor{red!30}  160.8 \\
+	ListPreload & 10000 & \cellcolor{red!30}  165.1 & \cellcolor{red!30}  159.9 & \cellcolor{red!30}  156.3 & \cellcolor{red!30}  155.9 & \cellcolor{red!30}  155.0 \\
+	Dashboard & 100 & \cellcolor{red!30}  155.6 & \cellcolor{red!28}  145.5 & \cellcolor{red!30}  157.9 & \cellcolor{red!29}  148.4 & \cellcolor{red!30}  160.9 \\
+	Dashboard & 1000 & \cellcolor{red!30}  150.3 & \cellcolor{red!30}  156.2 & \cellcolor{red!30}  150.7 & \cellcolor{red!30}  151.9 & \cellcolor{red!30}  150.6 \\
+	Dashboard & 10000 & \cellcolor{red!30}  151.5 & \cellcolor{red!30}  148.8 & \cellcolor{red!30}  153.3 & \cellcolor{red!29}  146.6 & \cellcolor{red!29}  148.6 \\
+	DashboardPreload & 100 & \cellcolor{red!29}  146.3 & \cellcolor{red!25}  138.4 & \cellcolor{red!27}  141.5 & \cellcolor{red!22}  130.1 & \cellcolor{red!27}  142.0 \\
+	DashboardPreload & 1000 & \cellcolor{red!26}  139.3 & \cellcolor{red!28}  145.5 & \cellcolor{red!26}  140.1 & \cellcolor{red!26}  140.4 & \cellcolor{red!26}  140.9 \\
+	DashboardPreload & 10000 & \cellcolor{red!28}  144.4 & \cellcolor{red!26}  140.3 & \cellcolor{red!26}  139.8 & \cellcolor{red!25}  137.2 & \cellcolor{red!23}  132.7 \\
+\bottomrule
+\end{tabular}
+\label{tab:relativer_speicherverbrauch_sqlt}
+\end{table}
+	

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"strings"
 
 	"github.com/go-sqlt/benchflix"
 	"github.com/montanaflynn/stats"
@@ -13,132 +12,71 @@ import (
 func main() {
 	b := benchflix.Must(benchflix.ReadAll(os.Stdin))
 
-	Variationskoeffizient(b, "SQL")
-	Variationskoeffizient(b, "PGX")
-	Variationskoeffizient(b, "SQUIRREL")
-	Variationskoeffizient(b, "SQLX")
-	Variationskoeffizient(b, "GORM")
-	Variationskoeffizient(b, "SQLC")
-	Variationskoeffizient(b, "SQLT")
-	Variationskoeffizient(b, "SQLT-Cache")
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_sql", "Quartilsdispersionskoeffizient des Durchsatzes von SQL in \\%", "SQL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_pgx", "Quartilsdispersionskoeffizient des Durchsatzes von PGX in \\%", "PGX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_squirrel", "Quartilsdispersionskoeffizient des Durchsatzes von SQUIRREL in \\%", "SQUIRREL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_sqlx", "Quartilsdispersionskoeffizient des Durchsatzes von SQLX in \\%", "SQLX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_gorm", "Quartilsdispersionskoeffizient des Durchsatzes von GORM in \\%", "GORM", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_sqlc", "Quartilsdispersionskoeffizient des Durchsatzes von SQLC in \\%", "SQLC", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_sqlt", "Quartilsdispersionskoeffizient des Durchsatzes von SQLT in \\%", "SQLT", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_durchsatz_sqltcache", "Quartilsdispersionskoeffizient des Durchsatzes von SQLT-Cache in \\%", "SQLT-Cache", benchflix.NsPerOp{})
 
-	Mittelwerte(b, "SQL", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQL", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQL", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "PGX", benchflix.NsPerOp{})
-	Mittelwerte(b, "PGX", benchflix.BytesPerOp{})
-	Mittelwerte(b, "PGX", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "SQUIRREL", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQUIRREL", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQUIRREL", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "SQLX", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQLX", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQLX", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "GORM", benchflix.NsPerOp{})
-	Mittelwerte(b, "GORM", benchflix.BytesPerOp{})
-	Mittelwerte(b, "GORM", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "SQLC", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQLC", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQLC", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "SQLT", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQLT", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQLT", benchflix.AllocsPerOp{})
-	Mittelwerte(b, "SQLT-Cache", benchflix.NsPerOp{})
-	Mittelwerte(b, "SQLT-Cache", benchflix.BytesPerOp{})
-	Mittelwerte(b, "SQLT-Cache", benchflix.AllocsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sql", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQL in \\%", "SQL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_pgx", "Quartilsdispersionskoeffizient des Speicherverbrauchs von PGX in \\%", "PGX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_squirrel", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQUIRREL in \\%", "SQUIRREL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sqlx", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQLX in \\%", "SQLX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_gorm", "Quartilsdispersionskoeffizient des Speicherverbrauchs von GORM in \\%", "GORM", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sqlc", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQLC in \\%", "SQLC", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sqlt", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQLT in \\%", "SQLT", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sqltcache", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQLT-Cache in \\%", "SQLT-Cache", benchflix.NsPerOp{})
 
-	Benchmarkdifferenz(b, "PGX", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "SQUIRREL", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "SQLX", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "GORM", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "SQLC", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "SQLT", benchflix.NsPerOp{})
-	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.NsPerOp{})
+	Median(b, "durchsatz_sql", "Median-Latenz von SQL [ns/op]", "SQL", benchflix.NsPerOp{})
+	Median(b, "durchsatz_pgx", "Median-Latenz von PGX [ns/op]", "PGX", benchflix.NsPerOp{})
+	Median(b, "durchsatz_squirrel", "Median-Latenz von SQUIRREL [ns/op]", "SQUIRREL", benchflix.NsPerOp{})
+	Median(b, "durchsatz_sqlx", "Median-Latenz von SQLX [ns/op]", "SQLX", benchflix.NsPerOp{})
+	Median(b, "durchsatz_gorm", "Median-Latenz von GORM [ns/op]", "GORM", benchflix.NsPerOp{})
+	Median(b, "durchsatz_sqlc", "Median-Latenz von SQLC [ns/op]", "SQLC", benchflix.NsPerOp{})
+	Median(b, "durchsatz_sqlt", "Median-Latenz von SQLT [ns/op]", "SQLT", benchflix.NsPerOp{})
+	Median(b, "durchsatz_sqltcache", "Median-Latenz von SQLT-Cache [ns/op]", "SQLT-Cache", benchflix.NsPerOp{})
 
-	Benchmarkdifferenz(b, "PGX", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "SQUIRREL", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "SQLX", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "GORM", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "SQLC", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "SQLT", benchflix.BytesPerOp{})
-	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sql", "Speicherverbrauch von SQL [bytes/op]", "SQL", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_pgx", "Speicherverbrauch von PGX [bytes/op]", "PGX", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_squirrel", "Speicherverbrauch von SQUIRREL [bytes/op]", "SQUIRREL", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlx", "Speicherverbrauch von SQLX [bytes/op]", "SQLX", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_gorm", "Speicherverbrauch von GORM [bytes/op]", "GORM", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlc", "Speicherverbrauch von SQLC [bytes/op]", "SQLC", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlt", "Speicherverbrauch von SQLT [bytes/op]", "SQLT", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqltcache", "Speicherverbrauch von SQLT-Cache [bytes/op]", "SQLT-Cache", benchflix.BytesPerOp{})
 
-	Benchmarkdifferenz(b, "PGX", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "SQUIRREL", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "SQLX", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "GORM", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "SQLC", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "SQLT", benchflix.AllocsPerOp{})
-	Benchmarkdifferenz(b, "SQLT-Cache", benchflix.AllocsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_pgx", "Relative Median-Latenz von PGX zu SQL in \\%", "PGX", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_squirrel", "Relative Median-Latenz von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_sqlx", "Relative Median-Latenz von SQLX zu SQL in \\%", "SQLX", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_gorm", "Relative Median-Latenz von GORM zu SQL in \\%", "GORM", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_sqlc", "Relative Median-Latenz von SQLC zu SQL in \\%", "SQLC", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_sqlt", "Relative Median-Latenz von SQLT zu SQL in \\%", "SQLT", benchflix.NsPerOp{})
+	RelativerVergleich(b, "relativer_durchsatz_sqltcache", "Relative Median-Latenz von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.NsPerOp{})
+
+	RelativerVergleich(b, "relativer_speicherverbrauch_pgx", "Relativer Speicherverbrauch von PGX zu SQL in \\%", "PGX", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_squirrel", "Relativer Speicherverbrauch von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlx", "Relativer Speicherverbrauch von SQLX zu SQL in \\%", "SQLX", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_gorm", "Relativer Speicherverbrauch von GORM zu SQL in \\%", "GORM", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlc", "Relativer Speicherverbrauch von SQLC zu SQL in \\%", "SQLC", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlt", "Relativer Speicherverbrauch von SQLT zu SQL in \\%", "SQLT", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqltcache", "Relativer Speicherverbrauch von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.BytesPerOp{})
 }
 
-func Variationskoeffizient(b benchflix.Benchmark, framework string) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/variationskoeffizienten_%s.tex", strings.ToLower(framework))))
+func RelativerVergleich(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
 
 	fmt.Fprintf(file, `
 \begin{table}[ht]
 \setlength{\extrarowheight}{-1pt}
 \centering
-\caption{%s: Variantionskoeffizienten in \%%}
+\caption{%s}
 \begin{tabular}{llrrrrrr}
 \toprule
-Szenario & Einheit & Parameter & ${CV_1}$ & ${CV_2}$ & ${CV_3}$& ${CV_4}$ & ${CV_5}$ \\
-\midrule`, framework)
-
-	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
-		for _, size := range []string{"100", "1000", "10000"} {
-			s, ok := b[size][framework][szenario]
-			if !ok {
-				continue
-			}
-
-			for _, unit := range []benchflix.Unit{benchflix.NsPerOp{}, benchflix.BytesPerOp{}, benchflix.AllocsPerOp{}} {
-				fmt.Fprintf(file, `
-	%s & %s & %s`,
-					szenario, unit.Name(), size,
-				)
-
-				for _, chunk := range []string{"1", "2", "3", "4", "5"} {
-					c, ok := s[chunk]
-					if !ok {
-						panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
-					}
-
-					nsX := benchflix.Must(stats.Mean(unit.Unit(c)))
-					nsSD := benchflix.Must(stats.StandardDeviation(unit.Unit(c)))
-
-					cv := nsSD / nsX * 100
-
-					fmt.Fprintf(file, ` & %s %.1f`,
-						cellColor(cv+100), cv,
-					)
-				}
-
-				fmt.Fprintf(file, ` \\`)
-			}
-		}
-	}
-
-	fmt.Fprintf(file, `
-\bottomrule
-\end{tabular}
-\label{tab:variationskoeffizienten_%s}
-\end{table}
-	`, strings.ToLower(framework))
-}
-
-func Benchmarkdifferenz(b benchflix.Benchmark, framework string, unit benchflix.Unit) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/benchmarkdifferenz_%s_%s.tex", strings.ToLower(framework), strings.ToLower(unit.Name()))))
-
-	fmt.Fprintf(file, `
-\begin{table}[ht]
-\setlength{\extrarowheight}{-1pt}
-\centering
-\caption{%s: Benchmarkdifferenz (%s) in \%%}
-\begin{tabular}{llrrrrrr}
-\toprule
-Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
-\midrule`, framework, unit.Name())
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+\midrule`, title)
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
 		for _, size := range []string{"100", "1000", "10000"} {
@@ -158,9 +96,9 @@ Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & $
 					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
 				}
 
-				baseX := benchflix.Must(stats.Mean(unit.Unit(b[size]["SQL"][szenario][chunk])))
+				baseX := benchflix.Must(stats.Median(unit.Unit(b[size]["SQL"][szenario][chunk])))
 
-				x := benchflix.Must(stats.Mean(unit.Unit(c)))
+				x := benchflix.Must(stats.Median(unit.Unit(c)))
 
 				percent := x / baseX * 100
 
@@ -174,23 +112,23 @@ Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & $
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:benchmarkdifferenz_%s_%s}
+\label{tab:%s}
 \end{table}
-	`, strings.ToLower(framework), strings.ToLower(unit.Name()))
+	`, output)
 }
 
-func Mittelwerte(b benchflix.Benchmark, framework string, unit benchflix.Unit) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/mittelwerte_%s_%s.tex", strings.ToLower(framework), strings.ToLower(unit.Name()))))
+func Median(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
 
 	fmt.Fprintf(file, `
 \begin{table}[ht]
 \setlength{\extrarowheight}{-1pt}
 \centering
-\caption{%s: Mittelwerte (%s)}
+\caption{%s}
 \begin{tabular}{llrrrrrr}
 \toprule
-Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & ${\Delta \overline{X}_3}$ & ${\Delta \overline{X}_4}$ & ${\Delta \overline{X}_5}$ \\
-\midrule`, framework, unit.Name())
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule`, title)
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
 		for _, size := range []string{"100", "1000", "10000"} {
@@ -210,7 +148,7 @@ Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & $
 					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
 				}
 
-				x := benchflix.Must(stats.Mean(unit.Unit(c)))
+				x := benchflix.Must(stats.Median(unit.Unit(c)))
 
 				fmt.Fprintf(file, ` & %.f`, math.Round(x))
 			}
@@ -222,9 +160,9 @@ Szenario & Parameter & ${\Delta \overline{X}_1}$ & ${\Delta \overline{X}_2}$ & $
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:mittelwerte_%s_%s}
+\label{tab:%s}
 \end{table}
-	`, strings.ToLower(framework), strings.ToLower(unit.Name()))
+	`, output)
 }
 
 func cellColor(percent float64) string {
@@ -253,4 +191,57 @@ func cellColor(percent float64) string {
 		intensity := mapIntensity(delta, 50.0, 10.0, 30.0)
 		return fmt.Sprintf(`\cellcolor{red!%.0f} `, intensity)
 	}
+}
+
+func Quartilsdispersionskoeffizient(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
+
+	fmt.Fprintf(file, `
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{%s}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
+\midrule`, title)
+
+	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
+		for _, size := range []string{"100", "1000", "10000"} {
+			s, ok := b[size][framework][szenario]
+			if !ok {
+				continue
+			}
+
+			fmt.Fprintf(file, `
+	%s & %s`,
+				szenario, size,
+			)
+
+			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
+				c, ok := s[chunk]
+				if !ok {
+					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
+				}
+
+				q2 := benchflix.Must(stats.Median(unit.Unit(c)))
+				qa := benchflix.Must(stats.InterQuartileRange(unit.Unit(c)))
+
+				cv := qa / q2 * 100
+
+				fmt.Fprintf(file, ` & %s %.1f`,
+					cellColor(cv+100), cv,
+				)
+			}
+
+			fmt.Fprintf(file, ` \\`)
+		}
+	}
+
+	fmt.Fprintf(file, `
+\bottomrule
+\end{tabular}
+\label{tab:%s}
+\end{table}
+	`, output)
 }

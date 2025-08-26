@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von SQLX [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 254137 & 283238 & 332376 & 329717 & 222628 \\
+	List & 1000 & 266601 & 278738 & 237577 & 255033 & 247130 \\
+	List & 10000 & 270451 & 260674 & 249149 & 262955 & 249978 \\
+	ListPreload & 100 & 290648 & 296383 & 372901 & 382492 & 253171 \\
+	ListPreload & 1000 & 313018 & 312377 & 268149 & 285629 & 278395 \\
+	ListPreload & 10000 & 306407 & 298966 & 287589 & 294519 & 283295 \\
+	Dashboard & 100 & 249432 & 306712 & 346655 & 343612 & 212914 \\
+	Dashboard & 1000 & 270188 & 265377 & 232457 & 247082 & 241223 \\
+	Dashboard & 10000 & 267915 & 260124 & 249022 & 263042 & 249738 \\
+	DashboardPreload & 100 & 271593 & 282000 & 361310 & 357882 & 221435 \\
+	DashboardPreload & 1000 & 291752 & 283532 & 246287 & 263138 & 251829 \\
+	DashboardPreload & 10000 & 282930 & 274694 & 261538 & 272917 & 262970 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_sqlx}
+\end{table}
+	

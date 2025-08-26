@@ -76,10 +76,8 @@ func NewRepository(conn string, min, max int, idle time.Duration) benchflix.Repo
 	cfg.MinConns = int32(min)
 	cfg.MaxConnIdleTime = idle
 
-	pool := benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg))
-
 	return Repository{
-		Pool: pool,
+		Pool: benchflix.Must(pgxpool.NewWithConfig(context.Background(), cfg)),
 	}
 }
 
@@ -139,6 +137,7 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 		ids = append(ids, movie.ID)
 		movies = append(movies, movie)
 	}
+
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -212,9 +211,11 @@ func (r Repository) QueryDashboard(ctx context.Context, params benchflix.Dashboa
 			)
 		)`)
 	}
+
 	if params.YearAdded != 0 {
 		sb.WriteString(" AND EXTRACT(YEAR FROM m.added_at) = @year_added")
 	}
+	
 	if params.MinRating != 0 {
 		sb.WriteString(" AND m.rating >= @min_rating")
 	}

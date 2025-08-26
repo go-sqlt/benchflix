@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von SQLT-Cache [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 206204 & 236529 & 285960 & 279433 & 181749 \\
+	List & 1000 & 222755 & 226581 & 191916 & 208918 & 200058 \\
+	List & 10000 & 219966 & 213594 & 207058 & 216829 & 202850 \\
+	ListPreload & 100 & 218083 & 222175 & 289739 & 294706 & 180012 \\
+	ListPreload & 1000 & 228840 & 229605 & 197176 & 210548 & 205639 \\
+	ListPreload & 10000 & 231528 & 220030 & 207851 & 216616 & 207181 \\
+	Dashboard & 100 & 214973 & 240397 & 329002 & 254493 & 152099 \\
+	Dashboard & 1000 & 224792 & 217594 & 183359 & 193939 & 193545 \\
+	Dashboard & 10000 & 199194 & 195316 & 201254 & 200718 & 194447 \\
+	DashboardPreload & 100 & 220930 & 190666 & 312705 & 252309 & 169771 \\
+	DashboardPreload & 1000 & 224721 & 228297 & 180873 & 198509 & 190133 \\
+	DashboardPreload & 10000 & 219814 & 215121 & 213500 & 211253 & 205069 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_sqltcache}
+\end{table}
+	

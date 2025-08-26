@@ -8,14 +8,16 @@ import (
 	"strconv"
 	"strings"
 
+	"slices"
+
 	"github.com/go-sqlt/benchflix"
 )
 
 type Data struct {
 	Function string
-	CC       int
+	CC       float64
 	HV       float64
-	MI       int
+	MI       float64
 }
 
 func main() {
@@ -77,9 +79,9 @@ func main() {
 
 		data := Data{
 			Function: funcName,
-			CC:       cc,
+			CC:       float64(cc),
 			HV:       hv,
-			MI:       mi,
+			MI:       float64(mi),
 		}
 
 		switch {
@@ -100,36 +102,105 @@ func main() {
 		}
 	}
 
-	Fprint("SQL", sql)
-	Fprint("PGX", pgx)
-	Fprint("SQUIRREL", squirrel)
-	Fprint("SQLX", sqlx)
-	Fprint("GORM", gorm)
-	Fprint("SQLC", sqlc)
-	Fprint("SQLT", sqlt)
+	Table("wartbarkeit_sql", "Wartbarkeitsmesswerte von SQL", sql)
+	Table("wartbarkeit_pgx", "Wartbarkeitsmesswerte von PGX", pgx)
+	Table("wartbarkeit_squirrel", "Wartbarkeitsmesswerte von SQUIRREL", squirrel)
+	Table("wartbarkeit_sqlx", "Wartbarkeitsmesswerte von SQLX", sqlx)
+	Table("wartbarkeit_gorm", "Wartbarkeitsmesswerte von GORM", gorm)
+	Table("wartbarkeit_sqlc", "Wartbarkeitsmesswerte von SQLC", sqlc)
+	Table("wartbarkeit_sqlt", "Wartbarkeitsmesswerte von SQLT", sqlt)
+
+	Vergleich("wartbarkeit_relativ_pgx", "Relative Wartbarkeitsmesswerte von PGX zu SQL in \\%", pgx, sql)
+	Vergleich("wartbarkeit_relativ_squirrel", "Relative Wartbarkeitsmesswerte von SQUIRREL zu SQL in \\%", squirrel, sql)
+	Vergleich("wartbarkeit_relativ_sqlx", "Relative Wartbarkeitsmesswerte von SQLX zu SQL in \\%", sqlx, sql)
+	Vergleich("wartbarkeit_relativ_gorm", "Relative Wartbarkeitsmesswerte von GORM zu SQL in \\%", gorm, sql)
+	Vergleich("wartbarkeit_relativ_sqlc", "Relative Wartbarkeitsmesswerte von SQLC zu SQL in \\%", sqlc, sql)
+	Vergleich("wartbarkeit_relativ_sqlt", "Relative Wartbarkeitsmesswerte von SQLT zu SQL in \\%", sqlt, sql)
 }
 
-func Fprint(name string, data []Data) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s_maintainability.tex", strings.ToLower(name))))
+func Table(output, title string, data []Data) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
 
 	fmt.Fprintf(file, `\begin{table}[ht]
 \centering
-\caption{%s: Wartbarkeit}
+\caption{%s}
 \begin{tabular}{lrrrr}
 \toprule
 Szenario & CC & HV & MI \\
-\midrule`, name)
+\midrule`, title)
 
 	for _, d := range data {
 		fmt.Fprintf(file, `
-	%s & %d & %g & %d \\`, d.Function, d.CC, math.Round(d.HV), d.MI,
+	%s & %g & %g & %g \\`, d.Function, d.CC, math.Round(d.HV), d.MI,
 		)
 	}
 
 	fmt.Fprintf(file, `
 \bottomrule
 \end{tabular}
-\label{tab:%s_maintainability}
+\label{tab:%s}
 \end{table}
-	`, strings.ToLower(name))
+	`, output)
+}
+
+func Vergleich(output, title string, data []Data, sql []Data) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
+
+	fmt.Fprintf(file, `\begin{table}[ht]
+\centering
+\caption{%s}
+\begin{tabular}{lrrrr}
+\toprule
+Szenario & CC & HV & MI \\
+\midrule`, title)
+
+	for _, d := range data {
+		base := sql[slices.IndexFunc(sql, func(r Data) bool { return r.Function == d.Function })]
+
+		fmt.Fprintf(file, `
+	%s & %s %g & %s %g & %s %g \\`,
+			d.Function,
+			cellColor(math.Round(d.CC/base.CC*1000.0)/10),
+			math.Round(d.CC/base.CC*1000.0)/10,
+			cellColor(math.Round(d.HV/base.HV*1000.0)/10),
+			math.Round(d.HV/base.HV*1000.0)/10,
+			cellColor(math.Round(d.MI/base.MI*1000.0)/10*-1+200),
+			math.Round(d.MI/base.MI*1000.0)/10,
+		)
+	}
+
+	fmt.Fprintf(file, `
+\bottomrule
+\end{tabular}
+\label{tab:%s}
+\end{table}
+	`, output)
+}
+
+func cellColor(percent float64) string {
+	delta := percent - 100.0
+	ad := math.Abs(delta)
+
+	if ad < 2.0 {
+		return ""
+	}
+
+	mapIntensity := func(v, maxDev, minInt, maxInt float64) float64 {
+		if v < 0 {
+			v = 0
+		}
+		if v > maxDev {
+			v = maxDev
+		}
+
+		return minInt + v/maxDev*(maxInt-minInt)
+	}
+
+	if delta < 0 {
+		intensity := mapIntensity(-delta, 50.0, 10.0, 30.0)
+		return fmt.Sprintf(`\cellcolor{green!%.0f} `, intensity)
+	} else {
+		intensity := mapIntensity(delta, 50.0, 10.0, 30.0)
+		return fmt.Sprintf(`\cellcolor{red!%.0f} `, intensity)
+	}
 }

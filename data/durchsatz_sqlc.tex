@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von SQLC [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 196338 & 176553 & 255994 & 252447 & 158220 \\
+	List & 1000 & 221028 & 213653 & 182194 & 205237 & 190194 \\
+	List & 10000 & 212802 & 208019 & 214517 & 201206 & 201739 \\
+	ListPreload & 100 & 162884 & 148028 & 228419 & 210756 & 129665 \\
+	ListPreload & 1000 & 184601 & 181786 & 158148 & 181878 & 163399 \\
+	ListPreload & 10000 & 183693 & 177305 & 183469 & 173969 & 172315 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_sqlc}
+\end{table}
+	

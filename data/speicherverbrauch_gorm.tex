@@ -1,0 +1,20 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von GORM [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	ListPreload & 100 & 39227 & 44523 & 51589 & 51862 & 45611 \\
+	ListPreload & 1000 & 48322 & 54479 & 46736 & 50035 & 47672 \\
+	ListPreload & 10000 & 49913 & 50068 & 48419 & 53466 & 47757 \\
+	DashboardPreload & 100 & 32591 & 41021 & 28840 & 29069 & 27733 \\
+	DashboardPreload & 1000 & 31804 & 33499 & 33217 & 34479 & 37193 \\
+	DashboardPreload & 10000 & 33989 & 34758 & 32507 & 35727 & 33369 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_gorm}
+\end{table}
+	

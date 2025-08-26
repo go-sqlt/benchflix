@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von SQL [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 209401 & 242738 & 286770 & 281118 & 180170 \\
+	List & 1000 & 230299 & 231346 & 196153 & 213616 & 204304 \\
+	List & 10000 & 230510 & 219229 & 208584 & 217842 & 207981 \\
+	ListPreload & 100 & 223611 & 228063 & 296155 & 299286 & 185469 \\
+	ListPreload & 1000 & 235341 & 232457 & 199711 & 215587 & 210162 \\
+	ListPreload & 10000 & 235543 & 223435 & 213631 & 220607 & 209096 \\
+	Dashboard & 100 & 212047 & 191960 & 327701 & 261084 & 159044 \\
+	Dashboard & 1000 & 229756 & 222856 & 189846 & 200451 & 193572 \\
+	Dashboard & 10000 & 228652 & 219143 & 212086 & 217251 & 208792 \\
+	DashboardPreload & 100 & 216697 & 196264 & 332613 & 262172 & 157943 \\
+	DashboardPreload & 1000 & 225200 & 226087 & 188690 & 203743 & 192752 \\
+	DashboardPreload & 10000 & 227169 & 216009 & 209760 & 214479 & 206830 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_sql}
+\end{table}
+	

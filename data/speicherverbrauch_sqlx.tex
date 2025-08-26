@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von SQLX [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 8876 & 10372 & 11891 & 11280 & 11163 \\
+	List & 1000 & 10954 & 13411 & 10611 & 11618 & 11150 \\
+	List & 10000 & 11946 & 11943 & 11277 & 12478 & 10844 \\
+	ListPreload & 100 & 12570 & 13831 & 14756 & 15403 & 13801 \\
+	ListPreload & 1000 & 14401 & 15233 & 14063 & 14572 & 14229 \\
+	ListPreload & 10000 & 14747 & 14991 & 14728 & 15514 & 14567 \\
+	Dashboard & 100 & 12328 & 13191 & 12529 & 13261 & 12376 \\
+	Dashboard & 1000 & 12856 & 13066 & 12896 & 13162 & 13262 \\
+	Dashboard & 10000 & 13181 & 13347 & 13070 & 13745 & 13208 \\
+	DashboardPreload & 100 & 13345 & 14887 & 13925 & 14680 & 13583 \\
+	DashboardPreload & 1000 & 14218 & 14451 & 14328 & 14590 & 14545 \\
+	DashboardPreload & 10000 & 14426 & 14819 & 14456 & 15243 & 14655 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_sqlx}
+\end{table}
+	

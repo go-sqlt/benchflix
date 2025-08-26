@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"slices"
 
@@ -15,25 +16,24 @@ import (
 func main() {
 	b := benchflix.Must(benchflix.ReadAll(os.Stdin))
 
-	renderChart(b, "List", benchflix.NsPerOp{}, 60)
-	renderChart(b, "List", benchflix.BytesPerOp{}, 40)
-	renderChart(b, "List", benchflix.AllocsPerOp{}, 40)
+	renderSzenario(b, "data/relativer_durchsatz_list.png", "Relative Median-Latenz zu SQL - Szenario List", "List", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relativer_speicherbedarf_list.png", "Relativer Speicherbedarf – Szenario List", "List", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderChart(b, "ListPreload", benchflix.NsPerOp{}, 60)
-	renderChart(b, "ListPreload", benchflix.BytesPerOp{}, 40)
-	renderChart(b, "ListPreload", benchflix.AllocsPerOp{}, 40)
+	renderSzenario(b, "data/relativer_durchsatz_listpreload.png", "Relative Median-Latenz zu SQL - Szenario ListPreload", "ListPreload", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relativer_speicherbedarf_listpreload.png", "Relativer Speicherbedarf – Szenario ListPreload", "ListPreload", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderChart(b, "Dashboard", benchflix.NsPerOp{}, 60)
-	renderChart(b, "Dashboard", benchflix.BytesPerOp{}, 40)
-	renderChart(b, "Dashboard", benchflix.AllocsPerOp{}, 40)
+	renderSzenario(b, "data/relativer_durchsatz_dashboard.png", "Relative Median-Latenz zu SQL - Szenario Dashboard", "Dashboard", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relativer_speicherbedarf_dashboard.png", "Relativer Speicherbedarf – Szenario Dashboard", "Dashboard", benchflix.BytesPerOp{}, 40, stats.Median)
 
-	renderChart(b, "DashboardPreload", benchflix.NsPerOp{}, 60)
-	renderChart(b, "DashboardPreload", benchflix.BytesPerOp{}, 40)
-	renderChart(b, "DashboardPreload", benchflix.AllocsPerOp{}, 40)
+	renderSzenario(b, "data/relativer_durchsatz_dashboardpreload.png", "Relative Median-Latenz zu SQL - Szenario DashboardPreload", "DashboardPreload", benchflix.NsPerOp{}, 60, stats.Median)
+	renderSzenario(b, "data/relativer_speicherbedarf_dashboardpreload.png", "Relativer Speicherbedarf – Szenario DashboardPreload", "DashboardPreload", benchflix.BytesPerOp{}, 40, stats.Median)
+
+	renderAll(b, "data/relativer_durchsatz.png", "Relative Median-Latenz zu SQL", benchflix.NsPerOp{}, 60, stats.Median)
+	renderAll(b, "data/relativer_speicherbedarf.png", "Relativer Speicherbedarf zu SQL", benchflix.BytesPerOp{}, 40, stats.Median)
 }
 
-func renderChart(b benchflix.Benchmark, szenario string, unit benchflix.Unit, minimum int) {
-	frameworks := slices.DeleteFunc([]string{"PGX", "SQUIRREL", "SQLX", "GORM", "SQLC", "SQLT", "SQLT-Cache"}, func(f string) bool {
+func renderSzenario(b benchflix.Benchmark, output, title, szenario string, unit benchflix.Unit, minimum int, statFn func(input stats.Float64Data) (float64, error)) {
+	frameworks := slices.DeleteFunc([]string{"SQLT-Cache", "SQLT", "SQLC", "GORM", "SQLX", "SQUIRREL", "PGX"}, func(f string) bool {
 		_, ok := b["100"][f][szenario]
 
 		return !ok
@@ -42,7 +42,7 @@ func renderChart(b benchflix.Benchmark, szenario string, unit benchflix.Unit, mi
 	chart := charts.NewBar()
 	chart.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title: fmt.Sprintf("Szenario %s: Vergleich (%s) in %%", szenario, unit.Name()),
+			Title: title,
 		}),
 		charts.WithAnimation(false),
 		charts.WithInitializationOpts(opts.Initialization{
@@ -71,7 +71,7 @@ func renderChart(b benchflix.Benchmark, szenario string, unit benchflix.Unit, mi
 			var maxVal float64 = 0
 
 			for _, c := range []string{"1", "2", "3", "4", "5"} {
-				val := benchflix.Must(stats.Mean(unit.Unit(b[size][f][szenario][c]))) / benchflix.Must(stats.Mean(unit.Unit(b[size]["SQL"][szenario][c]))) * 100
+				val := benchflix.Must(statFn(unit.Unit(b[size][f][szenario][c]))) / benchflix.Must(statFn(unit.Unit(b[size]["SQL"][szenario][c]))) * 100
 				minVal = min(val, minVal)
 				maxVal = max(val, maxVal)
 			}
@@ -122,7 +122,110 @@ func renderChart(b benchflix.Benchmark, szenario string, unit benchflix.Unit, mi
 			))
 	}
 
-	output := fmt.Sprintf("data/chart_%s_%s.png", szenario, unit.Name())
+	if err := render.MakeChartSnapshot(chart.RenderContent(), output); err != nil {
+		fmt.Println(chart)
+		panic(err)
+	}
+}
+
+func renderAll(
+	b benchflix.Benchmark,
+	output, title string,
+	unit benchflix.Unit,
+	minimum int,
+	statFn func(input stats.Float64Data) (float64, error),
+) {
+
+	frameworks := []string{"SQLT-Cache", "SQLT", "SQLC", "GORM", "SQLX", "SQUIRREL", "PGX"}
+	szenarien := []string{"List", "ListPreload", "Dashboard", "DashboardPreload"}
+	sizes := []string{"100", "1000", "10000"}
+
+	chart := charts.NewBar()
+	chart.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{Title: title}),
+		charts.WithAnimation(false),
+		charts.WithInitializationOpts(opts.Initialization{BackgroundColor: "#FFFFFF"}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Type: "category",
+			Data: frameworks,
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			Type: "value",
+			Min:  minimum,
+		}),
+		charts.WithLegendOpts(opts.Legend{
+			Right:  "0",
+			Orient: "vertical",
+		}),
+	)
+
+	for _, szenario := range szenarien {
+		minBar := make([]opts.BarData, 0, len(frameworks))
+		diffBar := make([]opts.BarData, 0, len(frameworks))
+
+		for _, f := range frameworks {
+			minVal := math.Inf(1)
+			maxVal := math.Inf(-1)
+
+			for _, sz := range sizes {
+				for _, chunk := range []string{"1", "2", "3", "4", "5"} {
+					fv, okF := b[sz][f][szenario][chunk]
+					sv, okS := b[sz]["SQL"][szenario][chunk]
+					if !okF || !okS {
+						continue
+					}
+					val := benchflix.Must(statFn(unit.Unit(fv))) /
+						benchflix.Must(statFn(unit.Unit(sv))) * 100.0
+					if val < minVal {
+						minVal = val
+					}
+					if val > maxVal {
+						maxVal = val
+					}
+				}
+			}
+
+			if math.IsInf(minVal, 1) || math.IsInf(maxVal, -1) {
+				minVal = 0
+				maxVal = 0
+			}
+
+			minBar = append(minBar, opts.BarData{
+				Name:  f,
+				Value: minVal,
+			})
+			diffBar = append(diffBar, opts.BarData{
+				Name:  f,
+				Value: maxVal - minVal,
+			})
+		}
+
+		chart.AddSeries("", minBar, charts.WithSeriesOpts(func(s *charts.SingleSeries) {
+			s.Stack = "Stack-" + szenario
+			s.ItemStyle = &opts.ItemStyle{Color: "transparent"}
+			s.Emphasis = &opts.Emphasis{ItemStyle: &opts.ItemStyle{Color: "transparent"}}
+			s.Name = ""
+		}))
+
+		chart.AddSeries(szenario, diffBar,
+			charts.WithSeriesOpts(func(s *charts.SingleSeries) {
+				s.Stack = "Stack-" + szenario
+			}),
+			charts.WithMarkLineStyleOpts(opts.MarkLineStyle{
+				Symbol: []string{"none"},
+				LineStyle: &opts.LineStyle{
+					Color: "black",
+					Type:  "dotted",
+					Width: 1,
+				},
+				Label: &opts.Label{Formatter: "SQL"},
+			}),
+			charts.WithMarkLineNameXAxisItemOpts(opts.MarkLineNameXAxisItem{
+				Name:  "SQL",
+				XAxis: 100,
+			}),
+		)
+	}
 
 	if err := render.MakeChartSnapshot(chart.RenderContent(), output); err != nil {
 		fmt.Println(chart)

@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von PGX [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 7663 & 8604 & 9258 & 9648 & 8671 \\
+	List & 1000 & 9105 & 9652 & 8811 & 9095 & 9033 \\
+	List & 10000 & 9564 & 9264 & 9424 & 9712 & 9377 \\
+	ListPreload & 100 & 10481 & 11923 & 12626 & 13126 & 11853 \\
+	ListPreload & 1000 & 12501 & 13117 & 12028 & 12418 & 12340 \\
+	ListPreload & 10000 & 13059 & 12543 & 12854 & 13059 & 12770 \\
+	Dashboard & 100 & 11422 & 12319 & 12383 & 12929 & 12020 \\
+	Dashboard & 1000 & 12375 & 12625 & 12244 & 12503 & 12369 \\
+	Dashboard & 10000 & 12815 & 12673 & 12399 & 12997 & 12742 \\
+	DashboardPreload & 100 & 13909 & 15385 & 14645 & 15483 & 14486 \\
+	DashboardPreload & 1000 & 14970 & 15241 & 14813 & 15168 & 15359 \\
+	DashboardPreload & 10000 & 15453 & 15354 & 15256 & 15783 & 15300 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_pgx}
+\end{table}
+	

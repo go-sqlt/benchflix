@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Speicherverbrauch von SQLT-Cache [bytes/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 5171 & 6254 & 7122 & 6651 & 6841 \\
+	List & 1000 & 6916 & 8302 & 6566 & 7234 & 7078 \\
+	List & 10000 & 7956 & 7252 & 6952 & 7796 & 7151 \\
+	ListPreload & 100 & 7204 & 8717 & 10094 & 9647 & 9447 \\
+	ListPreload & 1000 & 9781 & 11930 & 9360 & 10139 & 10067 \\
+	ListPreload & 10000 & 11290 & 10405 & 9647 & 10950 & 10104 \\
+	Dashboard & 100 & 4981 & 6143 & 6590 & 6139 & 6449 \\
+	Dashboard & 1000 & 6578 & 7789 & 6290 & 6802 & 6595 \\
+	Dashboard & 10000 & 7477 & 6985 & 6984 & 7374 & 6881 \\
+	DashboardPreload & 100 & 6344 & 8290 & 7599 & 7209 & 7452 \\
+	DashboardPreload & 1000 & 7808 & 9335 & 7635 & 8410 & 8376 \\
+	DashboardPreload & 10000 & 9031 & 8635 & 8070 & 8868 & 8400 \\
+\bottomrule
+\end{tabular}
+\label{tab:speicherverbrauch_sqltcache}
+\end{table}
+	

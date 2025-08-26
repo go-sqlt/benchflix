@@ -1,0 +1,26 @@
+
+\begin{table}[ht]
+\setlength{\extrarowheight}{-1pt}
+\centering
+\caption{Median-Latenz von SQLT [ns/op]}
+\begin{tabular}{llrrrrrr}
+\toprule
+Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+\midrule
+	List & 100 & 208203 & 245148 & 291152 & 284914 & 179971 \\
+	List & 1000 & 230288 & 232442 & 195959 & 211486 & 208655 \\
+	List & 10000 & 225329 & 219361 & 207510 & 220754 & 207781 \\
+	ListPreload & 100 & 222588 & 226163 & 294312 & 298617 & 183473 \\
+	ListPreload & 1000 & 235992 & 236542 & 204203 & 217982 & 215522 \\
+	ListPreload & 10000 & 234616 & 223446 & 213882 & 223035 & 211493 \\
+	Dashboard & 100 & 220065 & 246990 & 334063 & 258735 & 157524 \\
+	Dashboard & 1000 & 230584 & 223562 & 189321 & 204497 & 200146 \\
+	Dashboard & 10000 & 204919 & 199488 & 207540 & 203106 & 196432 \\
+	DashboardPreload & 100 & 224817 & 194437 & 315440 & 256702 & 175242 \\
+	DashboardPreload & 1000 & 227925 & 231345 & 186960 & 201284 & 193426 \\
+	DashboardPreload & 10000 & 211600 & 206884 & 205692 & 206135 & 199540 \\
+\bottomrule
+\end{tabular}
+\label{tab:durchsatz_sqlt}
+\end{table}
+	
