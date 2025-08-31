@@ -39,14 +39,14 @@ func main() {
 	Median(b, "latenz_sqlt", "Median-Latenz von SQLT [ns/op]", "SQLT", benchflix.NsPerOp{})
 	Median(b, "latenz_sqltcache", "Median-Latenz von SQLT-Cache [ns/op]", "SQLT-Cache", benchflix.NsPerOp{})
 
-	Median(b, "speicherverbrauch_sql", "Speicherverbrauch von SQL [bytes/op]", "SQL", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_pgx", "Speicherverbrauch von PGX [bytes/op]", "PGX", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_squirrel", "Speicherverbrauch von SQUIRREL [bytes/op]", "SQUIRREL", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_sqlx", "Speicherverbrauch von SQLX [bytes/op]", "SQLX", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_gorm", "Speicherverbrauch von GORM [bytes/op]", "GORM", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_sqlc", "Speicherverbrauch von SQLC [bytes/op]", "SQLC", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_sqlt", "Speicherverbrauch von SQLT [bytes/op]", "SQLT", benchflix.BytesPerOp{})
-	Median(b, "speicherverbrauch_sqltcache", "Speicherverbrauch von SQLT-Cache [bytes/op]", "SQLT-Cache", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sql", "Median-Speicherverbrauch von SQL [bytes/op]", "SQL", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_pgx", "Median-Speicherverbrauch von PGX [bytes/op]", "PGX", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_squirrel", "Median-Speicherverbrauch von SQUIRREL [bytes/op]", "SQUIRREL", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlx", "Median-Speicherverbrauch von SQLX [bytes/op]", "SQLX", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_gorm", "Median-Speicherverbrauch von GORM [bytes/op]", "GORM", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlc", "Median-Speicherverbrauch von SQLC [bytes/op]", "SQLC", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqlt", "Median-Speicherverbrauch von SQLT [bytes/op]", "SQLT", benchflix.BytesPerOp{})
+	Median(b, "speicherverbrauch_sqltcache", "Median-Speicherverbrauch von SQLT-Cache [bytes/op]", "SQLT-Cache", benchflix.BytesPerOp{})
 
 	RelativerVergleich(b, "relative_latenz_pgx", "Relative Median-Latenz von PGX zu SQL in \\%", "PGX", benchflix.NsPerOp{})
 	RelativerVergleich(b, "relative_latenz_squirrel", "Relative Median-Latenz von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.NsPerOp{})
@@ -56,13 +56,13 @@ func main() {
 	RelativerVergleich(b, "relative_latenz_sqlt", "Relative Median-Latenz von SQLT zu SQL in \\%", "SQLT", benchflix.NsPerOp{})
 	RelativerVergleich(b, "relative_latenz_sqltcache", "Relative Median-Latenz von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.NsPerOp{})
 
-	RelativerVergleich(b, "relativer_speicherverbrauch_pgx", "Relativer Speicherverbrauch von PGX zu SQL in \\%", "PGX", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_squirrel", "Relativer Speicherverbrauch von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlx", "Relativer Speicherverbrauch von SQLX zu SQL in \\%", "SQLX", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_gorm", "Relativer Speicherverbrauch von GORM zu SQL in \\%", "GORM", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlc", "Relativer Speicherverbrauch von SQLC zu SQL in \\%", "SQLC", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlt", "Relativer Speicherverbrauch von SQLT zu SQL in \\%", "SQLT", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqltcache", "Relativer Speicherverbrauch von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_pgx", "Relativer Median-Speicherverbrauch von PGX zu SQL in \\%", "PGX", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_squirrel", "Relativer Median-Speicherverbrauch von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlx", "Relativer Median-Speicherverbrauch von SQLX zu SQL in \\%", "SQLX", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_gorm", "Relativer Median-Speicherverbrauch von GORM zu SQL in \\%", "GORM", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlc", "Relativer Median-Speicherverbrauch von SQLC zu SQL in \\%", "SQLC", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqlt", "Relativer Median-Speicherverbrauch von SQLT zu SQL in \\%", "SQLT", benchflix.BytesPerOp{})
+	RelativerVergleich(b, "relativer_speicherverbrauch_sqltcache", "Relativer Median-Speicherverbrauch von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.BytesPerOp{})
 }
 
 func RelativerVergleich(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {

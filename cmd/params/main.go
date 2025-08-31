@@ -72,7 +72,7 @@ func main() {
 	file := benchflix.Must(os.Create("data/parameterverteilung.tex"))
 
 	fmt.Fprintf(file, `
-\renewcommand{\arraystretch}{0.8}
+\renewcommand{\arraystretch}{0.7}
 \begin{longtable}{lllrrrrr}
 \caption{Parameterverteilung in \%%}\label{tab:parameterverteilung}\\
 \toprule
