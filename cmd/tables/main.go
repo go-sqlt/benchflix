@@ -12,14 +12,14 @@ import (
 func main() {
 	b := benchflix.Must(benchflix.ReadAll(os.Stdin))
 
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sql", "Quartilsdispersionskoeffizient des Durchsatzes von SQL in \\%", "SQL", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_pgx", "Quartilsdispersionskoeffizient des Durchsatzes von PGX in \\%", "PGX", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_squirrel", "Quartilsdispersionskoeffizient des Durchsatzes von SQUIRREL in \\%", "SQUIRREL", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlx", "Quartilsdispersionskoeffizient des Durchsatzes von SQLX in \\%", "SQLX", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_gorm", "Quartilsdispersionskoeffizient des Durchsatzes von GORM in \\%", "GORM", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlc", "Quartilsdispersionskoeffizient des Durchsatzes von SQLC in \\%", "SQLC", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlt", "Quartilsdispersionskoeffizient des Durchsatzes von SQLT in \\%", "SQLT", benchflix.NsPerOp{})
-	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqltcache", "Quartilsdispersionskoeffizient des Durchsatzes von SQLT-Cache in \\%", "SQLT-Cache", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sql", "Quartilsdispersionskoeffizient der Latenz von SQL in \\%", "SQL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_pgx", "Quartilsdispersionskoeffizient der Latenz von PGX in \\%", "PGX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_squirrel", "Quartilsdispersionskoeffizient der Latenz von SQUIRREL in \\%", "SQUIRREL", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlx", "Quartilsdispersionskoeffizient der Latenz von SQLX in \\%", "SQLX", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_gorm", "Quartilsdispersionskoeffizient der Latenz von GORM in \\%", "GORM", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlc", "Quartilsdispersionskoeffizient der Latenz von SQLC in \\%", "SQLC", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqlt", "Quartilsdispersionskoeffizient der Latenz von SQLT in \\%", "SQLT", benchflix.NsPerOp{})
+	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_latenz_sqltcache", "Quartilsdispersionskoeffizient der Latenz von SQLT-Cache in \\%", "SQLT-Cache", benchflix.NsPerOp{})
 
 	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_sql", "Quartilsdispersionskoeffizient des Speicherverbrauchs von SQL in \\%", "SQL", benchflix.BytesPerOp{})
 	Quartilsdispersionskoeffizient(b, "quartilsdispersionskoeffizient_speicherverbrauch_pgx", "Quartilsdispersionskoeffizient des Speicherverbrauchs von PGX in \\%", "PGX", benchflix.BytesPerOp{})
