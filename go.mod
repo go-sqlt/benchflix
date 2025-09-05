@@ -4,7 +4,7 @@ go 1.24.2
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/go-echarts/go-echarts/v2 v2.6.1
+	github.com/go-echarts/go-echarts/v2 v2.6.2
 	github.com/go-echarts/snapshot-chromedp v0.0.5
 	github.com/go-sqlt/sqlt v0.6.3
 	github.com/jackc/pgx/v5 v5.7.5
@@ -17,7 +17,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20250803210736-d308e07a266d // indirect
 	github.com/chromedp/chromedp v0.14.1 // indirect
 	github.com/chromedp/sysutil v1.1.0 // indirect
-	github.com/go-json-experiment/json v0.0.0-20250725192818-e39067aee2d2 // indirect
+	github.com/go-json-experiment/json v0.0.0-20250813233538-9b1f9ea2e11b // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.4.0 // indirect
@@ -26,8 +26,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
-	github.com/yagipy/maintidx v1.0.0 // indirect
-	golang.org/x/mod v0.27.0 // indirect
 )
 
 require (
@@ -53,7 +51,7 @@ require (
 	github.com/moby/sys/user v0.4.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
-	github.com/opencontainers/runc v1.3.0 // indirect
+	github.com/opencontainers/runc v1.3.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	golang.org/x/crypto v0.41.0 // indirect
@@ -62,6 +60,6 @@ require (
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.1
+	gorm.io/gorm v1.30.3
 	gotest.tools v2.2.0+incompatible // indirect
 )

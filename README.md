@@ -1,5 +1,7 @@
 # Benchflix
 
+Datengrundlage: https://www.kaggle.com/datasets/bhargavchirumamilla/netflix-movies-and-tv-shows-till-2025
+
 ```sh
 go test -bench=. -benchmem -timeout=500m -count=10 > data/bench.txt
 

@@ -347,17 +347,12 @@ func ReadAll(reader io.Reader) (Benchmark, error) {
 
 var (
 	Search        = []string{"", "the", "of", "a", "s", "in", "and", "to", "love", "my", "man", "girl", "one", "for"}
+	MinRating     = []float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	Limit         = []uint64{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
+	YearAdded     = []int64{0, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025}
 	Sort          = []string{"title", "added_at", "rating"}
 	Desc          = []bool{true, false}
 	WithDirectors = []bool{true, false}
-	MinRating     = []float64{0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9}
-	Limit         = []uint64{5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100}
-	YearAdded     = []int64{
-		0,
-		2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-		2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
-		2021, 2022, 2023, 2024,
-	}
 )
 
 type Stats struct {
