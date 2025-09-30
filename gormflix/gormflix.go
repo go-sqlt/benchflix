@@ -69,7 +69,7 @@ type Repository struct {
 }
 
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	return nil, benchflix.ErrSkip
+	return r.QueryListPreload(ctx, params)
 }
 
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
@@ -119,7 +119,7 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 }
 
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
-	return nil, benchflix.ErrSkip
+	return r.QueryDashboardPreload(ctx, params)
 }
 
 func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {

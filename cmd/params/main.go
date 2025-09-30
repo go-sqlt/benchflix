@@ -89,7 +89,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 
 \endlastfoot`)
 
-	for _, size := range []int{100, 1000, 10000} {
+	for _, size := range []int{500, 5_000} {
 		chunks := data[size]
 
 		for _, value := range benchflix.Search {

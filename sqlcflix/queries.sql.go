@@ -10,7 +10,262 @@ import (
 	"time"
 )
 
-const query = `-- name: Query :many
+const queryDashboardPreload = `-- name: queryDashboardPreload :many
+SELECT id, title, added_at, rating
+FROM movies m
+WHERE
+    (
+        $1::TEXT = ''
+        OR to_tsvector('simple', title) @@ plainto_tsquery('simple', $1)
+        OR EXISTS (
+            SELECT 1
+            FROM movie_directors md
+            JOIN people p ON p.id = md.person_id
+            WHERE md.movie_id = id
+            AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+        )
+    )
+    AND ($2::INT8 = 0 OR EXTRACT(YEAR FROM added_at) = $2)
+    AND ($3::FLOAT8 = 0 OR rating >= $3)
+ORDER BY 
+    CASE WHEN $4 = 'title' AND NOT $5 THEN m.title END ASC
+    , CASE WHEN $4 = 'added_at' AND NOT $5 THEN m.added_at END ASC
+    , CASE WHEN $4 = 'rating' AND NOT $5 THEN m.rating END ASC
+    , CASE WHEN $4 = 'title' AND $5 THEN m.title END DESC
+    , CASE WHEN $4 = 'added_at' AND $5 THEN m.added_at END DESC
+    , CASE WHEN $4 = 'rating' AND $5 THEN m.rating END DESC
+    , id DESC
+LIMIT CASE WHEN $6::INT4 BETWEEN 1 AND 1000 THEN $6 ELSE 1000 END
+`
+
+type queryDashboardPreloadParams struct {
+	Search    string      `db:"search" json:"search"`
+	YearAdded int64       `db:"year_added" json:"year_added"`
+	MinRating float64     `db:"min_rating" json:"min_rating"`
+	Sort      interface{} `db:"sort" json:"sort"`
+	Desc      interface{} `db:"desc" json:"desc"`
+	Limit     uint64      `db:"limit" json:"limit"`
+}
+
+func (q *Queries) queryDashboardPreload(ctx context.Context, arg queryDashboardPreloadParams) ([]Movie, error) {
+	rows, err := q.db.Query(ctx, queryDashboardPreload,
+		arg.Search,
+		arg.YearAdded,
+		arg.MinRating,
+		arg.Sort,
+		arg.Desc,
+		arg.Limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Movie
+	for rows.Next() {
+		var i Movie
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.AddedAt,
+			&i.Rating,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const queryDashboardWithDirectors = `-- name: queryDashboardWithDirectors :many
+SELECT m.id, m.title, m.added_at, m.rating, d.directors::TEXT[] AS directors
+FROM movies m
+LEFT JOIN LATERAL (
+    SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
+    FROM movie_directors md
+    JOIN people p ON p.id = md.person_id
+    WHERE md.movie_id = m.id
+) d ON true
+WHERE
+    (
+        $1::TEXT = ''
+        OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
+        OR EXISTS (
+            SELECT 1
+            FROM movie_directors md
+            JOIN people p ON p.id = md.person_id
+            WHERE md.movie_id = m.id
+            AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+        )
+    )
+    AND ($2::INT8 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
+    AND ($3::FLOAT8 = 0 OR m.rating >= $3)
+ORDER BY 
+    CASE WHEN $4::TEXT = 'title' AND NOT $5::BOOLEAN THEN m.title END ASC
+    , CASE WHEN $4 = 'added_at' AND NOT $5 THEN m.added_at END ASC
+    , CASE WHEN $4 = 'rating' AND NOT $5 THEN m.rating END ASC
+    , CASE WHEN $4 = 'title' AND $5 THEN m.title END DESC
+    , CASE WHEN $4 = 'added_at' AND $5 THEN m.added_at END DESC
+    , CASE WHEN $4 = 'rating' AND $5 THEN m.rating END DESC
+    , id DESC
+LIMIT CASE WHEN $6::INT4 BETWEEN 1 AND 1000 THEN $6 ELSE 1000 END
+`
+
+type queryDashboardWithDirectorsParams struct {
+	Search    string  `db:"search" json:"search"`
+	YearAdded int64   `db:"year_added" json:"year_added"`
+	MinRating float64 `db:"min_rating" json:"min_rating"`
+	Sort      string  `db:"sort" json:"sort"`
+	Desc      bool    `db:"desc" json:"desc"`
+	Limit     uint64  `db:"limit" json:"limit"`
+}
+
+type queryDashboardWithDirectorsRow struct {
+	ID        int64     `db:"id" json:"id"`
+	Title     string    `db:"title" json:"title"`
+	AddedAt   time.Time `db:"added_at" json:"added_at"`
+	Rating    float64   `db:"rating" json:"rating"`
+	Directors []string  `db:"directors" json:"directors"`
+}
+
+func (q *Queries) queryDashboardWithDirectors(ctx context.Context, arg queryDashboardWithDirectorsParams) ([]queryDashboardWithDirectorsRow, error) {
+	rows, err := q.db.Query(ctx, queryDashboardWithDirectors,
+		arg.Search,
+		arg.YearAdded,
+		arg.MinRating,
+		arg.Sort,
+		arg.Desc,
+		arg.Limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []queryDashboardWithDirectorsRow
+	for rows.Next() {
+		var i queryDashboardWithDirectorsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.AddedAt,
+			&i.Rating,
+			&i.Directors,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const queryDashboardWithoutDirectors = `-- name: queryDashboardWithoutDirectors :many
+SELECT m.id, m.title, m.added_at, m.rating
+FROM movies m
+WHERE
+    (
+        $1::TEXT = ''
+        OR to_tsvector('simple', m.title) @@ plainto_tsquery('simple', $1)
+        OR EXISTS (
+            SELECT 1
+            FROM movie_directors md
+            JOIN people p ON p.id = md.person_id
+            WHERE md.movie_id = m.id
+            AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', $1)
+        )
+    )
+    AND ($2::INT8 = 0 OR EXTRACT(YEAR FROM m.added_at) = $2)
+    AND ($3::FLOAT8 = 0 OR m.rating >= $3)
+ORDER BY 
+    CASE WHEN $4::TEXT = 'title' AND NOT $5::BOOLEAN THEN m.title END ASC
+    , CASE WHEN $4 = 'added_at' AND NOT $5 THEN m.added_at END ASC
+    , CASE WHEN $4 = 'rating' AND NOT $5 THEN m.rating END ASC
+    , CASE WHEN $4 = 'title' AND $5 THEN m.title END DESC
+    , CASE WHEN $4 = 'added_at' AND $5 THEN m.added_at END DESC
+    , CASE WHEN $4 = 'rating' AND $5 THEN m.rating END DESC
+    , id DESC
+LIMIT CASE WHEN $6::INT4 BETWEEN 1 AND 1000 THEN $6 ELSE 1000 END
+`
+
+type queryDashboardWithoutDirectorsParams struct {
+	Search    string  `db:"search" json:"search"`
+	YearAdded int64   `db:"year_added" json:"year_added"`
+	MinRating float64 `db:"min_rating" json:"min_rating"`
+	Sort      string  `db:"sort" json:"sort"`
+	Desc      bool    `db:"desc" json:"desc"`
+	Limit     uint64  `db:"limit" json:"limit"`
+}
+
+func (q *Queries) queryDashboardWithoutDirectors(ctx context.Context, arg queryDashboardWithoutDirectorsParams) ([]Movie, error) {
+	rows, err := q.db.Query(ctx, queryDashboardWithoutDirectors,
+		arg.Search,
+		arg.YearAdded,
+		arg.MinRating,
+		arg.Sort,
+		arg.Desc,
+		arg.Limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Movie
+	for rows.Next() {
+		var i Movie
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.AddedAt,
+			&i.Rating,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const queryDirectors = `-- name: queryDirectors :many
+SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name)::TEXT[] AS directors
+FROM movie_directors md
+JOIN people ON people.id = md.person_id
+WHERE md.movie_id = ANY ($1::INT8[])
+GROUP BY md.movie_id
+`
+
+type queryDirectorsRow struct {
+	MovieID   int64    `db:"movie_id" json:"movie_id"`
+	Directors []string `db:"directors" json:"directors"`
+}
+
+func (q *Queries) queryDirectors(ctx context.Context, dollar_1 []int64) ([]queryDirectorsRow, error) {
+	rows, err := q.db.Query(ctx, queryDirectors, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []queryDirectorsRow
+	for rows.Next() {
+		var i queryDirectorsRow
+		if err := rows.Scan(&i.MovieID, &i.Directors); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const queryList = `-- name: queryList :many
 SELECT m.id, m.title, m.added_at, m.rating, d.directors::TEXT[] AS directors
 FROM movies m
 LEFT JOIN LATERAL (
@@ -37,14 +292,14 @@ ORDER BY m.rating DESC
 LIMIT CASE WHEN $4::INT4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END
 `
 
-type QueryParams struct {
+type queryListParams struct {
 	Search    string  `db:"search" json:"search"`
 	YearAdded int64   `db:"year_added" json:"year_added"`
 	MinRating float64 `db:"min_rating" json:"min_rating"`
 	Limit     uint64  `db:"limit" json:"limit"`
 }
 
-type QueryRow struct {
+type queryListRow struct {
 	ID        int64     `db:"id" json:"id"`
 	Title     string    `db:"title" json:"title"`
 	AddedAt   time.Time `db:"added_at" json:"added_at"`
@@ -52,8 +307,8 @@ type QueryRow struct {
 	Directors []string  `db:"directors" json:"directors"`
 }
 
-func (q *Queries) Query(ctx context.Context, arg QueryParams) ([]QueryRow, error) {
-	rows, err := q.db.Query(ctx, query,
+func (q *Queries) queryList(ctx context.Context, arg queryListParams) ([]queryListRow, error) {
+	rows, err := q.db.Query(ctx, queryList,
 		arg.Search,
 		arg.YearAdded,
 		arg.MinRating,
@@ -63,9 +318,9 @@ func (q *Queries) Query(ctx context.Context, arg QueryParams) ([]QueryRow, error
 		return nil, err
 	}
 	defer rows.Close()
-	var items []QueryRow
+	var items []queryListRow
 	for rows.Next() {
-		var i QueryRow
+		var i queryListRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Title,
@@ -83,40 +338,7 @@ func (q *Queries) Query(ctx context.Context, arg QueryParams) ([]QueryRow, error
 	return items, nil
 }
 
-const queryDirectors = `-- name: QueryDirectors :many
-SELECT md.movie_id, ARRAY_AGG(people.name ORDER BY people.name)::TEXT[] AS directors
-FROM movie_directors md
-JOIN people ON people.id = md.person_id
-WHERE md.movie_id = ANY ($1::INT8[])
-GROUP BY md.movie_id
-`
-
-type QueryDirectorsRow struct {
-	MovieID   int64    `db:"movie_id" json:"movie_id"`
-	Directors []string `db:"directors" json:"directors"`
-}
-
-func (q *Queries) QueryDirectors(ctx context.Context, dollar_1 []int64) ([]QueryDirectorsRow, error) {
-	rows, err := q.db.Query(ctx, queryDirectors, dollar_1)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []QueryDirectorsRow
-	for rows.Next() {
-		var i QueryDirectorsRow
-		if err := rows.Scan(&i.MovieID, &i.Directors); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const queryPreload = `-- name: QueryPreload :many
+const queryListPreload = `-- name: queryListPreload :many
 SELECT id, title, added_at, rating
 FROM movies m
 WHERE
@@ -137,15 +359,15 @@ ORDER BY rating DESC
 LIMIT CASE WHEN $4::INT4 BETWEEN 1 AND 1000 THEN $4 ELSE 1000 END
 `
 
-type QueryPreloadParams struct {
+type queryListPreloadParams struct {
 	Search    string  `db:"search" json:"search"`
 	YearAdded int64   `db:"year_added" json:"year_added"`
 	MinRating float64 `db:"min_rating" json:"min_rating"`
 	Limit     uint64  `db:"limit" json:"limit"`
 }
 
-func (q *Queries) QueryPreload(ctx context.Context, arg QueryPreloadParams) ([]Movie, error) {
-	rows, err := q.db.Query(ctx, queryPreload,
+func (q *Queries) queryListPreload(ctx context.Context, arg queryListPreloadParams) ([]Movie, error) {
+	rows, err := q.db.Query(ctx, queryListPreload,
 		arg.Search,
 		arg.YearAdded,
 		arg.MinRating,

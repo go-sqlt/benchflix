@@ -3,13 +3,13 @@
 Datengrundlage: https://www.kaggle.com/datasets/bhargavchirumamilla/netflix-movies-and-tv-shows-till-2025
 
 ```sh
-go test -bench=. -benchmem -timeout=500m -count=10 > data/bench.txt
+go test -bench=. -benchmem -timeout=700m -count=10 > data/bench.txt
 
 go run cmd/params/main.go
 cat data/bench.txt | go run cmd/tables/main.go 
 cat data/bench.txt | go run cmd/charts/main.go
 
-go get -u github.com/yagipy/maintidx/cmd/maintidx
+go get github.com/yagipy/maintidx/cmd/maintidx
 go run github.com/yagipy/maintidx/cmd/maintidx -under=500 ./... 2>&1 | go run cmd/maintainability/main.go
 ```
 

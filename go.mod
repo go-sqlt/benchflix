@@ -10,7 +10,7 @@ require (
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/montanaflynn/stats v0.7.1
 	github.com/ory/dockertest v3.3.5+incompatible
-	golang.org/x/tools v0.36.0
+	golang.org/x/tools v0.37.0
 )
 
 require (
@@ -54,11 +54,11 @@ require (
 	github.com/opencontainers/runc v1.3.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	golang.org/x/crypto v0.41.0 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sync v0.16.0
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/crypto v0.42.0 // indirect
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/sync v0.17.0
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.3
 	gotest.tools v2.2.0+incompatible // indirect

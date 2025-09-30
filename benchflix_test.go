@@ -69,13 +69,13 @@ var repositories = []NamedRepository{
 	{
 		Name: "SQLT-Cache",
 		Repository: func(conn string, min, max int, idle time.Duration) benchflix.Repository {
-			return sqltflix.NewRepository(conn, min, max, idle, sqlt.ExpressionSize(10_000))
+			return sqltflix.NewRepository(conn, min, max, idle, sqlt.ExpressionSize(5_000))
 		},
 	},
 }
 
 func Benchmark(b *testing.B) {
-	for _, size := range []int{100, 1_000, 10_000} {
+	for _, size := range []int{500, 5_000} {
 		b.Run(fmt.Sprintf("Size-%d", size), func(b *testing.B) {
 			chunkSize := size / 5
 

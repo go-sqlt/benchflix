@@ -31,11 +31,166 @@ type Repository struct {
 }
 
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	return nil, benchflix.ErrSkip
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating", "d.directors").From("movies AS m").LeftJoin(`LATERAL (
+			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
+			FROM movie_directors md
+			JOIN people p ON p.id = md.person_id
+			WHERE md.movie_id = m.id
+		) d ON true`).OrderBy("m.rating DESC")
+
+	if params.Search != "" {
+		sb = sb.Where(`
+			to_tsvector('simple', m.title) @@ plainto_tsquery('simple', ?)
+			OR EXISTS (
+			SELECT 1 FROM movie_directors md
+			JOIN people p ON p.id = md.person_id
+			WHERE md.movie_id = m.id
+				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', ?)
+			)
+		`, params.Search, params.Search)
+	}
+
+	if params.YearAdded != 0 {
+		sb = sb.Where("EXTRACT(YEAR FROM m.added_at) = ?", params.YearAdded)
+	}
+
+	if params.MinRating != 0 {
+		sb = sb.Where("m.rating >= ?", params.MinRating)
+	}
+
+	if params.Limit < 1 || params.Limit > 1000 {
+		sb = sb.Limit(1000)
+	} else {
+		sb = sb.Limit(params.Limit)
+	}
+
+	rows, err := sb.RunWith(r.DB).QueryContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var movies = make([]benchflix.Movie, 0, params.Limit)
+
+	for rows.Next() {
+		var (
+			movie     benchflix.Movie
+			directors pq.StringArray
+		)
+
+		if err := rows.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating, &directors); err != nil {
+			return nil, err
+		}
+
+		movie.Directors = directors
+
+		movies = append(movies, movie)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }
 
 func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	return nil, benchflix.ErrSkip
+	var (
+		movies = make([]benchflix.Movie, 0, params.Limit)
+		ids    = make([]int64, 0, params.Limit)
+		idMap  = make(map[int64]int, params.Limit)
+	)
+
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").From("movies AS m").OrderBy("m.rating DESC")
+
+	if params.Search != "" {
+		sb = sb.Where(`
+			to_tsvector('simple', m.title) @@ plainto_tsquery('simple', ?)
+			OR EXISTS (
+				SELECT 1 FROM movie_directors md
+				JOIN people p ON p.id = md.person_id
+				WHERE md.movie_id = m.id
+				AND to_tsvector('simple', p.name) @@ plainto_tsquery('simple', ?)
+			)
+		`, params.Search, params.Search)
+	}
+
+	if params.YearAdded != 0 {
+		sb = sb.Where("EXTRACT(YEAR FROM m.added_at) = ?", params.YearAdded)
+	}
+
+	if params.MinRating != 0 {
+		sb = sb.Where("m.rating >= ?", params.MinRating)
+	}
+
+	if params.Limit < 1 || params.Limit > 1000 {
+		sb = sb.Limit(1000)
+	} else {
+		sb = sb.Limit(params.Limit)
+	}
+
+	rows, err := sb.RunWith(r.DB).QueryContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var movie benchflix.Movie
+
+		if err := rows.Scan(&movie.ID, &movie.Title, &movie.AddedAt, &movie.Rating); err != nil {
+			return nil, err
+		}
+
+		idMap[movie.ID] = len(ids)
+		ids = append(ids, movie.ID)
+		movies = append(movies, movie)
+	}
+
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	if len(movies) == 0 {
+		return movies, nil
+	}
+
+	sb = r.Select.
+		Columns("md.movie_id", "ARRAY_AGG(p.name ORDER BY p.name) AS directors").
+		From("movie_directors md").Join("people p ON p.id = md.person_id").
+		Where("md.movie_id = ANY(?)", ids).GroupBy("md.movie_id")
+
+	dirRows, err := sb.RunWith(r.DB).QueryContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	defer dirRows.Close()
+
+	for dirRows.Next() {
+		var (
+			movieID   int64
+			directors pq.StringArray
+		)
+
+		if err := dirRows.Scan(&movieID, &directors); err != nil {
+			return nil, err
+		}
+
+		movies[idMap[movieID]].Directors = directors
+	}
+
+	if err = dirRows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }
 
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {

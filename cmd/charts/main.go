@@ -34,7 +34,7 @@ func main() {
 
 func renderSzenario(b benchflix.Benchmark, output, title, szenario string, unit benchflix.Unit, minimum int, statFn func(input stats.Float64Data) (float64, error)) {
 	frameworks := slices.DeleteFunc([]string{"SQLT-Cache", "SQLT", "SQLC", "GORM", "SQLX", "SQUIRREL", "PGX"}, func(f string) bool {
-		_, ok := b["100"][f][szenario]
+		_, ok := b["500"][f][szenario]
 
 		return !ok
 	})
@@ -62,7 +62,7 @@ func renderSzenario(b benchflix.Benchmark, output, title, szenario string, unit 
 		}),
 	)
 
-	for _, size := range []string{"100", "1000", "10000"} {
+	for _, size := range []string{"500", "5000"} {
 		minBar := []opts.BarData{}
 		diffBar := []opts.BarData{}
 
@@ -138,7 +138,7 @@ func renderAll(
 
 	frameworks := []string{"SQLT-Cache", "SQLT", "SQLC", "GORM", "SQLX", "SQUIRREL", "PGX"}
 	szenarien := []string{"List", "ListPreload", "Dashboard", "DashboardPreload"}
-	sizes := []string{"100", "1000", "10000"}
+	sizes := []string{"500", "5000"}
 
 	chart := charts.NewBar()
 	chart.SetGlobalOptions(
