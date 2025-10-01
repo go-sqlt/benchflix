@@ -3,18 +3,18 @@
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{Median-Latenz von SQLT [ns/op]}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
 \midrule
 	List & 500 & 352265 & 310845 & 332697 & 328613 & 330680 \\
-	List & 5000 & 336360 & 357184 & 330219 & 339023 & 362445 \\
+	List & 5.000 & 336360 & 357184 & 330219 & 339023 & 362445 \\
 	ListPreload & 500 & 343485 & 322905 & 326575 & 348290 & 344839 \\
-	ListPreload & 5000 & 359455 & 359957 & 351537 & 349053 & 372331 \\
+	ListPreload & 5.000 & 359455 & 359957 & 351537 & 349053 & 372331 \\
 	Dashboard & 500 & 305989 & 294385 & 290283 & 300991 & 295928 \\
-	Dashboard & 5000 & 316931 & 314902 & 303059 & 304830 & 318924 \\
+	Dashboard & 5.000 & 316931 & 314902 & 303059 & 304830 & 318924 \\
 	DashboardPreload & 500 & 320869 & 307324 & 297983 & 317171 & 306501 \\
-	DashboardPreload & 5000 & 330356 & 328744 & 313146 & 320123 & 330143 \\
+	DashboardPreload & 5.000 & 330356 & 328744 & 313146 & 320123 & 330143 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_sqlt}

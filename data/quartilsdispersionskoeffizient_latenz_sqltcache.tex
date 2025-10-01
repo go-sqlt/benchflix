@@ -3,18 +3,18 @@
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{Quartilsdispersionskoeffizient der Latenz von SQLT-Cache in \%}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
 \midrule
-	List & 500 &  1.2 & \cellcolor{red!11}  2.2 &  1.4 &  1.1 &  0.7 \\
-	List & 5000 &  1.5 &  0.5 &  1.8 &  1.1 & \cellcolor{red!11}  2.1 \\
-	ListPreload & 500 &  0.9 &  1.9 &  0.7 &  1.6 &  1.3 \\
-	ListPreload & 5000 & \cellcolor{red!11}  2.1 &  1.6 &  1.4 &  1.2 &  1.8 \\
-	Dashboard & 500 &  1.3 &  1.3 &  0.7 &  1.4 &  0.3 \\
-	Dashboard & 5000 &  1.6 &  1.5 &  0.5 &  1.2 &  0.5 \\
-	DashboardPreload & 500 &  0.8 &  0.8 &  0.4 &  0.4 &  1.4 \\
-	DashboardPreload & 5000 &  1.4 &  1.3 &  0.4 &  1.0 &  0.4 \\
+	List & 500 & \cellcolor{red!1}  1.2 & \cellcolor{red!1}  2.2 & \cellcolor{red!1}  1.4 & \cellcolor{red!1}  1.1 & \cellcolor{red!0}  0.7 \\
+	List & 5.000 & \cellcolor{red!1}  1.5 & \cellcolor{red!0}  0.5 & \cellcolor{red!1}  1.8 & \cellcolor{red!1}  1.1 & \cellcolor{red!1}  2.1 \\
+	ListPreload & 500 & \cellcolor{red!0}  0.9 & \cellcolor{red!1}  1.9 & \cellcolor{red!0}  0.7 & \cellcolor{red!1}  1.6 & \cellcolor{red!1}  1.3 \\
+	ListPreload & 5.000 & \cellcolor{red!1}  2.1 & \cellcolor{red!1}  1.6 & \cellcolor{red!1}  1.4 & \cellcolor{red!1}  1.2 & \cellcolor{red!1}  1.8 \\
+	Dashboard & 500 & \cellcolor{red!1}  1.3 & \cellcolor{red!1}  1.3 & \cellcolor{red!0}  0.7 & \cellcolor{red!1}  1.4 & \cellcolor{red!0}  0.3 \\
+	Dashboard & 5.000 & \cellcolor{red!1}  1.6 & \cellcolor{red!1}  1.5 & \cellcolor{red!0}  0.5 & \cellcolor{red!1}  1.2 & \cellcolor{red!0}  0.5 \\
+	DashboardPreload & 500 & \cellcolor{red!0}  0.8 & \cellcolor{red!0}  0.8 & \cellcolor{red!0}  0.4 & \cellcolor{red!0}  0.4 & \cellcolor{red!1}  1.4 \\
+	DashboardPreload & 5.000 & \cellcolor{red!1}  1.4 & \cellcolor{red!1}  1.3 & \cellcolor{red!0}  0.4 & \cellcolor{red!0}  1.0 & \cellcolor{red!0}  0.4 \\
 \bottomrule
 \end{tabular}
 \label{tab:quartilsdispersionskoeffizient_latenz_sqltcache}

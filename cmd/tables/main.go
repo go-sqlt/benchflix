@@ -73,7 +73,7 @@ func RelativerVergleich(b benchflix.Benchmark, output, title string, framework s
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{%s}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule`, title)
@@ -85,9 +85,15 @@ Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delt
 				continue
 			}
 
+			sizedisplay := size
+
+			if size == "5000" {
+				sizedisplay = "5.000"
+			}
+
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, size,
+				szenario, sizedisplay,
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
@@ -125,7 +131,7 @@ func Median(b benchflix.Benchmark, output, title string, framework string, unit 
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{%s}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
 \midrule`, title)
@@ -137,9 +143,15 @@ Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\
 				continue
 			}
 
+			sizedisplay := size
+
+			if size == "5000" {
+				sizedisplay = "5.000"
+			}
+
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, size,
+				szenario, sizedisplay,
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
@@ -167,29 +179,11 @@ Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\
 
 func cellColor(percent float64) string {
 	delta := percent - 100.0
-	ad := math.Abs(delta)
-
-	if ad < 2.0 {
-		return ""
-	}
-
-	mapIntensity := func(v, maxDev, minInt, maxInt float64) float64 {
-		if v < 0 {
-			v = 0
-		}
-		if v > maxDev {
-			v = maxDev
-		}
-
-		return minInt + v/maxDev*(maxInt-minInt)
-	}
 
 	if delta < 0 {
-		intensity := mapIntensity(-delta, 50.0, 10.0, 30.0)
-		return fmt.Sprintf(`\cellcolor{green!%.0f} `, intensity)
+		return fmt.Sprintf(`\cellcolor{green!%.0f} `, min(math.Abs(delta), 100)/2)
 	} else {
-		intensity := mapIntensity(delta, 50.0, 10.0, 30.0)
-		return fmt.Sprintf(`\cellcolor{red!%.0f} `, intensity)
+		return fmt.Sprintf(`\cellcolor{red!%.0f} `, min(math.Abs(delta), 100)/2)
 	}
 }
 
@@ -201,7 +195,7 @@ func Quartilsdispersionskoeffizient(b benchflix.Benchmark, output, title string,
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{%s}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
 \midrule`, title)
@@ -213,9 +207,15 @@ Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ 
 				continue
 			}
 
+			sizedisplay := size
+
+			if size == "5000" {
+				sizedisplay = "5.000"
+			}
+
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, size,
+				szenario, sizedisplay,
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {

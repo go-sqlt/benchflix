@@ -3,18 +3,18 @@
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{Median-Latenz von GORM [ns/op]}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
 \midrule
 	List & 500 & 410004 & 393988 & 380563 & 418261 & 412249 \\
-	List & 5000 & 406914 & 422176 & 410096 & 405365 & 436714 \\
+	List & 5.000 & 406914 & 422176 & 410096 & 405365 & 436714 \\
 	ListPreload & 500 & 408471 & 392260 & 385240 & 416909 & 416147 \\
-	ListPreload & 5000 & 407746 & 421600 & 410033 & 407580 & 435578 \\
+	ListPreload & 5.000 & 407746 & 421600 & 410033 & 407580 & 435578 \\
 	Dashboard & 500 & 354171 & 351297 & 339304 & 350896 & 347121 \\
-	Dashboard & 5000 & 368874 & 377298 & 355744 & 364089 & 380119 \\
+	Dashboard & 5.000 & 368874 & 377298 & 355744 & 364089 & 380119 \\
 	DashboardPreload & 500 & 355513 & 352567 & 340233 & 353546 & 346416 \\
-	DashboardPreload & 5000 & 365456 & 376256 & 355942 & 363608 & 379609 \\
+	DashboardPreload & 5.000 & 365456 & 376256 & 355942 & 363608 & 379609 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_gorm}

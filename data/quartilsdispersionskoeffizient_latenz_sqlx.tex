@@ -3,18 +3,18 @@
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{Quartilsdispersionskoeffizient der Latenz von SQLX in \%}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
 \midrule
-	List & 500 &  1.7 &  0.7 &  1.9 &  0.6 &  0.3 \\
-	List & 5000 &  1.4 &  0.4 &  0.8 &  0.3 &  0.5 \\
-	ListPreload & 500 &  1.8 &  0.4 &  0.5 & \cellcolor{red!11}  2.1 &  1.4 \\
-	ListPreload & 5000 &  0.6 &  0.6 & \cellcolor{red!11}  2.4 & \cellcolor{red!11}  2.4 &  0.5 \\
-	Dashboard & 500 &  0.9 &  1.5 &  0.6 &  1.9 &  0.7 \\
-	Dashboard & 5000 &  0.8 &  1.7 &  0.4 &  0.8 &  0.8 \\
-	DashboardPreload & 500 &  0.6 &  0.8 &  1.2 &  0.3 & \cellcolor{red!11}  2.5 \\
-	DashboardPreload & 5000 &  1.4 &  1.2 & \cellcolor{red!11}  2.1 &  1.7 &  0.8 \\
+	List & 500 & \cellcolor{red!1}  1.7 & \cellcolor{red!0}  0.7 & \cellcolor{red!1}  1.9 & \cellcolor{red!0}  0.6 & \cellcolor{red!0}  0.3 \\
+	List & 5.000 & \cellcolor{red!1}  1.4 & \cellcolor{red!0}  0.4 & \cellcolor{red!0}  0.8 & \cellcolor{red!0}  0.3 & \cellcolor{red!0}  0.5 \\
+	ListPreload & 500 & \cellcolor{red!1}  1.8 & \cellcolor{red!0}  0.4 & \cellcolor{red!0}  0.5 & \cellcolor{red!1}  2.1 & \cellcolor{red!1}  1.4 \\
+	ListPreload & 5.000 & \cellcolor{red!0}  0.6 & \cellcolor{red!0}  0.6 & \cellcolor{red!1}  2.4 & \cellcolor{red!1}  2.4 & \cellcolor{red!0}  0.5 \\
+	Dashboard & 500 & \cellcolor{red!0}  0.9 & \cellcolor{red!1}  1.5 & \cellcolor{red!0}  0.6 & \cellcolor{red!1}  1.9 & \cellcolor{red!0}  0.7 \\
+	Dashboard & 5.000 & \cellcolor{red!0}  0.8 & \cellcolor{red!1}  1.7 & \cellcolor{red!0}  0.4 & \cellcolor{red!0}  0.8 & \cellcolor{red!0}  0.8 \\
+	DashboardPreload & 500 & \cellcolor{red!0}  0.6 & \cellcolor{red!0}  0.8 & \cellcolor{red!1}  1.2 & \cellcolor{red!0}  0.3 & \cellcolor{red!1}  2.5 \\
+	DashboardPreload & 5.000 & \cellcolor{red!1}  1.4 & \cellcolor{red!1}  1.2 & \cellcolor{red!1}  2.1 & \cellcolor{red!1}  1.7 & \cellcolor{red!0}  0.8 \\
 \bottomrule
 \end{tabular}
 \label{tab:quartilsdispersionskoeffizient_latenz_sqlx}

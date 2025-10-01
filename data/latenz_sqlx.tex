@@ -3,18 +3,18 @@
 \setlength{\extrarowheight}{-1pt}
 \centering
 \caption{Median-Latenz von SQLX [ns/op]}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
 Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
 \midrule
 	List & 500 & 394053 & 353082 & 376512 & 375413 & 371249 \\
-	List & 5000 & 373466 & 406700 & 371502 & 381872 & 411760 \\
+	List & 5.000 & 373466 & 406700 & 371502 & 381872 & 411760 \\
 	ListPreload & 500 & 450192 & 422453 & 421403 & 448803 & 439985 \\
-	ListPreload & 5000 & 437750 & 446976 & 443064 & 440996 & 461303 \\
+	ListPreload & 5.000 & 437750 & 446976 & 443064 & 440996 & 461303 \\
 	Dashboard & 500 & 372431 & 364322 & 360453 & 363855 & 353728 \\
-	Dashboard & 5000 & 376588 & 393386 & 357912 & 376303 & 388613 \\
+	Dashboard & 5.000 & 376588 & 393386 & 357912 & 376303 & 388613 \\
 	DashboardPreload & 500 & 405892 & 405667 & 380707 & 391662 & 386890 \\
-	DashboardPreload & 5000 & 415596 & 415770 & 394567 & 399170 & 411907 \\
+	DashboardPreload & 5.000 & 415596 & 415770 & 394567 & 399170 & 411907 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_sqlx}
