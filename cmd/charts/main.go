@@ -99,7 +99,7 @@ func renderSzenario(b benchflix.Benchmark, output, title, szenario string, unit 
 			}
 		}))
 
-		chart.AddSeries(size, diffBar,
+		chart.AddSeries(benchflix.Thousand(size), diffBar,
 			charts.WithSeriesOpts(func(s *charts.SingleSeries) {
 				s.Stack = fmt.Sprintf("Stack-%s", size)
 			}),

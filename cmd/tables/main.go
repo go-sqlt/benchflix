@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strconv"
 
 	"github.com/go-sqlt/benchflix"
 	"github.com/montanaflynn/stats"
@@ -85,15 +86,9 @@ Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delt
 				continue
 			}
 
-			sizedisplay := size
-
-			if size == "5000" {
-				sizedisplay = "5.000"
-			}
-
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, sizedisplay,
+				szenario, benchflix.Thousand(size),
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
@@ -143,15 +138,9 @@ Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\
 				continue
 			}
 
-			sizedisplay := size
-
-			if size == "5000" {
-				sizedisplay = "5.000"
-			}
-
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, sizedisplay,
+				szenario, benchflix.Thousand(size),
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
@@ -162,7 +151,7 @@ Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\
 
 				x := benchflix.Must(stats.Median(unit.Unit(c)))
 
-				fmt.Fprintf(file, ` & %.f`, math.Round(x))
+				fmt.Fprintf(file, ` & %s`, benchflix.Thousand(strconv.FormatFloat(math.Round(x), 'g', '0', 64)))
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -207,15 +196,9 @@ Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ 
 				continue
 			}
 
-			sizedisplay := size
-
-			if size == "5000" {
-				sizedisplay = "5.000"
-			}
-
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, sizedisplay,
+				szenario, benchflix.Thousand(size),
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {

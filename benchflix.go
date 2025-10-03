@@ -417,3 +417,15 @@ func (stats *Stats) RandomParams() (ListParams, DashboardParams) {
 			WithDirectors: withDirectorsValue,
 		}
 }
+
+func Thousand(size string) string {
+	if len(size) > 6 {
+		return size[:len(size)-6] + "." + size[len(size)-6:len(size)-3] + "." + size[len(size)-3:]
+	}
+
+	if len(size) > 3 {
+		return size[:len(size)-3] + "." + size[len(size)-3:]
+	}
+
+	return size
+}

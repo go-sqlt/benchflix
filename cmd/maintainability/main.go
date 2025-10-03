@@ -8,8 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"slices"
-
 	"github.com/go-sqlt/benchflix"
 )
 
@@ -110,12 +108,20 @@ func main() {
 	Table("wartbarkeit_sqlc", "Wartbarkeitsmesswerte von SQLC", sqlc)
 	Table("wartbarkeit_sqlt", "Wartbarkeitsmesswerte von SQLT", sqlt)
 
-	Vergleich("wartbarkeit_relativ_pgx", "Relative Wartbarkeitsmesswerte von PGX zu SQL in \\%", pgx, sql)
-	Vergleich("wartbarkeit_relativ_squirrel", "Relative Wartbarkeitsmesswerte von SQUIRREL zu SQL in \\%", squirrel, sql)
-	Vergleich("wartbarkeit_relativ_sqlx", "Relative Wartbarkeitsmesswerte von SQLX zu SQL in \\%", sqlx, sql)
-	Vergleich("wartbarkeit_relativ_gorm", "Relative Wartbarkeitsmesswerte von GORM zu SQL in \\%", gorm, sql)
-	Vergleich("wartbarkeit_relativ_sqlc", "Relative Wartbarkeitsmesswerte von SQLC zu SQL in \\%", sqlc, sql)
-	Vergleich("wartbarkeit_relativ_sqlt", "Relative Wartbarkeitsmesswerte von SQLT zu SQL in \\%", sqlt, sql)
+	frameworks := map[string][]Data{
+		"SQL":      sql,
+		"PGX":      pgx,
+		"SQUIRREL": squirrel,
+		"SQLX":     sqlx,
+		"GORM":     gorm,
+		"SQLC":     sqlc,
+		"SQLT":     sqlt,
+	}
+
+	Szenario("wartbarkeit_list", "Wartbarkeitsmesswerte des List-Szenarios", "List", frameworks)
+	Szenario("wartbarkeit_listpreload", "Wartbarkeitsmesswerte des ListPreload-Szenarios", "ListPreload", frameworks)
+	Szenario("wartbarkeit_dashboard", "Wartbarkeitsmesswerte des Dashboard-Szenarios", "Dashboard", frameworks)
+	Szenario("wartbarkeit_dashboardpreload", "Wartbarkeitsmesswerte des DashboardPreload-Szenarios", "DashboardPreload", frameworks)
 }
 
 func Table(output, title string, data []Data) {
@@ -143,7 +149,7 @@ Szenario & CC & HV & MI \\
 	`, output)
 }
 
-func Vergleich(output, title string, data []Data, sql []Data) {
+func Szenario(output, title string, function string, frameworks map[string][]Data) {
 	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
 
 	fmt.Fprintf(file, `\begin{table}[ht]
@@ -151,22 +157,17 @@ func Vergleich(output, title string, data []Data, sql []Data) {
 \caption{%s}
 \begin{tabular}{lrrrr}
 \toprule
-Szenario & CC & HV & MI \\
+Framework & CC & HV & MI \\
 \midrule`, title)
 
-	for _, d := range data {
-		base := sql[slices.IndexFunc(sql, func(r Data) bool { return r.Function == d.Function })]
-
-		fmt.Fprintf(file, `
-	%s & %s %g & %s %g & %s %g \\`,
-			d.Function,
-			cellColor(math.Round(d.CC/base.CC*1000.0)/10),
-			math.Round(d.CC/base.CC*1000.0)/10,
-			cellColor(math.Round(d.HV/base.HV*1000.0)/10),
-			math.Round(d.HV/base.HV*1000.0)/10,
-			cellColor(math.Round(d.MI/base.MI*1000.0)/10*-1+200),
-			math.Round(d.MI/base.MI*1000.0)/10,
-		)
+	for _, framework := range []string{"SQL", "PGX", "SQUIRREL", "SQLX", "GORM", "SQLC", "SQLT"} {
+		for _, d := range frameworks[framework] {
+			if d.Function == function {
+				fmt.Fprintf(file, `
+	%s & %g & %g & %g \\`, framework, d.CC, math.Round(d.HV), d.MI,
+				)
+			}
+		}
 	}
 
 	fmt.Fprintf(file, `
@@ -175,32 +176,4 @@ Szenario & CC & HV & MI \\
 \label{tab:%s}
 \end{table}
 	`, output)
-}
-
-func cellColor(percent float64) string {
-	delta := percent - 100.0
-	ad := math.Abs(delta)
-
-	if ad < 2.0 {
-		return ""
-	}
-
-	mapIntensity := func(v, maxDev, minInt, maxInt float64) float64 {
-		if v < 0 {
-			v = 0
-		}
-		if v > maxDev {
-			v = maxDev
-		}
-
-		return minInt + v/maxDev*(maxInt-minInt)
-	}
-
-	if delta < 0 {
-		intensity := mapIntensity(-delta, 50.0, 10.0, 30.0)
-		return fmt.Sprintf(`\cellcolor{green!%.0f} `, intensity)
-	} else {
-		intensity := mapIntensity(delta, 50.0, 10.0, 30.0)
-		return fmt.Sprintf(`\cellcolor{red!%.0f} `, intensity)
-	}
 }
