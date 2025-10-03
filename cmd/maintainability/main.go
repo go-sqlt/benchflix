@@ -137,7 +137,7 @@ Szenario & CC & HV & MI \\
 
 	for _, d := range data {
 		fmt.Fprintf(file, `
-	%s & %g & %g & %g \\`, d.Function, d.CC, math.Round(d.HV), d.MI,
+	%s & %g & %s & %g \\`, d.Function, d.CC, benchflix.Thousand(strconv.FormatFloat(math.Round(d.HV), 'f', 0, 64)), d.MI,
 		)
 	}
 
@@ -164,7 +164,7 @@ Framework & CC & HV & MI \\
 		for _, d := range frameworks[framework] {
 			if d.Function == function {
 				fmt.Fprintf(file, `
-	%s & %g & %g & %g \\`, framework, d.CC, math.Round(d.HV), d.MI,
+	%s & %g & %s & %g \\`, framework, d.CC, benchflix.Thousand(strconv.FormatFloat(math.Round(d.HV), 'f', 0, 64)), d.MI,
 				)
 			}
 		}
