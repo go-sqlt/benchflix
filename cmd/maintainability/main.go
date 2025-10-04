@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -36,8 +37,6 @@ func main() {
 		var funcName string
 
 		switch strings.TrimSpace(text[fnStart+len("Function name:") : fnEnd]) {
-		case "NewRepository":
-			funcName = "NewRepository"
 		case "QueryList":
 			funcName = "List"
 		case "QueryListPreload":
@@ -88,7 +87,7 @@ func main() {
 		case strings.Contains(text, "sqlxflix"):
 			sqlx = append(sqlx, data)
 		case strings.Contains(text, "gormflix"):
-			if strings.Contains(funcName, "Preload") {
+			if strings.Contains(text, "Preload") {
 				gorm = append(gorm, data)
 			}
 		case strings.Contains(text, "sqlcflix"):
@@ -120,6 +119,8 @@ func main() {
 	Szenario("wartbarkeit_listpreload", "Wartbarkeitsmesswerte des ListPreload-Szenarios", "ListPreload", frameworks)
 	Szenario("wartbarkeit_dashboard", "Wartbarkeitsmesswerte des Dashboard-Szenarios", "Dashboard", frameworks)
 	Szenario("wartbarkeit_dashboardpreload", "Wartbarkeitsmesswerte des DashboardPreload-Szenarios", "DashboardPreload", frameworks)
+
+	Maintainability("wartbarkeit", "Maintainability-Indices", frameworks)
 }
 
 func Table(output, title string, data []Data) {
@@ -166,6 +167,45 @@ Framework & CC & HV & MI \\
 				)
 			}
 		}
+	}
+
+	fmt.Fprintf(file, `
+\bottomrule
+\end{tabular}
+\label{tab:%s}
+\end{table}
+	`, output)
+}
+
+func Maintainability(output, title string, frameworks map[string][]Data) {
+	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
+
+	fmt.Fprintf(file, `\begin{table}[ht]
+\centering
+\caption{%s}
+\begin{tabular}{lrrrr}
+\toprule
+Framework & List & ListPreload & Dashboard & DashboardPreload \\
+\midrule`, title)
+
+	for _, framework := range []string{"SQL", "PGX", "SQUIRREL", "SQLX", "GORM", "SQLC", "SQLT"} {
+		fmt.Fprintf(file, `
+	%s`, framework)
+
+		for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
+			index := slices.IndexFunc(frameworks[framework], func(d Data) bool {
+				return d.Function == szenario
+			})
+			if index < 0 {
+				fmt.Fprintf(file, ` & -`)
+
+				continue
+			}
+
+			fmt.Fprintf(file, ` & %g`, frameworks[framework][index].MI)
+		}
+
+		fmt.Fprintf(file, ` \\`)
 	}
 
 	fmt.Fprintf(file, `
