@@ -65,6 +65,10 @@ Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delt
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
 		for _, size := range []string{"500", "5000"} {
+			if framework == "GORM" && (szenario == "List" || szenario == "Dashboard") {
+				continue
+			}
+
 			s, ok := b[size][framework][szenario]
 			if !ok {
 				continue
@@ -127,6 +131,10 @@ Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ 
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
 		for _, size := range []string{"500", "5000"} {
+			if framework == "GORM" && (szenario == "List" || szenario == "Dashboard") {
+				continue
+			}
+
 			s, ok := b[size][framework][szenario]
 			if !ok {
 				continue
