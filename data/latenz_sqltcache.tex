@@ -5,16 +5,16 @@
 \caption{Median-Latenz von SQLT-Cache [ns/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & 354.784 & 307.743 & 326.815 & 327.778 & 325.021 \\
-	List & 5.000 & 328.605 & 355.679 & 326.775 & 333.075 & 356.102 \\
-	ListPreload & 500 & 337.912 & 314.938 & 313.269 & 341.019 & 337.531 \\
-	ListPreload & 5.000 & 338.561 & 339.911 & 329.743 & 333.386 & 353.928 \\
-	Dashboard & 500 & 303.042 & 290.633 & 286.891 & 300.005 & 293.091 \\
-	Dashboard & 5.000 & 313.158 & 309.665 & 299.327 & 300.732 & 318.169 \\
-	DashboardPreload & 500 & 320.068 & 307.430 & 297.517 & 318.258 & 308.282 \\
-	DashboardPreload & 5.000 & 327.532 & 325.954 & 309.614 & 316.395 & 326.861 \\
+	List & 500 & \cellcolor{red!9}  354.784 & \cellcolor{red!2}  307.743 & \cellcolor{red!1}  326.815 & \cellcolor{red!2}  327.778 & \cellcolor{red!1}  325.021 \\
+	List & 5.000 & \cellcolor{red!2}  328.605 & \cellcolor{red!3}  355.679 & \cellcolor{red!2}  326.775 & \cellcolor{green!1}  333.075 & \cellcolor{red!2}  356.102 \\
+	ListPreload & 500 & \cellcolor{red!2}  337.912 & \cellcolor{red!1}  314.938 & \cellcolor{red!1}  313.269 & \cellcolor{red!1}  341.019 & \cellcolor{red!1}  337.531 \\
+	ListPreload & 5.000 & \cellcolor{red!1}  338.561 & \cellcolor{green!1}  339.911 & \cellcolor{red!1}  329.743 & \cellcolor{red!1}  333.386 & \cellcolor{green!1}  353.928 \\
+	Dashboard & 500 & \cellcolor{green!6}  303.042 & \cellcolor{green!6}  290.633 & \cellcolor{green!8}  286.891 & \cellcolor{green!4}  300.005 & \cellcolor{green!6}  293.091 \\
+	Dashboard & 5.000 & \cellcolor{green!6}  313.158 & \cellcolor{green!10}  309.665 & \cellcolor{green!6}  299.327 & \cellcolor{green!10}  300.732 & \cellcolor{green!10}  318.169 \\
+	DashboardPreload & 500 & \cellcolor{green!1}  320.068 & \cellcolor{green!4}  307.430 & \cellcolor{green!6}  297.517 & \cellcolor{green!3}  318.258 & \cellcolor{green!4}  308.282 \\
+	DashboardPreload & 5.000 & \cellcolor{green!4}  327.532 & \cellcolor{green!5}  325.954 & \cellcolor{green!4}  309.614 & \cellcolor{green!4}  316.395 & \cellcolor{green!6}  326.861 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_sqltcache}

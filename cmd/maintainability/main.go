@@ -71,10 +71,6 @@ func main() {
 			continue
 		}
 
-		if cc == 1 && hv < 100 {
-			continue
-		}
-
 		data := Data{
 			Function: funcName,
 			CC:       float64(cc),
@@ -92,7 +88,9 @@ func main() {
 		case strings.Contains(text, "sqlxflix"):
 			sqlx = append(sqlx, data)
 		case strings.Contains(text, "gormflix"):
-			gorm = append(gorm, data)
+			if strings.Contains(funcName, "Preload") {
+				gorm = append(gorm, data)
+			}
 		case strings.Contains(text, "sqlcflix"):
 			sqlc = append(sqlc, data)
 		case strings.Contains(text, "sqltflix"):

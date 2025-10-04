@@ -5,16 +5,16 @@
 \caption{Median-Speicherverbrauch von PGX [bytes/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & 11.514 & 13.112 & 10.995 & 11.606 & 11.631 \\
-	List & 5.000 & 11.754 & 11.574 & 11.912 & 12.379 & 11.330 \\
-	ListPreload & 500 & 15.863 & 18.270 & 15.100 & 15.981 & 16.004 \\
-	ListPreload & 5.000 & 15.978 & 16.053 & 15.995 & 16.906 & 15.263 \\
-	Dashboard & 500 & 14.535 & 16.118 & 14.020 & 14.226 & 14.416 \\
-	Dashboard & 5.000 & 14.709 & 14.781 & 14.627 & 15.323 & 14.364 \\
-	DashboardPreload & 500 & 17.652 & 20.115 & 16.968 & 16.903 & 17.592 \\
-	DashboardPreload & 5.000 & 17.842 & 17.867 & 17.806 & 18.539 & 17.350 \\
+	List & 500 & \cellcolor{green!16}  11.514 & \cellcolor{green!18}  13.112 & \cellcolor{green!17}  10.995 & \cellcolor{green!17}  11.606 & \cellcolor{green!15}  11.631 \\
+	List & 5.000 & \cellcolor{green!16}  11.754 & \cellcolor{green!18}  11.574 & \cellcolor{green!17}  11.912 & \cellcolor{green!15}  12.379 & \cellcolor{green!16}  11.330 \\
+	ListPreload & 500 & \cellcolor{green!10}  15.863 & \cellcolor{green!8}  18.270 & \cellcolor{green!11}  15.100 & \cellcolor{green!10}  15.981 & \cellcolor{green!9}  16.004 \\
+	ListPreload & 5.000 & \cellcolor{green!11}  15.978 & \cellcolor{green!10}  16.053 & \cellcolor{green!12}  15.995 & \cellcolor{green!8}  16.906 & \cellcolor{green!11}  15.263 \\
+	Dashboard & 500 & \cellcolor{red!9}  14.535 & \cellcolor{red!4}  16.118 & \cellcolor{red!8}  14.020 & \cellcolor{red!9}  14.226 & \cellcolor{red!9}  14.416 \\
+	Dashboard & 5.000 & \cellcolor{red!5}  14.709 & \cellcolor{red!6}  14.781 & \cellcolor{red!7}  14.627 & \cellcolor{red!8}  15.323 & \cellcolor{red!7}  14.364 \\
+	DashboardPreload & 500 & \cellcolor{red!13}  17.652 & \cellcolor{red!10}  20.115 & \cellcolor{red!12}  16.968 & \cellcolor{red!12}  16.903 & \cellcolor{red!13}  17.592 \\
+	DashboardPreload & 5.000 & \cellcolor{red!10}  17.842 & \cellcolor{red!10}  17.867 & \cellcolor{red!12}  17.806 & \cellcolor{red!12}  18.539 & \cellcolor{red!12}  17.350 \\
 \bottomrule
 \end{tabular}
 \label{tab:speicherverbrauch_pgx}

@@ -5,16 +5,16 @@
 \caption{Median-Latenz von PGX [ns/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & 332.514 & 312.482 & 329.673 & 339.082 & 310.532 \\
-	List & 5.000 & 342.017 & 327.898 & 331.015 & 341.031 & 352.579 \\
-	ListPreload & 500 & 284.528 & 277.252 & 276.325 & 312.314 & 283.797 \\
-	ListPreload & 5.000 & 293.195 & 284.380 & 280.271 & 300.310 & 298.606 \\
-	Dashboard & 500 & 311.149 & 293.521 & 300.368 & 311.563 & 302.149 \\
-	Dashboard & 5.000 & 323.662 & 322.858 & 306.869 & 314.868 & 335.451 \\
-	DashboardPreload & 500 & 322.674 & 307.944 & 318.925 & 332.756 & 317.618 \\
-	DashboardPreload & 5.000 & 341.879 & 332.725 & 322.161 & 331.815 & 344.655 \\
+	List & 500 & \cellcolor{red!2}  332.514 & \cellcolor{red!4}  312.482 & \cellcolor{red!2}  329.673 & \cellcolor{red!6}  339.082 & \cellcolor{green!4}  310.532 \\
+	List & 5.000 & \cellcolor{red!6}  342.017 & \cellcolor{green!6}  327.898 & \cellcolor{red!4}  331.015 & \cellcolor{red!2}  341.031 & \cellcolor{red!1}  352.579 \\
+	ListPreload & 500 & \cellcolor{green!15}  284.528 & \cellcolor{green!12}  277.252 & \cellcolor{green!12}  276.325 & \cellcolor{green!8}  312.314 & \cellcolor{green!16}  283.797 \\
+	ListPreload & 5.000 & \cellcolor{green!14}  293.195 & \cellcolor{green!18}  284.380 & \cellcolor{green!15}  280.271 & \cellcolor{green!10}  300.310 & \cellcolor{green!17}  298.606 \\
+	Dashboard & 500 & \cellcolor{green!3}  311.149 & \cellcolor{green!5}  293.521 & \cellcolor{green!4}  300.368 & \cellcolor{red!1}  311.563 & \cellcolor{green!3}  302.149 \\
+	Dashboard & 5.000 & \cellcolor{green!3}  323.662 & \cellcolor{green!6}  322.858 & \cellcolor{green!3}  306.869 & \cellcolor{green!5}  314.868 & \cellcolor{green!5}  335.451 \\
+	DashboardPreload & 500 & \cellcolor{green!1}  322.674 & \cellcolor{green!3}  307.944 & \cellcolor{red!1}  318.925 & \cellcolor{red!2}  332.756 & \cellcolor{green!1}  317.618 \\
+	DashboardPreload & 5.000 & \cellcolor{red!1}  341.879 & \cellcolor{green!3}  332.725 & \cellcolor{red!1}  322.161 & \cellcolor{red!1}  331.815 & \cellcolor{green!1}  344.655 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_pgx}

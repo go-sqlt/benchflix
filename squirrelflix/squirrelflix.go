@@ -31,12 +31,15 @@ type Repository struct {
 }
 
 func (r Repository) QueryList(ctx context.Context, params benchflix.ListParams) ([]benchflix.Movie, error) {
-	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating", "d.directors").From("movies AS m").LeftJoin(`LATERAL (
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating", "d.directors").
+		From("movies AS m").
+		LeftJoin(`LATERAL (
 			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
 			FROM movie_directors md
 			JOIN people p ON p.id = md.person_id
 			WHERE md.movie_id = m.id
-		) d ON true`).OrderBy("m.rating DESC")
+		) d ON true`).
+		OrderBy("m.rating DESC")
 
 	if params.Search != "" {
 		sb = sb.Where(`
@@ -102,7 +105,9 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 		idMap  = make(map[int64]int, params.Limit)
 	)
 
-	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").From("movies AS m").OrderBy("m.rating DESC")
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").
+		From("movies AS m").
+		OrderBy("m.rating DESC")
 
 	if params.Search != "" {
 		sb = sb.Where(`
@@ -163,8 +168,10 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 
 	sb = r.Select.
 		Columns("md.movie_id", "ARRAY_AGG(p.name ORDER BY p.name) AS directors").
-		From("movie_directors md").Join("people p ON p.id = md.person_id").
-		Where("md.movie_id = ANY(?)", ids).GroupBy("md.movie_id")
+		From("movie_directors md").
+		Join("people p ON p.id = md.person_id").
+		Where("md.movie_id = ANY(?)", ids).
+		GroupBy("md.movie_id")
 
 	dirRows, err := sb.RunWith(r.DB).QueryContext(ctx)
 	if err != nil {
@@ -194,10 +201,12 @@ func (r Repository) QueryListPreload(ctx context.Context, params benchflix.ListP
 }
 
 func (r Repository) QueryDashboard(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
-	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").From("movies AS m")
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").
+		From("movies AS m")
 
 	if params.WithDirectors {
-		sb = sb.Column("d.directors").LeftJoin(`LATERAL (
+		sb = sb.Column("d.directors").
+			LeftJoin(`LATERAL (
 			SELECT ARRAY_AGG(p.name ORDER BY p.name) AS directors
 			FROM movie_directors md
 			JOIN people p ON p.id = md.person_id
@@ -286,7 +295,8 @@ func (r Repository) QueryDashboard(ctx context.Context, params benchflix.Dashboa
 }
 
 func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.DashboardParams) ([]benchflix.Movie, error) {
-	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").From("movies AS m")
+	sb := r.Select.Columns("m.id", "m.title", "m.added_at", "m.rating").
+		From("movies AS m")
 
 	if params.Search != "" {
 		sb = sb.Where(`
@@ -373,8 +383,10 @@ func (r Repository) QueryDashboardPreload(ctx context.Context, params benchflix.
 
 	sb = r.Select.
 		Columns("md.movie_id", "ARRAY_AGG(p.name ORDER BY p.name) AS directors").
-		From("movie_directors md").Join("people p ON p.id = md.person_id").
-		Where("md.movie_id = ANY(?)", ids).GroupBy("md.movie_id")
+		From("movie_directors md").
+		Join("people p ON p.id = md.person_id").
+		Where("md.movie_id = ANY(?)", ids).
+		GroupBy("md.movie_id")
 
 	dirRows, err := sb.RunWith(r.DB).QueryContext(ctx)
 	if err != nil {

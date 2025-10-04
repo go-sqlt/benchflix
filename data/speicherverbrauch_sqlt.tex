@@ -5,16 +5,16 @@
 \caption{Median-Speicherverbrauch von SQLT [bytes/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
+Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & 21.464 & 23.791 & 20.365 & 21.616 & 20.862 \\
-	List & 5.000 & 21.668 & 21.816 & 21.724 & 22.413 & 21.273 \\
-	ListPreload & 500 & 29.089 & 31.833 & 27.280 & 29.195 & 28.227 \\
-	ListPreload & 5.000 & 29.151 & 29.882 & 29.674 & 29.653 & 28.358 \\
-	Dashboard & 500 & 20.405 & 22.768 & 19.253 & 20.334 & 19.834 \\
-	Dashboard & 5.000 & 20.567 & 20.619 & 20.760 & 21.415 & 20.216 \\
-	DashboardPreload & 500 & 23.484 & 27.426 & 21.916 & 22.995 & 22.181 \\
-	DashboardPreload & 5.000 & 23.687 & 24.005 & 23.489 & 24.750 & 23.072 \\
+	List & 500 & \cellcolor{red!50}  21.464 & \cellcolor{red!50}  23.791 & \cellcolor{red!50}  20.365 & \cellcolor{red!50}  21.616 & \cellcolor{red!50}  20.862 \\
+	List & 5.000 & \cellcolor{red!50}  21.668 & \cellcolor{red!50}  21.816 & \cellcolor{red!50}  21.724 & \cellcolor{red!50}  22.413 & \cellcolor{red!50}  21.273 \\
+	ListPreload & 500 & \cellcolor{red!50}  29.089 & \cellcolor{red!50}  31.833 & \cellcolor{red!50}  27.280 & \cellcolor{red!50}  29.195 & \cellcolor{red!50}  28.227 \\
+	ListPreload & 5.000 & \cellcolor{red!50}  29.151 & \cellcolor{red!50}  29.882 & \cellcolor{red!50}  29.674 & \cellcolor{red!50}  29.653 & \cellcolor{red!50}  28.358 \\
+	Dashboard & 500 & \cellcolor{red!50}  20.405 & \cellcolor{red!46}  22.768 & \cellcolor{red!49}  19.253 & \cellcolor{red!50}  20.334 & \cellcolor{red!49}  19.834 \\
+	Dashboard & 5.000 & \cellcolor{red!47}  20.567 & \cellcolor{red!47}  20.619 & \cellcolor{red!50}  20.760 & \cellcolor{red!50}  21.415 & \cellcolor{red!50}  20.216 \\
+	DashboardPreload & 500 & \cellcolor{red!50}  23.484 & \cellcolor{red!50}  27.426 & \cellcolor{red!44}  21.916 & \cellcolor{red!50}  22.995 & \cellcolor{red!43}  22.181 \\
+	DashboardPreload & 5.000 & \cellcolor{red!45}  23.687 & \cellcolor{red!48}  24.005 & \cellcolor{red!48}  23.489 & \cellcolor{red!50}  24.750 & \cellcolor{red!49}  23.072 \\
 \bottomrule
 \end{tabular}
 \label{tab:speicherverbrauch_sqlt}

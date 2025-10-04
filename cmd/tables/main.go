@@ -48,25 +48,9 @@ func main() {
 	Median(b, "speicherverbrauch_sqlc", "Median-Speicherverbrauch von SQLC [bytes/op]", "SQLC", benchflix.BytesPerOp{})
 	Median(b, "speicherverbrauch_sqlt", "Median-Speicherverbrauch von SQLT [bytes/op]", "SQLT", benchflix.BytesPerOp{})
 	Median(b, "speicherverbrauch_sqltcache", "Median-Speicherverbrauch von SQLT-Cache [bytes/op]", "SQLT-Cache", benchflix.BytesPerOp{})
-
-	RelativerVergleich(b, "relative_latenz_pgx", "Relative Median-Latenz von PGX zu SQL in \\%", "PGX", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_squirrel", "Relative Median-Latenz von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_sqlx", "Relative Median-Latenz von SQLX zu SQL in \\%", "SQLX", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_gorm", "Relative Median-Latenz von GORM zu SQL in \\%", "GORM", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_sqlc", "Relative Median-Latenz von SQLC zu SQL in \\%", "SQLC", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_sqlt", "Relative Median-Latenz von SQLT zu SQL in \\%", "SQLT", benchflix.NsPerOp{})
-	RelativerVergleich(b, "relative_latenz_sqltcache", "Relative Median-Latenz von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.NsPerOp{})
-
-	RelativerVergleich(b, "relativer_speicherverbrauch_pgx", "Relativer Median-Speicherverbrauch von PGX zu SQL in \\%", "PGX", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_squirrel", "Relativer Median-Speicherverbrauch von SQUIRREL zu SQL in \\%", "SQUIRREL", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlx", "Relativer Median-Speicherverbrauch von SQLX zu SQL in \\%", "SQLX", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_gorm", "Relativer Median-Speicherverbrauch von GORM zu SQL in \\%", "GORM", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlc", "Relativer Median-Speicherverbrauch von SQLC zu SQL in \\%", "SQLC", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqlt", "Relativer Median-Speicherverbrauch von SQLT zu SQL in \\%", "SQLT", benchflix.BytesPerOp{})
-	RelativerVergleich(b, "relativer_speicherverbrauch_sqltcache", "Relativer Median-Speicherverbrauch von SQLT-Cache zu SQL in \\%", "SQLT-Cache", benchflix.BytesPerOp{})
 }
 
-func RelativerVergleich(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
+func Median(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
 	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
 
 	fmt.Fprintf(file, `
@@ -103,55 +87,7 @@ Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delt
 
 				percent := x / baseX * 100
 
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent), percent)
-			}
-
-			fmt.Fprintf(file, ` \\`)
-		}
-	}
-
-	fmt.Fprintf(file, `
-\bottomrule
-\end{tabular}
-\label{tab:%s}
-\end{table}
-	`, output)
-}
-
-func Median(b benchflix.Benchmark, output, title string, framework string, unit benchflix.Unit) {
-	file := benchflix.Must(os.Create(fmt.Sprintf("data/%s.tex", output)))
-
-	fmt.Fprintf(file, `
-\begin{table}[ht]
-\setlength{\extrarowheight}{-1pt}
-\centering
-\caption{%s}
-\begin{tabular}{lrrrrrrr}
-\toprule
-Szenario & Parameter & ${\tilde{X}_1}$ & ${\tilde{X}_2}$ & ${\tilde{X}_3}$ & ${\tilde{X}_4}$ & ${\tilde{X}_5}$ \\
-\midrule`, title)
-
-	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
-		for _, size := range []string{"500", "5000"} {
-			s, ok := b[size][framework][szenario]
-			if !ok {
-				continue
-			}
-
-			fmt.Fprintf(file, `
-	%s & %s`,
-				szenario, benchflix.Thousand(size),
-			)
-
-			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
-				c, ok := s[chunk]
-				if !ok {
-					panic(fmt.Sprintf("%s %s %s %s", size, framework, szenario, chunk))
-				}
-
-				x := benchflix.Must(stats.Median(unit.Unit(c)))
-
-				fmt.Fprintf(file, ` & %s`, benchflix.Thousand(strconv.FormatFloat(math.Round(x), 'g', '0', 64)))
+				fmt.Fprintf(file, ` & %s %s`, cellColor(percent), benchflix.Thousand(strconv.FormatFloat(math.Round(x), 'g', '0', 64)))
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -170,9 +106,9 @@ func cellColor(percent float64) string {
 	delta := percent - 100.0
 
 	if delta < 0 {
-		return fmt.Sprintf(`\cellcolor{green!%.0f} `, min(math.Abs(delta), 100)/2)
+		return fmt.Sprintf(`\cellcolor{green!%.0f} `, min(math.Ceil(math.Abs(delta)), 50))
 	} else {
-		return fmt.Sprintf(`\cellcolor{red!%.0f} `, min(math.Abs(delta), 100)/2)
+		return fmt.Sprintf(`\cellcolor{red!%.0f} `, min(math.Ceil(math.Abs(delta)), 50))
 	}
 }
 
