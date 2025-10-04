@@ -75,7 +75,7 @@ func main() {
 	fmt.Fprintf(file, `
 \renewcommand{\arraystretch}{0.7}
 \begin{longtable}{rrrrrrrr}
-\caption{Parameterverteilung in \%%}\label{tab:parameterverteilung}\\
+\caption{Parameterverteilung}\label{tab:parameterverteilung}\\
 \toprule
 Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 \midrule
