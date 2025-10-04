@@ -385,7 +385,7 @@ func (s Stats) Print(size, i int) {
 	}
 }
 
-func (stats *Stats) RandomParams() (ListParams, DashboardParams) {
+func Random() DashboardParams {
 	searchValue := Search[rand.IntN(len(Search))]
 	yearAddedValue := YearAdded[rand.IntN(len(YearAdded))]
 	minRatingValue := MinRating[rand.IntN(len(MinRating))]
@@ -394,28 +394,25 @@ func (stats *Stats) RandomParams() (ListParams, DashboardParams) {
 	descValue := Desc[rand.IntN(len(Desc))]
 	withDirectorsValue := WithDirectors[rand.IntN(len(WithDirectors))]
 
-	stats.Search[searchValue]++
-	stats.YearAdded[strconv.FormatInt(yearAddedValue, 10)]++
-	stats.MinRating[strconv.FormatFloat(minRatingValue, 'f', 1, 64)]++
-	stats.Limit[strconv.FormatUint(limitValue, 10)]++
-	stats.Sort[sortValue]++
-	stats.Desc[strconv.FormatBool(descValue)]++
-	stats.WithDirectors[strconv.FormatBool(withDirectorsValue)]++
+	return DashboardParams{
+		Search:        searchValue,
+		YearAdded:     yearAddedValue,
+		MinRating:     minRatingValue,
+		Limit:         limitValue,
+		Sort:          sortValue,
+		Desc:          descValue,
+		WithDirectors: withDirectorsValue,
+	}
+}
 
-	return ListParams{
-			Search:    searchValue,
-			YearAdded: yearAddedValue,
-			MinRating: minRatingValue,
-			Limit:     limitValue,
-		}, DashboardParams{
-			Search:        searchValue,
-			YearAdded:     yearAddedValue,
-			MinRating:     minRatingValue,
-			Limit:         limitValue,
-			Sort:          sortValue,
-			Desc:          descValue,
-			WithDirectors: withDirectorsValue,
-		}
+func (stats *Stats) Add(params DashboardParams) {
+	stats.Search[params.Search]++
+	stats.YearAdded[strconv.FormatInt(params.YearAdded, 10)]++
+	stats.MinRating[strconv.FormatFloat(params.MinRating, 'f', 1, 64)]++
+	stats.Limit[strconv.FormatUint(params.Limit, 10)]++
+	stats.Sort[params.Sort]++
+	stats.Desc[strconv.FormatBool(params.Desc)]++
+	stats.WithDirectors[strconv.FormatBool(params.WithDirectors)]++
 }
 
 func Thousand(size string) string {

@@ -77,6 +77,11 @@ var repositories = []NamedRepository{
 func Benchmark(b *testing.B) {
 	for _, size := range []int{500, 5_000} {
 		b.Run(fmt.Sprintf("Size-%d", size), func(b *testing.B) {
+			var (
+				listParams      []benchflix.ListParams
+				dashboardParams []benchflix.DashboardParams
+			)
+
 			chunkSize := size / 5
 
 			if chunkSize*5 != size {
@@ -85,33 +90,20 @@ func Benchmark(b *testing.B) {
 				return
 			}
 
-			stats := &benchflix.Stats{
-				Search:        map[string]int{},
-				Sort:          map[string]int{},
-				Desc:          map[string]int{},
-				WithDirectors: map[string]int{},
-				Limit:         map[string]int{},
-				MinRating:     map[string]int{},
-				YearAdded:     map[string]int{},
+			file, err := os.Open(fmt.Sprintf("data/params_%d", size))
+			if err != nil {
+				b.Fatal(err)
+
+				return
 			}
 
-			listParams := make([]benchflix.ListParams, size)
-			dashboardParams := make([]benchflix.DashboardParams, size)
-			chunk := 1
+			if err := json.NewDecoder(file).Decode(&listParams); err != nil {
+				b.Fatal(err)
 
-			for i := range size {
-				listParams[i], dashboardParams[i] = stats.RandomParams()
-
-				if i > 0 && i%chunkSize == chunkSize-1 {
-					stats.Print(size, chunk)
-					stats.Reset()
-					chunk++
-				}
+				return
 			}
 
-			file := benchflix.Must(os.Create(fmt.Sprintf("data/params_%d.json", size)))
-
-			if err := json.NewEncoder(file).Encode(dashboardParams); err != nil {
+			if err := json.NewDecoder(file).Decode(&dashboardParams); err != nil {
 				b.Fatal(err)
 
 				return

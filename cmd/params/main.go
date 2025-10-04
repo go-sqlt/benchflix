@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -98,9 +99,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.Search[value]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.Search))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.Search[value])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -112,9 +111,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.YearAdded[strconv.FormatInt(value, 10)]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.YearAdded))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.YearAdded[strconv.FormatInt(value, 10)])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -126,9 +123,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.MinRating[strconv.FormatFloat(value, 'f', 1, 64)]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.MinRating))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.MinRating[strconv.FormatFloat(value, 'f', 1, 64)])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -140,9 +135,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.Limit[strconv.FormatUint(value, 10)]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.Limit))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.Limit[strconv.FormatUint(value, 10)])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -154,9 +147,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.Sort[value]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.Sort))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.Sort[value])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -168,9 +159,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.Desc[strconv.FormatBool(value)]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.Desc))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.Desc[strconv.FormatBool(value)])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -182,9 +171,7 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 			)
 
 			for _, chunk := range chunks {
-				percent := float64(chunk.WithDirectors[strconv.FormatBool(value)]) / (float64(size) / 5.0) * 100
-
-				fmt.Fprintf(file, ` & %s %.1f`, cellColor(percent*float64(len(benchflix.WithDirectors))), percent)
+				fmt.Fprintf(file, ` & %d`, chunk.WithDirectors[strconv.FormatBool(value)])
 			}
 
 			fmt.Fprintf(file, ` \\`)
@@ -198,13 +185,5 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 }
 
 func cellColor(percent float64) string {
-	if percent <= 120.0 {
-		return ""
-	}
-
-	if percent >= 200 {
-		return `\cellcolor{orange!40}`
-	}
-
-	return fmt.Sprintf(`\cellcolor{orange!%.0f}`, 10+(percent-140)/(80.0/30.0))
+	return fmt.Sprintf(`\cellcolor{orange!%.0f} `, math.Abs(percent))
 }

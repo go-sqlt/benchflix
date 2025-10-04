@@ -3,12 +3,25 @@
 Datengrundlage: https://www.kaggle.com/datasets/bhargavchirumamilla/netflix-movies-and-tv-shows-till-2025
 
 ```sh
+# Generate params
+go run cmd/generate/main.go
+
+# Run Benchmark with generated params
 go test -bench=. -benchmem -timeout=700m -count=10 > data/bench.txt
 
+# collect stats from generated params
+go run cmd/stats/main.go
+
+# create table from stats
 go run cmd/params/main.go
+
+# create tables from benchmark
 cat data/bench.txt | go run cmd/tables/main.go 
+
+# create charts from benchmark
 cat data/bench.txt | go run cmd/charts/main.go
 
+# create maintainability tables
 go get github.com/yagipy/maintidx/cmd/maintidx
 go run github.com/yagipy/maintidx/cmd/maintidx -under=500 ./... 2>&1 | go run cmd/maintainability/main.go
 ```
