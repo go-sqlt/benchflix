@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -182,8 +181,4 @@ Parameter & Feld & Wert & ${H_1}$ & ${H_2}$ & ${H_3}$ & ${H_4}$ & ${H_5}$ \\
 \bottomrule
 \label{tab:parameterverteilung}
 \end{longtable}`)
-}
-
-func cellColor(percent float64) string {
-	return fmt.Sprintf(`\cellcolor{orange!%.0f} `, math.Abs(percent))
 }

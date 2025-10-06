@@ -185,12 +185,15 @@ func Maintainability(output, title string, frameworks map[string][]Data) {
 \caption{%s}
 \begin{tabular}{lrrrr}
 \toprule
-Framework & List & ListPreload & Dashboard & DashboardPreload \\
+Framework & List & ListPreload & Dashboard & DashboardPreload & \diameter \\
 \midrule`, title)
 
 	for _, framework := range []string{"SQL", "PGX", "SQUIRREL", "SQLX", "GORM", "SQLC", "SQLT"} {
 		fmt.Fprintf(file, `
 	%s`, framework)
+
+		num := 0.0
+		together := 0.0
 
 		for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
 			index := slices.IndexFunc(frameworks[framework], func(d Data) bool {
@@ -202,10 +205,13 @@ Framework & List & ListPreload & Dashboard & DashboardPreload \\
 				continue
 			}
 
+			together += frameworks[framework][index].MI
+			num++
+
 			fmt.Fprintf(file, ` & %g`, frameworks[framework][index].MI)
 		}
 
-		fmt.Fprintf(file, ` \\`)
+		fmt.Fprintf(file, ` & %s %g \\`, miColor(together/num), together/num)
 	}
 
 	fmt.Fprintf(file, `
@@ -214,4 +220,16 @@ Framework & List & ListPreload & Dashboard & DashboardPreload \\
 \label{tab:%s}
 \end{table}
 	`, output)
+}
+
+func miColor(mi float64) string {
+	if mi < 40 {
+		return `\cellcolor{red!25}`
+	}
+
+	if mi < 50 {
+		return `\cellcolor{orange!25}`
+	}
+
+	return `\cellcolor{green!25}`
 }
