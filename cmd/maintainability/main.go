@@ -185,7 +185,7 @@ func Maintainability(output, title string, frameworks map[string][]Data) {
 \caption{%s}
 \begin{tabular}{lrrrr}
 \toprule
-Framework & List & ListPreload & Dashboard & DashboardPreload & \diameter \\
+Framework & List & ListPreload & Dashboard & DashboardPreload & Ergebnis \\
 \midrule`, title)
 
 	for _, framework := range []string{"SQL", "PGX", "SQUIRREL", "SQLX", "GORM", "SQLC", "SQLT"} {
