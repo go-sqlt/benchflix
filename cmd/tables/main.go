@@ -158,7 +158,7 @@ Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ 
 				cv := qa / q2 * 100
 
 				fmt.Fprintf(file, ` & %s %s`,
-					cellColor(cv+100), strings.Replace(strconv.FormatFloat(cv, 'g', 1, 64), ".", ",", -1),
+					cellColor(cv+100), strings.Replace(strconv.FormatFloat(cv, 'f', 1, 64), ".", ",", -1),
 				)
 			}
 
