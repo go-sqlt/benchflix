@@ -61,7 +61,7 @@ func Median(b benchflix.Benchmark, output, title string, framework string, unit 
 \caption{%s}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+Szenario & Size & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule`, title)
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
@@ -75,9 +75,14 @@ Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delt
 				continue
 			}
 
+			sizeInt, err := strconv.Atoi(size)
+			if err != nil {
+				panic(err)
+			}
+
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, benchflix.Thousand(size),
+				szenario, benchflix.Thousand(strconv.Itoa(sizeInt/5)),
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {
@@ -127,7 +132,7 @@ func Quartilsdispersionskoeffizient(b benchflix.Benchmark, output, title string,
 \caption{%s}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
+Szenario & Size & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ \\
 \midrule`, title)
 
 	for _, szenario := range []string{"List", "ListPreload", "Dashboard", "DashboardPreload"} {
@@ -141,9 +146,14 @@ Szenario & Parameter & ${QDK_1}$ & ${QDK_2}$ & ${QDK_3}$& ${QDK_4}$ & ${QDK_5}$ 
 				continue
 			}
 
+			sizeInt, err := strconv.Atoi(size)
+			if err != nil {
+				panic(err)
+			}
+
 			fmt.Fprintf(file, `
 	%s & %s`,
-				szenario, benchflix.Thousand(size),
+				szenario, benchflix.Thousand(strconv.Itoa(sizeInt/5)),
 			)
 
 			for _, chunk := range []string{"1", "2", "3", "4", "5"} {

@@ -5,16 +5,16 @@
 \caption{Median-Speicherverbrauch von SQLC [bytes/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+Szenario & Size & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & \cellcolor{green!4}  13.257 & \cellcolor{red!3}  16.277 & \cellcolor{green!8}  12.057 & \cellcolor{green!3}  13.557 & \cellcolor{green!6}  12.805 \\
-	List & 5.000 & \cellcolor{green!2}  13.686 & \cellcolor{green!4}  13.508 & \cellcolor{green!2}  14.019 & \cellcolor{red!3}  14.882 & \cellcolor{green!3}  13.060 \\
-	ListPreload & 500 & \cellcolor{green!8}  16.253 & \cellcolor{red!3}  20.197 & \cellcolor{green!13}  14.702 & \cellcolor{green!5}  16.916 & \cellcolor{green!10}  15.850 \\
-	ListPreload & 5.000 & \cellcolor{green!8}  16.371 & \cellcolor{green!7}  16.622 & \cellcolor{green!9}  16.602 & \cellcolor{green!2}  18.117 & \cellcolor{green!10}  15.453 \\
-	Dashboard & 500 & \cellcolor{green!14}  11.606 & \cellcolor{green!6}  14.737 & \cellcolor{green!20}  10.441 & \cellcolor{green!13}  11.483 & \cellcolor{green!16}  11.222 \\
-	Dashboard & 5.000 & \cellcolor{green!14}  12.162 & \cellcolor{green!13}  12.290 & \cellcolor{green!14}  11.865 & \cellcolor{green!8}  13.159 & \cellcolor{green!15}  11.475 \\
-	DashboardPreload & 500 & \cellcolor{green!14}  13.489 & \cellcolor{green!4}  17.666 & \cellcolor{green!21}  12.078 & \cellcolor{green!14}  13.168 & \cellcolor{green!18}  12.791 \\
-	DashboardPreload & 5.000 & \cellcolor{green!17}  13.665 & \cellcolor{green!15}  13.888 & \cellcolor{green!15}  13.660 & \cellcolor{green!9}  15.101 & \cellcolor{green!18}  12.801 \\
+	List & 100 & \cellcolor{green!4}  13.257 & \cellcolor{red!3}  16.277 & \cellcolor{green!8}  12.057 & \cellcolor{green!3}  13.557 & \cellcolor{green!6}  12.805 \\
+	List & 1.000 & \cellcolor{green!2}  13.686 & \cellcolor{green!4}  13.508 & \cellcolor{green!2}  14.019 & \cellcolor{red!3}  14.882 & \cellcolor{green!3}  13.060 \\
+	ListPreload & 100 & \cellcolor{green!8}  16.253 & \cellcolor{red!3}  20.197 & \cellcolor{green!13}  14.702 & \cellcolor{green!5}  16.916 & \cellcolor{green!10}  15.850 \\
+	ListPreload & 1.000 & \cellcolor{green!8}  16.371 & \cellcolor{green!7}  16.622 & \cellcolor{green!9}  16.602 & \cellcolor{green!2}  18.117 & \cellcolor{green!10}  15.453 \\
+	Dashboard & 100 & \cellcolor{green!14}  11.606 & \cellcolor{green!6}  14.737 & \cellcolor{green!20}  10.441 & \cellcolor{green!13}  11.483 & \cellcolor{green!16}  11.222 \\
+	Dashboard & 1.000 & \cellcolor{green!14}  12.162 & \cellcolor{green!13}  12.290 & \cellcolor{green!14}  11.865 & \cellcolor{green!8}  13.159 & \cellcolor{green!15}  11.475 \\
+	DashboardPreload & 100 & \cellcolor{green!14}  13.489 & \cellcolor{green!4}  17.666 & \cellcolor{green!21}  12.078 & \cellcolor{green!14}  13.168 & \cellcolor{green!18}  12.791 \\
+	DashboardPreload & 1.000 & \cellcolor{green!17}  13.665 & \cellcolor{green!15}  13.888 & \cellcolor{green!15}  13.660 & \cellcolor{green!9}  15.101 & \cellcolor{green!18}  12.801 \\
 \bottomrule
 \end{tabular}
 \label{tab:speicherverbrauch_sqlc}

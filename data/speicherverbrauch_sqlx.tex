@@ -5,16 +5,16 @@
 \caption{Median-Speicherverbrauch von SQLX [bytes/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+Szenario & Size & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & \cellcolor{red!20}  16.392 & \cellcolor{red!24}  19.520 & \cellcolor{red!15}  14.975 & \cellcolor{red!18}  16.382 & \cellcolor{red!15}  15.633 \\
-	List & 5.000 & \cellcolor{red!23}  17.035 & \cellcolor{red!23}  17.126 & \cellcolor{red!18}  16.737 & \cellcolor{red!18}  17.134 & \cellcolor{red!18}  15.751 \\
-	ListPreload & 500 & \cellcolor{red!4}  18.223 & \cellcolor{red!4}  20.384 & \cellcolor{red!4}  17.498 & \cellcolor{red!4}  18.223 & \cellcolor{red!3}  18.006 \\
-	ListPreload & 5.000 & \cellcolor{red!5}  18.562 & \cellcolor{red!3}  18.195 & \cellcolor{red!3}  18.628 & \cellcolor{red!8}  19.632 & \cellcolor{red!2}  17.342 \\
-	Dashboard & 500 & \cellcolor{red!15}  15.384 & \cellcolor{red!12}  17.425 & \cellcolor{red!15}  14.815 & \cellcolor{red!14}  14.873 & \cellcolor{red!15}  15.210 \\
-	Dashboard & 5.000 & \cellcolor{red!14}  15.871 & \cellcolor{red!12}  15.633 & \cellcolor{red!13}  15.508 & \cellcolor{red!12}  15.910 & \cellcolor{red!12}  15.024 \\
-	DashboardPreload & 500 & \cellcolor{red!10}  17.105 & \cellcolor{red!9}  19.793 & \cellcolor{red!9}  16.547 & \cellcolor{red!9}  16.422 & \cellcolor{red!10}  17.064 \\
-	DashboardPreload & 5.000 & \cellcolor{red!8}  17.559 & \cellcolor{red!7}  17.243 & \cellcolor{red!8}  17.184 & \cellcolor{red!8}  17.757 & \cellcolor{red!8}  16.782 \\
+	List & 100 & \cellcolor{red!20}  16.392 & \cellcolor{red!24}  19.520 & \cellcolor{red!15}  14.975 & \cellcolor{red!18}  16.382 & \cellcolor{red!15}  15.633 \\
+	List & 1.000 & \cellcolor{red!23}  17.035 & \cellcolor{red!23}  17.126 & \cellcolor{red!18}  16.737 & \cellcolor{red!18}  17.134 & \cellcolor{red!18}  15.751 \\
+	ListPreload & 100 & \cellcolor{red!4}  18.223 & \cellcolor{red!4}  20.384 & \cellcolor{red!4}  17.498 & \cellcolor{red!4}  18.223 & \cellcolor{red!3}  18.006 \\
+	ListPreload & 1.000 & \cellcolor{red!5}  18.562 & \cellcolor{red!3}  18.195 & \cellcolor{red!3}  18.628 & \cellcolor{red!8}  19.632 & \cellcolor{red!2}  17.342 \\
+	Dashboard & 100 & \cellcolor{red!15}  15.384 & \cellcolor{red!12}  17.425 & \cellcolor{red!15}  14.815 & \cellcolor{red!14}  14.873 & \cellcolor{red!15}  15.210 \\
+	Dashboard & 1.000 & \cellcolor{red!14}  15.871 & \cellcolor{red!12}  15.633 & \cellcolor{red!13}  15.508 & \cellcolor{red!12}  15.910 & \cellcolor{red!12}  15.024 \\
+	DashboardPreload & 100 & \cellcolor{red!10}  17.105 & \cellcolor{red!9}  19.793 & \cellcolor{red!9}  16.547 & \cellcolor{red!9}  16.422 & \cellcolor{red!10}  17.064 \\
+	DashboardPreload & 1.000 & \cellcolor{red!8}  17.559 & \cellcolor{red!7}  17.243 & \cellcolor{red!8}  17.184 & \cellcolor{red!8}  17.757 & \cellcolor{red!8}  16.782 \\
 \bottomrule
 \end{tabular}
 \label{tab:speicherverbrauch_sqlx}

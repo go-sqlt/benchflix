@@ -5,16 +5,16 @@
 \caption{Median-Latenz von SQLX [ns/op]}
 \begin{tabular}{lrrrrrrr}
 \toprule
-Szenario & Parameter & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
+Szenario & Size & ${\Delta \tilde{X}_1}$ & ${\Delta \tilde{X}_2}$ & ${\Delta \tilde{X}_3}$ & ${\Delta \tilde{X}_4}$ & ${\Delta \tilde{X}_5}$ \\
 \midrule
-	List & 500 & \cellcolor{red!21}  394.053 & \cellcolor{red!17}  353.082 & \cellcolor{red!16}  376.512 & \cellcolor{red!17}  375.413 & \cellcolor{red!16}  371.249 \\
-	List & 5.000 & \cellcolor{red!16}  373.466 & \cellcolor{red!18}  406.700 & \cellcolor{red!16}  371.502 & \cellcolor{red!14}  381.872 & \cellcolor{red!18}  411.760 \\
-	ListPreload & 500 & \cellcolor{red!36}  450.192 & \cellcolor{red!35}  422.453 & \cellcolor{red!36}  421.403 & \cellcolor{red!33}  448.803 & \cellcolor{red!32}  439.985 \\
-	ListPreload & 5.000 & \cellcolor{red!30}  437.750 & \cellcolor{red!31}  446.976 & \cellcolor{red!35}  443.064 & \cellcolor{red!34}  440.996 & \cellcolor{red!30}  461.303 \\
-	Dashboard & 500 & \cellcolor{red!17}  372.431 & \cellcolor{red!18}  364.322 & \cellcolor{red!16}  360.453 & \cellcolor{red!18}  363.855 & \cellcolor{red!15}  353.728 \\
-	Dashboard & 5.000 & \cellcolor{red!14}  376.588 & \cellcolor{red!15}  393.386 & \cellcolor{red!14}  357.912 & \cellcolor{red!14}  376.303 & \cellcolor{red!11}  388.613 \\
-	DashboardPreload & 500 & \cellcolor{red!26}  405.892 & \cellcolor{red!28}  405.667 & \cellcolor{red!21}  380.707 & \cellcolor{red!20}  391.662 & \cellcolor{red!21}  386.890 \\
-	DashboardPreload & 5.000 & \cellcolor{red!23}  415.596 & \cellcolor{red!22}  415.770 & \cellcolor{red!23}  394.567 & \cellcolor{red!22}  399.170 & \cellcolor{red!19}  411.907 \\
+	List & 100 & \cellcolor{red!21}  394.053 & \cellcolor{red!17}  353.082 & \cellcolor{red!16}  376.512 & \cellcolor{red!17}  375.413 & \cellcolor{red!16}  371.249 \\
+	List & 1.000 & \cellcolor{red!16}  373.466 & \cellcolor{red!18}  406.700 & \cellcolor{red!16}  371.502 & \cellcolor{red!14}  381.872 & \cellcolor{red!18}  411.760 \\
+	ListPreload & 100 & \cellcolor{red!36}  450.192 & \cellcolor{red!35}  422.453 & \cellcolor{red!36}  421.403 & \cellcolor{red!33}  448.803 & \cellcolor{red!32}  439.985 \\
+	ListPreload & 1.000 & \cellcolor{red!30}  437.750 & \cellcolor{red!31}  446.976 & \cellcolor{red!35}  443.064 & \cellcolor{red!34}  440.996 & \cellcolor{red!30}  461.303 \\
+	Dashboard & 100 & \cellcolor{red!17}  372.431 & \cellcolor{red!18}  364.322 & \cellcolor{red!16}  360.453 & \cellcolor{red!18}  363.855 & \cellcolor{red!15}  353.728 \\
+	Dashboard & 1.000 & \cellcolor{red!14}  376.588 & \cellcolor{red!15}  393.386 & \cellcolor{red!14}  357.912 & \cellcolor{red!14}  376.303 & \cellcolor{red!11}  388.613 \\
+	DashboardPreload & 100 & \cellcolor{red!26}  405.892 & \cellcolor{red!28}  405.667 & \cellcolor{red!21}  380.707 & \cellcolor{red!20}  391.662 & \cellcolor{red!21}  386.890 \\
+	DashboardPreload & 1.000 & \cellcolor{red!23}  415.596 & \cellcolor{red!22}  415.770 & \cellcolor{red!23}  394.567 & \cellcolor{red!22}  399.170 & \cellcolor{red!19}  411.907 \\
 \bottomrule
 \end{tabular}
 \label{tab:latenz_sqlx}
